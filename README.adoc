@@ -1,0 +1,5 @@
+This is camel-kafka-connector examples repository
+
+List of existing examples:
+
+- aws-s3 to JMS example
