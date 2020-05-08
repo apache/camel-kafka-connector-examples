@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This is an example for Camel-Kafka-connector
+This is an example for Camel-Kafka-connector AW2-SQS
 
 ## What is needed
 
