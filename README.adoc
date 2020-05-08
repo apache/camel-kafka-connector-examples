@@ -3,3 +3,4 @@ This is camel-kafka-connector examples repository
 List of existing examples:
 
 - aws-s3 to JMS example
+- aws2-sqs source example
