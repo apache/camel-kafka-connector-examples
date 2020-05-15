@@ -4,3 +4,4 @@ List of existing examples:
 
 - aws-s3 to JMS example
 - aws2-sqs source example
+- cql sink example
