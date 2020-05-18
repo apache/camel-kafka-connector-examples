@@ -1,4 +1,4 @@
-# Camel-Kafka-connector AWS S3 to JMS demo
+# Camel-Kafka-connector AWS2 SQS Source
 
 ## Introduction
 
