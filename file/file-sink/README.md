@@ -49,12 +49,10 @@ camel.sink.endpoint.fileName=kafkaconnect.txt
 camel.sink.endpoint.fileExist=Append
 ```
 
-and add the correct credentials for AWS.
-
 Now you can run the example
 
 ```
-$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWS2SNSSinkConnector.properties
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelFileSinkConnector.properties
 ```
 
 On a different terminal run the kafka-producer and send messages to your Kafka Broker.
