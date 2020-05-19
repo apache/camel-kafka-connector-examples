@@ -1,8 +1,8 @@
-# Camel-Kafka-connector AWS2 SQS Sink
+# Camel-Kafka-connector AWS2 SNS Sink
 
 ## Introduction
 
-This is an example for Camel-Kafka-connector AW2-SNS Sink 
+This is an example for Camel-Kafka-connector AWS2-SNS Sink 
 
 ## What is needed
 
@@ -69,5 +69,5 @@ Kafka to SNS message 1
 Kafka to SNS message 2
 ```
 
-You shold see the messages enqueued in the camel-1 SQS queue.
+You shold see the messages enqueued in the topic-1 SNS Topic, through your subscription.
 
