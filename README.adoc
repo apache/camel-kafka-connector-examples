@@ -5,5 +5,5 @@ List of existing examples:
 - aws-s3 to JMS example
 - aws2-sns sink example
 - aws2-sqs source and sink examples
-- cql sink example
+- cql source and sink example
 - file source and sink example
