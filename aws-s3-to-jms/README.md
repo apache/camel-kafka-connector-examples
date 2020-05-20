@@ -36,9 +36,9 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sjms2-kafka-connector/0.1.0/camel-sjms2-kafka-connector-0.2.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sjms2-kafka-connector/0.2.0/camel-sjms2-kafka-connector-0.2.0-package.zip
 > unzip camel-sjms2-kafka-connector-0.2.0-package.zip
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws-s3-kafka-connector/0.1.0/camel-aws-s3-kafka-connector-0.2.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws-s3-kafka-connector/0.2.0/camel-aws-s3-kafka-connector-0.2.0-package.zip
 > unzip camel-aws-s3-kafka-connector-0.2.0-package.zip
 ```
 
