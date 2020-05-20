@@ -89,7 +89,7 @@ connector.class=org.apache.camel.kafkaconnector.cql.CamelCqlSourceConnector
 key.converter=org.apache.kafka.connect.storage.StringConverter
 value.converter=org.apache.kafka.connect.storage.StringConverter
 
-camel.source.kafka.topic=mytopic
+topics=mytopic
 
 camel.source.path.hosts=172.17.0.2
 camel.source.path.keyspace=9042/test

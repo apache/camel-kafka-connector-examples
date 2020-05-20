@@ -44,7 +44,7 @@ value.converter=org.apache.kafka.connect.storage.StringConverter
 
 camel.source.maxPollDuration=10000
 
-camel.source.kafka.topic=mytopic
+topics=mytopic
 
 camel.source.url=aws2-sqs://camel-1?deleteAfterRead=false&deleteIfFiltered=true
 
