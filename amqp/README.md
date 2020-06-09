@@ -1,0 +1,66 @@
+# Camel-Kafka-connector Kafka to AMQP broker demo
+
+## Introduction
+
+This is an example for Camel-Kafka-connector
+
+## What is needed
+
+- An Artemis Broker 2.9.0 running
+- A Kafka Cluster 2.4.0 running 
+- Apache Qpid JMS client
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Running Artemis
+
+```
+$ARTEMIS_HOME/bin/$BROKER_NAME/bin/artemis run
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-amqp-kafka-connector/0.2.0/camel-amqp-kafka-connector-0.2.0-package.zip
+> unzip camel-amqp-kafka-connector-0.2.0-package.zip
+> wget https://downloads.apache.org/qpid/jms/0.51.0/apache-qpid-jms-0.51.0-bin.tar.gz
+> tar -xzvf apache-qpid-jms-0.51.0-bin.tar.gz
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAmqpSourceConnector.properties config/CamelAmqpSinkConnector.properties
+```
+
+Just connect to your Kafka 
+- Produce some sample kafka messages
+```bash
+$KAFKA_HOME/bin/kafka-console-producer.sh --bootstrap-server kafka:9092 --topic mytopic
+>Test Message-1
+>Test Message-2
+Ctrl+C
+```
+- Check with the kafka console consumer that the messages are available in the kafka topic.
+```bash
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic mytopic --from-beginning
+Test Message-1
+Test Message-2
+Ctrl+C
+```
+
