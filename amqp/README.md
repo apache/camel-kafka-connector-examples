@@ -63,4 +63,4 @@ Test Message-1
 Test Message-2
 Ctrl+C
 ```
-
+- Check in the artemis console that there is a queue `mytopic` created with the messages 
