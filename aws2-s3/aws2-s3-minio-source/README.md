@@ -1,8 +1,8 @@
-# Camel-Kafka-connector AWS2 S3 Source
+# Camel-Kafka-connector AWS2 S3 MinIO Source
 
 ## Introduction
 
-This is an example for Camel-Kafka-connector AW2-S3
+This is an example for Camel-Kafka-connector AW2-S3 MinIO
 
 ## What is needed
 
