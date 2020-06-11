@@ -66,7 +66,7 @@ Just connect to your AWS Console and upload a file into your bucket.
 On a different terminal run the kafka-consumer and you should see messages from the S3 bucket arriving through Kafka Broker.
 
 ```
-bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic mytopic --from-beginning
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test1 --from-beginning
 S3 to Kafka through Camel
 ```
 
