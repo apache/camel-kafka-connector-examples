@@ -36,8 +36,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-amqp-kafka-connector/0.2.0/camel-amqp-kafka-connector-0.2.0-package.zip
-> unzip camel-amqp-kafka-connector-0.2.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-amqp-kafka-connector/0.3.0/camel-amqp-kafka-connector-0.3.0-package.zip
+> unzip camel-amqp-kafka-connector-0.3.0-package.zip
 > wget https://downloads.apache.org/qpid/jms/0.51.0/apache-qpid-jms-0.51.0-bin.tar.gz
 > tar -xzvf apache-qpid-jms-0.51.0-bin.tar.gz
 ```
