@@ -1,4 +1,4 @@
-# Camel-Kafka-connector AWS2 S3 MinIO Source
+# Camel-Kafka-connector AWS2 S3 Source with move after read
 
 ## Introduction
 
