@@ -65,8 +65,6 @@ camel.component.aws2-s3.secret-key=miniostorage
 camel.component.aws2-s3.region=eu-west-1
 ```
 
-and add the correct credentials for AWS.
-
 Now you can run the example
 
 ```
