@@ -28,8 +28,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-file-kafka-connector/0.3.0/camel-file-kafka-connector-0.3.0-package.zip
-> unzip camel-file-kafka-connector-0.3.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-file-kafka-connector/0.4.0/camel-file-kafka-connector-0.4.0-package.zip
+> unzip camel-file-kafka-connector-0.4.0-package.zip
 ```
 
 Now it's time to setup the connectors
