@@ -50,7 +50,7 @@ Now it's time to setup the connectors
 Open the NATS configuration file
 
 ```
-name=CamelNatsSourceConnector
+name=CamelNatsSinkConnector
 connector.class=org.apache.camel.kafkaconnector.nats.CamelNatsSinkConnector
 key.converter=org.apache.kafka.connect.storage.StringConverter
 value.converter=org.apache.kafka.connect.storage.StringConverter
