@@ -1,0 +1,89 @@
+# Camel-Kafka-connector NATS Sink
+
+## Introduction
+
+This is an example for Camel-Kafka-connector NATS Sink 
+
+## What is needed
+
+- A NATS topic
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-nats-kafka-connector/0.4.0/camel-nats-kafka-connector-0.4.0-package.zip
+> unzip camel-nats-kafka-connector-0.4.0-package.zip
+```
+
+In this example we'll use a docker image for NATS
+
+```
+> docker run -d --name nats-main -p 4222:4222 -p 6222:6222 -p 8222:8222 nats
+```
+
+We'll need to inspect the container for the IP address of NATS 
+
+```
+> docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nats-main
+172.17.0.2
+```
+
+Now it's time to setup the connectors
+
+Open the NATS configuration file
+
+```
+name=CamelNatsSourceConnector
+connector.class=org.apache.camel.kafkaconnector.nats.CamelNatsSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.component.nats.servers=172.17.0.2
+camel.sink.path.topic=nats-main
+```
+
+And add the correct address for the server.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelNatsSinkConnector.properties
+```
+
+On a different terminal run the kafka-producer and send messages to your Kafka Broker.
+
+```
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic mytopic
+Kafka to Nats message 1
+Kafka to Nats message 2
+```
+
+To consume messages from NATS you can use nats-sub go executable
+
+```
+> go get github.com/nats-io/go-nats-examples/tools/nats-sub
+> nats-sub nats-main
+Listening on [nats-main]
+[#1] Received on [nats-main]: 'Kafka to Nats message 1'
+[#2] Received on [nats-main]: 'Kafka to Nats message 2'
+```
+
