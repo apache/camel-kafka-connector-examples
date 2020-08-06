@@ -8,5 +8,5 @@ List of existing examples:
 - aws2-sns sink example
 - aws2-sqs source and sink examples
 - cql source and sink example
-- nats sink example
+- nats source and sink example
 - file source and sink example
