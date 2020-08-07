@@ -1,0 +1,93 @@
+# Camel-Kafka-connector AWS2 Lambda Sink
+
+## Introduction
+
+This is an example for Camel-Kafka-connector AWS2-Lambda Sink 
+
+## What is needed
+
+- An AWS Lambda function
+- The following project here: https://github.com/oscerd/lambda-ckc
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-lambda-kafka-connector/0.4.0/camel-aws2-lambda-kafka-connector-0.4.0-package.zip
+> unzip camel-aws2-sns-kafka-connector-0.4.0-package.zip
+```
+
+## Deploying the AWS Lambda function
+
+```
+> git clone git@github.com:oscerd/lambda-ckc.git
+> cd lambda-ckc/
+> mvn clean install
+```
+
+In your AWS console for Lambda service, create a new function called `hello-ckc` and deploy the `target/test-ckc.jar`
+
+Wait for the function to be up and running and eventually do a test through the lambda console.
+
+## Setting up the connector
+
+Now it's time to setup the connectors
+
+Open the AWS2 Lambda configuration file
+
+```
+name=CamelAWS2LambdaSinkConnector
+connector.class=org.apache.camel.kafkaconnector.aws2lambda.CamelAws2lambdaSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+
+topics=mytopic
+
+camel.sink.path.function=hello-ckc
+camel.sink.endpoint.operation=invokeFunction
+
+camel.component.aws2-lambda.access-key=xxxx
+camel.component.aws2-lambda.secret-key=yyyy
+camel.component.aws2-lambda.region=eu-west-1
+```
+
+and add the correct credentials for AWS.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWS2LambdaSinkConnector.properties
+```
+
+On a different terminal run the kafka-producer and send messages to your Kafka Broker.
+
+```
+>$ bin/kafka-console-producer.sh --topic test12 --broker-list localhost:9092
+>"Kafka message sent!"
+```
+
+In the AWS console, in the CloudWatch Log insights section under the monitoring tabs, you should get the information about this invokation and you should see in the logs
+
+```
+2020-08-07T12:32:12.282+02:00 START RequestId: 666d2257-1a22-406e-b112-2384ceac23a3 Version: $LATEST
+2020-08-07T12:32:12.321+02:00 Event received: Kafka message sent!
+2020-08-07T12:32:12.325+02:00 END RequestId: 666d2257-1a22-406e-b112-2384ceac23a3
+2020-08-07T12:32:12.325+02:00 REPORT RequestId: 666d2257-1a22-406e-b112-2384ceac23a3 Duration: 43.33 ms Billed Duration: 100 ms Memory Size: 512 MB Max Memory Used: 75 MB Init Duration: 293.52 ms
+```
+
