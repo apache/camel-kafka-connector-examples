@@ -74,5 +74,5 @@ Kafka to Kinesis Firehose message 1
 Kafka to Kinesis Firehose message 2
 ```
 
-You shold see the an S3 object created each 60 seconds and in it, you should see the messages concatenated.
+You shold see an S3 object created each 60 seconds and in it, you should see the messages concatenated.
 
