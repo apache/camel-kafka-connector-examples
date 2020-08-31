@@ -1,0 +1,78 @@
+# Camel-Kafka-connector AWS2 Kinesis Firehose Sink
+
+## Introduction
+
+This is an example for Camel-Kafka-connector AWS2-Kinesis Firehose Sink 
+
+## What is needed
+
+- An AWS Kinesis Firehose delivery stream
+- An S3 bucket
+- Some work on the AWS console
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-firehose-kafka-connector/0.4.0/camel-aws2-kinesis-firehose-kafka-connector-0.4.0-package.zip
+> unzip camel-aws2-kinesis-firehose-kafka-connector-0.4.0-package.zip
+```
+
+On AWS console create a Kinesis firehose delivery stream named firehose-stream and choose to send it to an S3 bucket from the available list (in the same region)
+Choose 1 Mb as buffer size and 60 seconds as buffer interval.
+
+Now it's time to setup the connectors
+
+Open the AWS2 Kinesis Firehose configuration file
+
+```
+name=CamelAWS2KinesisFirehoseSinkConnector
+connector.class=org.apache.camel.kafkaconnector.aws2kinesisfirehose.CamelAws2kinesisfirehoseSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.streamName=firehose-stream
+
+camel.component.aws2-kinesis-firehose.access-key=xxxx
+camel.component.aws2-kinesis-firehose.secret-key=yyyy
+camel.component.aws2-kinesis-firehose.region=eu-west-1
+```
+
+and add the correct credentials for AWS.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWS2KinesisFirehoseSinkConnector.properties
+```
+
+Just connect to your AWS Console and check the S3 bucket
+
+On a different terminal run the kafka-producer and send messages to your Kafka Broker.
+
+```
+bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic mytopic
+Kafka to Kinesis Firehose message 1
+Kafka to Kinesis Firehose message 2
+```
+
+You shold see the an S3 object created each 60 seconds and in it, you should see the messages concatenated.
+
