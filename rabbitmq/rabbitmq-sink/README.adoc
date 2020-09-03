@@ -1,0 +1,103 @@
+# Camel-Kafka-connector RabbitMQ Sink
+
+## Introduction
+
+This is an example for Camel-Kafka-connector RabbitMQ
+
+## What is needed
+
+- A RabbitMQ instance
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-rabbitmq-kafka-connector/0.4.0/camel-rabbitmq-kafka-connector-0.4.0-package.zip
+> unzip camel-rabbitmq-kafka-connector-0.4.0-package.zip
+```
+
+## Setting up Apache Cassandra
+
+This examples require a running RabbitMQ instance, for simplicity the steps below show how to start RabbitMQ using Docker. First you'll need to run a RabbitMQ with management instance:
+
+[source,bash]
+----
+docker run -d --hostname my-rabbit --name some-rabbit rabbitmq:3-management
+----
+
+Next, we need to check the address of the container
+
+[source,bash]
+----
+> docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' container_id
+172.17.0.2
+----
+
+In the configuration `.properties` file we use below the IP address of the RabbitMQ master node needs to be configured, replace the value `172.17.0.2` configuration property with the IP of the node obtained from Docker. 
+
+Next through your browser go to http://<address>:15672
+and login with the credentials guest/guest
+
+Create a queue called 'queue'.
+
+Now it's time to setup the connectors
+
+Open the RabbitMQ Sink configuration file
+
+```
+name=CamelRabbitmqSinkConnector
+connector.class=org.apache.camel.kafkaconnector.rabbitmq.CamelRabbitmqSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.component.rabbitmq.hostname=172.17.0.2
+camel.component.rabbitmq.portnumber=5672
+camel.sink.path.exchangeName=queue
+camel.sink.endpoint.exchangeType=topic
+camel.sink.endpoint.autoDelete=false
+camel.sink.endpoint.queue=queue
+camel.sink.endpoint.routingKey=key
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelRabbitmqSinkConnector.properties
+```
+
+On a different terminal run the kafka-producer and you should see messages from Kafka arriving at RabbitMQ
+
+```
+bin/kafka-console-producer.sh --topic mytopic --broker-list localhost:9092
+>test
+>test1
+>test2
+>test3
+```
+
+At this point you should be able to get messages through the management console, so these are the steps needed:
+
+- Go to http://<address>:15672
+- Select the Queues tab
+- Select the 'queue' Queue
+- Select get Messages action
+- Browse through the messages
+
