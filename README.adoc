@@ -2,13 +2,14 @@ This is camel-kafka-connector examples repository
 
 List of existing examples:
 
-- amqp source and sink example
-- aws-s3 to JMS example
-- aws2-lambda sink example
-- aws2-kinesis-firehose sink example
-- aws2-s3 source and sink examples
-- aws2-sns sink example
-- aws2-sqs source and sink examples
-- cql source and sink example
-- nats source and sink example
-- file source and sink example
+- AMQP source and sink example
+- AWS-S3 to JMS example
+- AWS2-lambda sink example
+- AWS2-kinesis-firehose sink example
+- AWS2-S3 source and sink examples
+- AWS2-SNS sink example
+- AWS2-SQS source and sink examples
+- CQL source and sink example
+- Nats source and sink example
+- File source and sink example
+- RabbitMQ
