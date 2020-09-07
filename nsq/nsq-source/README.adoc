@@ -1,0 +1,97 @@
+# Camel-Kafka-connector NSQ Source
+
+## Introduction
+
+This is an example for Camel-Kafka-connector NSQ Source 
+
+## What is needed
+
+- A NSQ topic
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-nsq-kafka-connector/0.4.0/camel-nsq-kafka-connector-0.4.0-package.zip
+> unzip camel-nsq-kafka-connector-0.4.0-package.zip
+```
+
+We'll need to add also some dependencies for this connector
+
+```
+> cd /home/oscerd/connectors/camel-nsq-kafka-connector/
+> wget https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.13.3/log4j-api-2.13.3.jar
+> wget https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.13.3/log4j-core-2.13.3.jar
+```
+
+In this example we'll use the plain nsq release
+
+```
+> wget https://github.com/nsqio/nsq/releases/download/v1.2.0/nsq-1.2.0.linux-amd64.go1.12.9.tar.gz
+> tar -xzf nsq-1.2.0.linux-amd64.go1.12.9.tar.gz
+> cd nsq-1.2.0.linux-amd64.go1.12.9/
+> ./nsqlookupd
+```
+
+in another terminal run the nsqd daemon
+
+```
+> ./nsqd --lookupd-tcp-address=127.0.0.1:4160 --broadcast-address=127.0.0.1
+```
+
+Now it's time to setup the connector
+
+Open the NSQ configuration file
+
+```
+name=CamelNsqSourceConnector
+connector.class=org.apache.camel.kafkaconnector.nsq.CamelNsqSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+
+topics=mytopic
+
+camel.source.endpoint.servers=127.0.0.1
+camel.source.path.topic=eltopic
+camel.source.endpoint.lookupServerPort=4161
+```
+
+And add the correct address for the server.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelNsqSourceConnector.properties
+```
+
+In one terminal send some messages
+
+```
+> curl -d 'NSQ to Kafka message 1' 'http://127.0.0.1:4151/pub?topic=eltopic'
+> curl -d 'NSQ to Kafka message 2' 'http://127.0.0.1:4151/pub?topic=eltopic'
+```
+
+On a different terminal run the kafka-consumer and send messages to your Kafka Broker.
+
+```
+bin/kafka-console-consumer.sh --topic mytopic --from-beginning --bootstrap-server localhost:9092
+NSQ to Kafka message 1
+NSQ to Kafka message 2
+```
+
