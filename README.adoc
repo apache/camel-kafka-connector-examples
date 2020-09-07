@@ -11,6 +11,6 @@ List of existing examples:
 - AWS2-SQS source and sink examples
 - CQL source and sink example
 - Nats source and sink example
-- NSQ sink example
+- NSQ source and sink example
 - File source and sink example
 - RabbitMQ source and sink example
