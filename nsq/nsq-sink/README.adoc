@@ -1,0 +1,108 @@
+# Camel-Kafka-connector NSQ Sink
+
+## Introduction
+
+This is an example for Camel-Kafka-connector NSQ Sink 
+
+## What is needed
+
+- A NSQ topic
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-nsq-kafka-connector/0.4.0/camel-nsq-kafka-connector-0.4.0-package.zip
+> unzip camel-nsq-kafka-connector-0.4.0-package.zip
+```
+
+In this example we'll use a docker image for NSQ
+
+```
+> docker pull nsqio/nsq
+> docker run --name lookupd -p 4160:4160 -p 4161:4161 nsqio/nsq /nsqlookupd
+```
+
+We'll need to inspect the container for the IP address of nsqlookupd 
+
+```
+> docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' lookupd
+172.17.0.2
+```
+
+Now we need to run the nsqd container and use the above IP
+
+```
+> docker run --name nsqd -p 4150:4150 -p 4151:4151 \
+>     nsqio/nsq /nsqd \
+>     --broadcast-address=172.17.0.2 \
+>     --lookupd-tcp-address=172.17.0.2:4160
+```
+
+And we now need to check for the container IP
+
+```
+> docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' nsqd
+172.17.0.3
+```
+
+Now it's time to setup the connector
+
+Open the NSQ configuration file
+
+```
+name=CamelNsqSourceConnector
+connector.class=org.apache.camel.kafkaconnector.nsq.CamelNsqSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.endpoint.servers=172.17.0.3
+camel.sink.path.topic=nsq-main
+```
+
+And add the correct address for the server.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelNsqSinkConnector.properties
+```
+
+On a different terminal run the kafka-producer and send messages to your Kafka Broker.
+
+```
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic mytopic
+Kafka to NSQ message 1
+Kafka to NSQ message 2
+```
+
+To consume messages from NSQ you need to login into the nsqd container and use nsq_tail
+
+```
+> docker exec -it nsqd sh
+> nsq_tail -topic nsq-main --nsqd-tcp-address localhost:4150
+2020/09/07 09:15:40 Adding consumer for topic: nsq-main
+2020/09/07 09:15:40 INF    1 [nsq-main/tail419367#ephemeral] (localhost:4150) connecting to nsqd
+Kafka to NSQ message 1
+
+Kafka to NSQ message 2
+```
+
