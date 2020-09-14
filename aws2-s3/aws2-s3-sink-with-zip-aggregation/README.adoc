@@ -27,17 +27,17 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.4.0
-[INFO] Using property: camel-kafka-connector-version = 0.4.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.5.0
+[INFO] Using property: camel-kafka-connector-version = 0.5.0
 Confirm properties configuration:
 groupId: org.apache.camel.ckc
 artifactId: aws2s3
 version: 1.0-SNAPSHOT
 package: org.apache.camel.ckc
-camel-kafka-connector-version: 0.4.0
+camel-kafka-connector-version: 0.5.0
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.4.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.5.0
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.ckc
 [INFO] Parameter: artifactId, Value: aws2s3
@@ -47,7 +47,7 @@ camel-kafka-connector-version: 0.4.0
 [INFO] Parameter: package, Value: com.github.oscerd
 [INFO] Parameter: version, Value: 1.0-SNAPSHOT
 [INFO] Parameter: groupId, Value: org.apache.camel.ckc
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.4.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.5.0
 [INFO] Parameter: artifactId, Value: aws2s3
 [INFO] Project created from Archetype in dir: /home/workspace/miscellanea/aws2s3
 [INFO] ------------------------------------------------------------------------
@@ -93,12 +93,12 @@ Now we need to edit the POM
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-kafka-connector</artifactId>
-      <version>0.4.0</version>
+      <version>0.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-aws2-s3-kafka-connector</artifactId>
-      <version>0.4.0</version>
+      <version>0.5.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
