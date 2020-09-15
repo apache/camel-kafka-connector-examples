@@ -1,0 +1,80 @@
+# Camel-Kafka-connector AWS2 MinIO Source
+
+## Introduction
+
+This is an example for Camel-Kafka-connector MinIO
+
+## What is needed
+
+- A MinIO instance running
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-minio-kafka-connector/0.5.0/camel-minio-kafka-connector-0.5.0-package.zip
+> unzip camel-minio-kafka-connector-0.5.0-package.zip
+```
+
+Now we need to setup a MinIO instance
+
+```
+> wget https://dl.min.io/server/minio/release/linux-amd64/minio
+> chmod +x minio
+> export MINIO_ACCESS_KEY=minio
+> export MINIO_SECRET_KEY=miniostorage
+> mkdir data
+> ./minio server data/
+```
+
+Now it's time to setup the connectors
+
+Open the Minio configuration File
+
+```
+name=CamelMinioSourceConnector
+connector.class=org.apache.camel.kafkaconnector.minio.CamelMinioSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+camel.source.maxPollDuration=10000
+
+topics=mytopic
+
+camel.source.path.bucketName=bucket
+camel.source.endpoint.endpoint=http://localhost:9000
+camel.component.minio.access-key=minio
+camel.component.minio.secret-key=miniostorage
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelMinioSourceConnector.properties
+```
+
+Just connect to your MinIO console and upload a file into your bucket.
+
+On a different terminal run the kafka-consumer and you should see messages from the MinIO bucket arriving through Kafka Broker.
+
+```
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic mytopic --from-beginning
+Minio to Kafka through Camel
+```
+
