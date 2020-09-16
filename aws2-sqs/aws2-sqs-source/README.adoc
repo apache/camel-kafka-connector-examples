@@ -158,7 +158,7 @@ apiVersion: kafka.strimzi.io/v1alpha1
 kind: KafkaConnector
 metadata:
   name: sqs-source-connector
-  namespace: oscerd-ckc
+  namespace: myproject
   labels:
     strimzi.io/cluster: my-connect-cluster
 spec:
