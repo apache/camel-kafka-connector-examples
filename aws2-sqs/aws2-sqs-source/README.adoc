@@ -155,6 +155,20 @@ We should now wait for the rollout of the new image to finish and the replica se
 Once it is done, we can check that the connectors are available in our Kafka Connect cluster.
 Strimzi is running Kafka Connect in a distributed mode.
 
+To check the available connector plugins, you can run the following command:
+
+[source,bash,options="nowrap"]
+----
+oc exec -i -c kafka my-cluster-kafka-0 -- curl -s http://my-connect-cluster-connect-api:8083/connector-plugins
+----
+
+You should see something like this:
+
+[source,json,options="nowrap"]
+----
+[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.aws2sqs.CamelAws2sqsSinkConnector","type":"sink","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.aws2sqs.CamelAws2sqsSourceConnector","type":"source","version":"0.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
+----
+
 ### Create connector instance
 
 Now we can create some instance of a AWS2-SQS source connector:
