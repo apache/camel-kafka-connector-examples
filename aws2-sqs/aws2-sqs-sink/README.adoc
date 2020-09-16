@@ -159,7 +159,7 @@ To check the available connector plugins, you can run the following command:
 
 [source,bash,options="nowrap"]
 ----
-oc exec -i -c kafka my-cluster-kafka-0 -- curl -s http://my-connect-cluster-connect-api:8083/connector-plugins
+oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name=my-connect-cluster-connect -o=jsonpath='{.items[0].metadata.name}'` -- curl -s http://my-connect-cluster-connect-api:8083/connector-plugins
 ----
 
 You should see something like this:
@@ -203,7 +203,7 @@ You can check the status of the connector using
 
 [source,bash,options="nowrap"]
 ----
-oc exec -i -c kafka my-cluster-kafka-0 -- curl -s http://my-connect-cluster-connect-api:8083/connectors/sqs-sink-connector/status
+oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name=my-connect-cluster-connect -o=jsonpath='{.items[0].metadata.name}'` -- curl -s http://my-connect-cluster-connect-api:8083/connectors/sqs-sink-connector/status
 ----
 
 ### Check enqueued messages
