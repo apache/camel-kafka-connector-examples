@@ -171,9 +171,7 @@ You should see something like this:
 
 ### Create connector instance
 
-Now we can create some instance of a AWS2-SQS source connector:
-
-Now we can create some instance of a connector plugin::
+Now we can create some instance of the AWS2 SQS source connector:
 
 [source,bash,options="nowrap"]
 ----
