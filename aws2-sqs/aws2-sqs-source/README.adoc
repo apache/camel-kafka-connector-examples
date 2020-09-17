@@ -188,7 +188,6 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "value.converter": "org.apache.kafka.connect.storage.StringConverter",
     "topics": "sqs-topic",
     "camel.source.path.queueNameOrArn": "camel-connector-test",
-    "camel.source.endpoint.autocloseBody": false,
     "camel.source.maxPollDuration": 10000,
     "camel.component.aws2-sqs.accessKey": "xxx",
     "camel.component.aws2-sqs.secretKey": "xxx",
