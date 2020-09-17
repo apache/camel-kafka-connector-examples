@@ -180,7 +180,7 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     -H "Content-Type:application/json" \
     http://my-connect-cluster-connect-api:8083/connectors -d @- <<'EOF'
 {
-  "name": "s3-connector",
+  "name": "sns-sink-connector",
   "config": {
     "connector.class": "org.apache.camel.kafkaconnector.aws2sns.CamelAws2snsSinkConnector",
     "tasks.max": "1",
