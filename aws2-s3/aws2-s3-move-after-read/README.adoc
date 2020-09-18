@@ -6,7 +6,7 @@ This is an example for Camel-Kafka-connector AW2-S3 with move after read option
 
 ### What is needed
 
-- Your AWS credentials
+- An AWS S3 Bucket
 
 ### Running Kafka
 
