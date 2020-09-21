@@ -186,6 +186,34 @@ You should see something like this:
 [{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SinkConnector","type":"sink","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector","type":"source","version":"0.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
 ----
 
+### Set the AWS credential as secret (optional)
+
+You can also set the aws creds option as secret, you'll need to edit the file config/aws-s3-cred.properties with the correct credentials and then execute the following command
+
+[source,bash,options="nowrap"]
+----
+oc create secret generic aws2-s3 --from-file=config/openshift/aws2-s3-cred.properties
+----
+
+Now we need to edit KafkaConnectS2I custom resource to reference the secret. For example:
+
+[source,bash,options="nowrap"]
+----
+spec:
+  # ...
+  config:
+    config.providers: file
+    config.providers.file.class: org.apache.kafka.common.config.provider.FileConfigProvider
+  #...
+  externalConfiguration:
+    volumes:
+      - name: aws-credentials
+        secret:
+          secretName: aws2-s3
+----
+
+In this way the secret aws2-s3 will be mounted as volume with path /opt/kafka/external-configuration/aws-credentials/
+
 ### Create connector instance
 
 Now we can create some instance of the AWS2 S3 sink connector:
@@ -245,6 +273,13 @@ spec:
     camel.component.aws2-s3.secretKey: yyyy
     camel.component.aws2-s3.region: region
 EOF
+----
+
+If you followed the optional step for secret credentials you can run the following command:
+
+[source,bash,options="nowrap"]
+----
+oc apply -f config/openshift/aws2-s3-sink-with-aggregation.yaml
 ----
 
 You can check the status of the connector using
