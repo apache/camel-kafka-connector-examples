@@ -174,7 +174,7 @@ You can also set the aws creds option as secret, you'll need to edit the file co
 
 [source,bash,options="nowrap"]
 ----
-oc create secret generic aws2-s3 --from-file=aws2-s3-cred.properties
+oc create secret generic aws2-s3 --from-file=config/openshift/aws2-s3-cred.properties
 ----
 
 Now we need to edit KafkaConnectS2I custom resource to reference the secret. For example:
@@ -255,7 +255,7 @@ If you followed the optional step for secret credentials you can run the followi
 
 [source,bash,options="nowrap"]
 ----
-oc apply -f config/aws2-s3-source-connector.yaml
+oc apply -f config/openshift/aws2-s3-source-connector.yaml
 ----
 
 You can check the status of the connector using
