@@ -1,0 +1,18 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: sqs-sink-connector
+  namespace: myproject
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.aws2sqs.CamelAws2sqsSinkConnector
+  tasksMax: 1
+  config:
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
+    topics: sqs-topic
+    camel.sink.path.queueNameOrArn: camel-connector-test
+    camel.component.aws2-s3.accessKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:accessKey}
+    camel.component.aws2-s3.secretKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:secretKey}
+    camel.component.aws2-s3.region: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:region}
