@@ -169,6 +169,34 @@ You should see something like this:
 [{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.aws2sns.CamelAws2snsSinkConnector","type":"sink","version":"0.5.0"},{"class":"org.apache.camel.kafkaconnector.aws2sns.CamelAws2snsSourceConnector","type":"source","version":"0.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
 ----
 
+### Set the AWS credential as secret (optional)
+
+You can also set the aws creds option as secret, you'll need to edit the file config/aws-s3-cred.properties with the correct credentials and then execute the following command
+
+[source,bash,options="nowrap"]
+----
+oc create secret generic aws2-sns --from-file=config/openshift/aws2-sns-cred.properties
+----
+
+Now we need to edit KafkaConnectS2I custom resource to reference the secret. For example:
+
+[source,bash,options="nowrap"]
+----
+spec:
+  # ...
+  config:
+    config.providers: file
+    config.providers.file.class: org.apache.kafka.common.config.provider.FileConfigProvider
+  #...
+  externalConfiguration:
+    volumes:
+      - name: aws-credentials
+        secret:
+          secretName: aws2-sns
+----
+
+In this way the secret aws2-sns will be mounted as volume with path /opt/kafka/external-configuration/aws-credentials/
+
 ### Create connector instance
 
 Now we can create some instance of a AWS2-SNS sink connector:
