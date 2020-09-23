@@ -1,0 +1,19 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: lambda-sink-connector
+  namespace: myproject
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.aws2lambda.CamelAws2lambdaSinkConnector
+  tasksMax: 1
+  config:
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
+    topics: lambda-topic
+    camel.sink.path.function: hello-ckc
+    camel.sink.endpoint.operation: invokeFunction
+    camel.component.aws2-lambda.accessKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-lambda-cred.properties:accessKey}
+    camel.component.aws2-lambda.secretKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-lambda-cred.properties:secretKey}
+    camel.component.aws2-lambda.region: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-lambda-cred.properties:region}
