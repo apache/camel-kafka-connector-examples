@@ -238,9 +238,9 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "topics": "lambda-topic",
     "camel.sink.path.function": "hello-ckc",
     "camel.sink.endpoint.operation": "invokeFunction",
-    "camel.component.aws2-s3.accessKey": "xxx",
-    "camel.component.aws2-s3.secretKey": "xxx",
-    "camel.component.aws2-s3.region": "xxx"
+    "camel.component.aws2-lambda.accessKey": "xxx",
+    "camel.component.aws2-lambda.secretKey": "xxx",
+    "camel.component.aws2-lambda.region": "xxx"
   }
 }
 EOF
@@ -267,9 +267,9 @@ spec:
     topics: lambda-topic
     camel.sink.path.function: hello-ckc
     camel.sink.endpoint.operation: invokeFunction
-    camel.component.aws2-s3.accessKey: xxxx
-    camel.component.aws2-s3.secretKey: yyyy
-    camel.component.aws2-s3.region: region
+    camel.component.aws2-lambda.accessKey: xxxx
+    camel.component.aws2-lambda.secretKey: yyyy
+    camel.component.aws2-lambda.region: region
 EOF
 ----
 
