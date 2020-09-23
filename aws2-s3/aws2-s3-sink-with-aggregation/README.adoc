@@ -188,7 +188,7 @@ You should see something like this:
 
 ### Set the AWS credential as secret (optional)
 
-You can also set the aws creds option as secret, you'll need to edit the file config/aws-s3-cred.properties with the correct credentials and then execute the following command
+You can also set the aws creds option as secret, you'll need to edit the file config/aws2-s3-cred.properties with the correct credentials and then execute the following command
 
 [source,bash,options="nowrap"]
 ----
