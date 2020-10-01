@@ -10,6 +10,7 @@ List of existing examples:
 - AWS2-SNS sink example
 - AWS2-SQS source and sink examples
 - CQL source and sink example
+- Infinispan sink example
 - MinIO source and sink example
 - Nats source and sink example
 - NSQ source and sink example
