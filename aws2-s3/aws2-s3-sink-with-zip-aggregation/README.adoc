@@ -132,7 +132,7 @@ Now it's time to setup the connectors
 Open the AWS2 S3 configuration file
 
 ```
-name=CamelAWS2S3SourceConnector
+name=CamelAWS2S3SinkConnector
 connector.class=org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SinkConnector
 key.converter=org.apache.kafka.connect.storage.StringConverter
 value.converter=org.apache.kafka.connect.storage.StringConverter
