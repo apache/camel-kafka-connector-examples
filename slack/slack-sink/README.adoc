@@ -1,0 +1,80 @@
+# Camel-Kafka-connector Slack Sink
+
+This is an example for Camel-Kafka-connector Slack Sink 
+
+## Standalone
+
+### What is needed
+
+- A Slack app
+- A Slack channel
+
+### Setting up Slack
+
+You'll need a workspace and a channel.
+
+In your Slack settings, create an app.
+
+Add the following permissions to your Bot Token scopes:
+* channels:history
+* channels:read
+
+Install the app on your workspace and select the channel you want to consume from. 
+
+Use the Bot User OAuth Access Token as token for this example.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-slack-kafka-connector/0.5.0/camel-slack-kafka-connector-0.5.0-package.zip
+> unzip camel-slack-kafka-connector-0.5.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Slack sink configuration file
+
+```
+name=CamelSlackSinkConnector
+connector.class=org.apache.camel.kafkaconnector.slack.CamelSlackSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.channel=general
+camel.component.slack.webhookUrl=<your_webhook_url>
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelSlackSinkConnector.properties
+```
+
+Check for messages in your channel
+
+In another terminal, using kafkacat, you should be able to send messages
+
+```
+> echo "Hello from Apache Camel" | ./kafkacat -b localhost:9092 -t mytopic 
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
