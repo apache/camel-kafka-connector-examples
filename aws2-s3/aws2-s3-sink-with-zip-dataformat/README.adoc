@@ -444,7 +444,7 @@ If you followed the optional step for secret credentials you can run the followi
 
 [source,bash,options="nowrap"]
 ----
-oc apply -f config/openshift/aws2-s3-sink-with-zip-aggregation.yaml
+oc apply -f config/openshift/aws2-s3-sink-with-zip-dataformat.yaml
 ----
 
 You can check the status of the connector using
