@@ -16,8 +16,8 @@ You'll need a workspace and a channel.
 In your Slack settings, create an app.
 
 Add the following permissions to your Bot Token scopes:
-  - channels:history
-  - channels:read
+* channels:history
+* channels:read
 
 Install the app on your workspace and select the channel you want to consume from. 
 
