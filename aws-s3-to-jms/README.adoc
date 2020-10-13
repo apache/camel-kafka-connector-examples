@@ -42,7 +42,7 @@ In this example we'll use `/home/oscerd/connectors/`
 > unzip camel-aws-s3-kafka-connector-0.5.0-package.zip
 ```
 
-These are the basic connectors. For camel-sjms2 we have a bunch of provided dependencies we need to add in our path, so run the following commands (this is a known bug of Camel-sjms2kKafka-connector 0.1.0, already fixed for 0.2.0)
+These are the basic connectors. For camel-sjms2 we have a bunch of provided dependencies we need to add in our path, so run the following commands:
 
 ```
 > cd /home/oscerd/connectors/camel-sjms2-kafka-connector
