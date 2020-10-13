@@ -165,7 +165,7 @@ bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic mytopic
 Kafka to S3 message 1
 ```
 
-You should see (after the timeout has been reached) a file with date-exchangeId.zip name containing the one file named date-exchangeId. This file will contain the message.
+You should see a file with date-exchangeId.zip name containing the one file named date-exchangeId. This file will contain the message.
 
 ```
 Kafka to S3 message 1
