@@ -1,0 +1,17 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: slack-source-connector
+  namespace: myproject
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.slack.CamelSlackSourceConnector
+  tasksMax: 1
+  config:
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    transforms: SlackTransformer
+    transforms.SlackTransformer.type: org.apache.camel.kafkaconnector.SlackTransformer
+    topics: slack-topic
+    camel.source.path.channel: general
+    camel.source.endpoint.token: ${file:/opt/kafka/external-configuration/slack-token/slack-token.properties:token}
