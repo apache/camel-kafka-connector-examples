@@ -1,0 +1,73 @@
+# Camel-Kafka-connector Telegram Source
+
+This is an example for Camel-Kafka-connector Telegram Source
+
+## Standalone
+
+### What is needed
+
+- A Telegram Bot
+
+### Setting up Telegram Bot and get Chat id
+
+First of all create a telegram bot through the Bot Father channel in Telegram and take note of the BOT token.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-telegram-kafka-connector/0.5.0/camel-telegram-kafka-connector-0.5.0-package.zip
+> unzip camel-telegram-kafka-connector-0.5.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Telegram source configuration file
+
+```
+name=CamelTelegramSourceConnector
+connector.class=org.apache.camel.kafkaconnector.telegram.CamelTelegramSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.source.endpoint.authorizationToken=<bot_token>
+camel.source.path.type=bots
+```
+
+Set the correct options in the file.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelTelegramSourceConnector.properties
+```
+
+Send message to your BOT
+
+In another terminal, using kafkacat, you can consume the messages
+
+```
+> ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Consumer mode (use -P or -C to override)
+IncomingMessage{messageId=7, date=2020-10-21T12:13:10Z, from=User{id=217879046, is_bot='false', firstName='Andrea', lastName='Cosentino', username='Oscerd'}, text='Hello', chat=Chat{id='217879046', title='null', type='private', all_members_are_administrators='false'}, photo=null, video=null, audio=null, document=null, sticker=null, location=null, entities=null, caption=null, captionEntities=null, replyMarkup=null, game=null}
+% Reached end of topic mytopic [0] at offset 1
+```
+
