@@ -17,3 +17,4 @@ List of existing examples:
 - NSQ source and sink examples
 - RabbitMQ source and sink examples
 - Slack source and sink examples
+- Telegram sink example
