@@ -11,8 +11,7 @@ This is an example for Camel-Kafka-connector Telegram Sink
 
 ### Setting up Telegram Bot and get Chat id
 
-First of all create a telegram bot on through the Bot Father channel in Telegram
-Take note of the BOT token.
+First of all create a telegram bot through the Bot Father channel in Telegram and take note of the BOT token.
 Create a group Chat with yourself and the BOT just created, or add the BOT to an existing group Chat.
 If you are lazy you can invite also the RawDataBot BOT and take note of the group chatId.
 In this example we created the ApacheCamelBot BOT.
