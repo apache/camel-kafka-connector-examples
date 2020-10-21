@@ -1,0 +1,79 @@
+# Camel-Kafka-connector Telegram Sink
+
+This is an example for Camel-Kafka-connector Telegram Sink 
+
+## Standalone
+
+### What is needed
+
+- A Telegram Bot
+- A ChatId
+
+### Setting up Telegram Bot and get Chat id
+
+First of all create a telegram bot on through the Bot Father channel in Telegram
+Take note of the BOT token.
+Create a group Chat with yourself and the BOT just created, or add the BOT to an existing group Chat.
+If you are lazy you can invite also the RawDataBot BOT and take note of the group chatId.
+In this example we created the ApacheCamelBot BOT.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-telegram-kafka-connector/0.5.0/camel-telegram-kafka-connector-0.5.0-package.zip
+> unzip camel-telegram-kafka-connector-0.5.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Telegram sink configuration file
+
+```
+name=CamelTelegramSinkConnector
+connector.class=org.apache.camel.kafkaconnector.telegram.CamelTelegramSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.endpoint.authorizationToken=<bot_token>
+camel.sink.path.type=bots
+camel.sink.endpoint.chatId=<group_chat_id>
+```
+
+Set the correct options in the file.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelTelegramSinkConnector.properties
+```
+
+Check for messages in your chat
+
+In another terminal, using kafkacat, you should be able to send messages
+
+```
+> echo "Hello from Apache Camel" | ./kafkacat -b localhost:9092 -t mytopic 
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+and in your group chat you should see messages coming from the ApacheCamelBot or the name of your BOT.
+
