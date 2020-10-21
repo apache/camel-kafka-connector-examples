@@ -10,7 +10,7 @@ This is an example for Camel-Kafka-connector Telegram Source
 
 ### Setting up Telegram Bot and get Chat id
 
-First of all create a telegram bot through the Bot Father channel in Telegram and take note of the BOT token.
+First of all create a telegram bot through the Bot Father channel in Telegram and take note of the BOT authorization token.
 
 ### Running Kafka
 
@@ -48,7 +48,7 @@ value.converter=org.apache.kafka.connect.storage.StringConverter
 
 topics=mytopic
 
-camel.source.endpoint.authorizationToken=<bot_token>
+camel.source.endpoint.authorizationToken=<bot_authorization_token>
 camel.source.path.type=bots
 ```
 
