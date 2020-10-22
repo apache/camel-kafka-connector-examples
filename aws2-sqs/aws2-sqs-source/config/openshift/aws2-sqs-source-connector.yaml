@@ -14,6 +14,6 @@ spec:
     topics: sqs-topic
     camel.source.path.queueNameOrArn: camel-connector-test
     camel.source.maxPollDuration: 10000
-    camel.component.aws2-s3.accessKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:accessKey}
-    camel.component.aws2-s3.secretKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:secretKey}
-    camel.component.aws2-s3.region: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:region}
+    camel.component.aws2-sqs.accessKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:accessKey}
+    camel.component.aws2-sqs.secretKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:secretKey}
+    camel.component.aws2-sqs.region: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-sqs-cred.properties:region}
