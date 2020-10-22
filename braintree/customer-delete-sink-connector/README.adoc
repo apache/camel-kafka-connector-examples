@@ -1,0 +1,93 @@
+# Camel-Kafka-connector Braintree Sink
+
+This is an example for Camel-Kafka-connector Braintree Sink 
+
+## Standalone
+
+### What is needed
+
+- A Braintree account
+- At least one customer registered in Braintree account
+
+### Setting up Braintree
+
+In this example we're using a Sandbox environment coming from Braintree.
+In the UI of your sandbox create a customer and take note of his id.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-braintree-kafka-connector/0.5.0/camel-braintree-kafka-connector-0.5.0-package.zip
+> unzip camel-braintree-kafka-connector-0.5.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Telegram sink configuration file
+
+```
+name=CamelBraintreeSinkConnector
+connector.class=org.apache.camel.kafkaconnector.braintree.CamelBraintreeSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.apiName=customer
+camel.sink.path.methodName=delete
+camel.sink.endpoint.inBody=id
+camel.sink.endpoint.environment=sandbox
+camel.sink.endpoint.publicKey=<public_key>
+camel.sink.endpoint.privateKey=<secret_key>
+camel.sink.endpoint.merchantId=<merchant_id>
+```
+
+Set the correct options in the file.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelBraintreeSinkConnector.properties
+```
+
+You should have taken note of the customer id in the first steps, now it's time to use it.
+
+```
+> echo "264512693" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+In your log you should see something like this:
+
+```
+[2020-10-22 12:36:46,220] INFO [Consumer clientId=connector-consumer-CamelBraintreeSinkConnector-0, groupId=connect-CamelBraintreeSinkConnector] Finished assignment for group at generation 19: {connector-consumer-CamelBraintreeSinkConnector-0-e1192455-0339-4cd2-9cdf-fd66a5be1e14=org.apache.kafka.clients.consumer.ConsumerPartitionAssignor$Assignment@6e4955f2} (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator:585)
+[2020-10-22 12:36:46,223] INFO [Consumer clientId=connector-consumer-CamelBraintreeSinkConnector-0, groupId=connect-CamelBraintreeSinkConnector] Successfully joined group with generation 19 (org.apache.kafka.clients.consumer.internals.AbstractCoordinator:484)
+[2020-10-22 12:36:46,226] INFO [Consumer clientId=connector-consumer-CamelBraintreeSinkConnector-0, groupId=connect-CamelBraintreeSinkConnector] Adding newly assigned partitions: mytopic-0 (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator:267)
+[2020-10-22 12:36:46,234] INFO [Consumer clientId=connector-consumer-CamelBraintreeSinkConnector-0, groupId=connect-CamelBraintreeSinkConnector] Found no committed offset for partition mytopic-0 (org.apache.kafka.clients.consumer.internals.ConsumerCoordinator:1241)
+[2020-10-22 12:36:46,243] INFO [Consumer clientId=connector-consumer-CamelBraintreeSinkConnector-0, groupId=connect-CamelBraintreeSinkConnector] Resetting offset for partition mytopic-0 to offset 0. (org.apache.kafka.clients.consumer.internals.SubscriptionState:385)
+[2020-10-22 12:36:47,245] INFO [Braintree] [22/Oct/2020 12:36:47 +0200]] DELETE /merchants/645mkwqchkwvy7td/customers/264512693 (Braintree:64)
+Oct 22, 2020 12:36:47 PM com.braintreegateway.util.Http httpDo
+INFO: [Braintree] [22/Oct/2020 12:36:47 +0200]] DELETE /merchants/645mkwqchkwvy7td/customers/264512693
+[2020-10-22 12:36:55,925] INFO WorkerSinkTask{id=CamelBraintreeSinkConnector-0} Committing offsets asynchronously using sequence number 1: {mytopic-0=OffsetAndMetadata{offset=1, leaderEpoch=null, metadata=''}} (org.apache.kafka.connect.runtime.WorkerSinkTask:345)
+
+```
+
+Now the customer has been removed from your Braintree account.
+
