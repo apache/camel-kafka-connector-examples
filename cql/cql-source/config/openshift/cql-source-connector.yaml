@@ -1,0 +1,23 @@
+---
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: cql-source-connector
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.cql.CamelCqlSourceConnector
+  tasksMax: 1
+  config:
+    topics: mytopic
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
+
+    camel.source.path.hosts: cassandra
+    camel.source.path.port: 9042
+    camel.source.path.keyspace: test
+    camel.source.endpoint.cql: select * from users
+    camel.source.endpoint.username: admin
+    camel.source.endpoint.password: admin
+
+

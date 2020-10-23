@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cassandra
+  labels:
+    app: cassandra
+spec:
+  replicas: 1
+  selector:
+      matchLabels:
+        app: cassandra
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      containers:
+      - image: centos/cassandra-311-centos7
+        name: cassandra
+        ports:
+            - containerPort: 9042
+        env:
+            - name: CASSANDRA_ADMIN_PASSWORD
+              value: admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cassandra
+  labels:
+      app: cassandra
+spec:
+  ports:
+    - port: 9042
+      targetPort: 9042
+  type: ClusterIP
+  selector:
+    app: cassandra
+
