@@ -11,8 +11,8 @@ This is an example for Camel-Kafka-connector AWS2-S3 Sink with Zip Dataformat
 ### Running Kafka
 
 ```
-$KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
-$KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
 $KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
 ```
 
@@ -330,7 +330,7 @@ Now we need to build the connector:
 
 And move the zip package in targe to my-connectors folder and unzipped it.
 
-Now we can start the build 
+Now we can start the build
 
 [source,bash,options="nowrap"]
 ----
