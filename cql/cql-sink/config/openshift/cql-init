@@ -1,0 +1,4 @@
+create keyspace test with replication = {'class':'SimpleStrategy', 'replication_factor':3};
+use test;
+create table users ( id timeuuid primary key, name text );
+quit;

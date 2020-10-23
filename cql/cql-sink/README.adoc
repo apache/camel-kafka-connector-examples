@@ -140,3 +140,238 @@ cqlsh:test> select * from users;
 
 ----
 
+
+
+## Openshift
+
+### What is needed
+
+- An Openshift instance
+
+### Running Kafka using Strimzi Operator
+
+First we install the Strimzi operator and use it to deploy the Kafka broker and Kafka Connect into our OpenShift project.
+We need to create security objects as part of installation so it is necessary to switch to admin user.
+If you use Minishift, you can do it with the following command:
+
+[source,bash,options="nowrap"]
+----
+oc login -u system:admin
+----
+
+We will use OpenShift project `myproject`.
+If it doesn't exist yet, you can create it using following command:
+
+[source,bash,options="nowrap"]
+----
+oc new-project myproject
+----
+
+If the project already exists, you can switch to it with:
+
+[source,bash,options="nowrap"]
+----
+oc project myproject
+----
+
+We can now install the Strimzi operator into this project:
+
+[source,bash,options="nowrap",subs="attributes"]
+----
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.19.0/strimzi-cluster-operator-0.19.0.yaml
+----
+
+Next we will deploy a Kafka broker cluster and a Kafka Connect cluster and then create a Kafka Connect image with the Debezium connectors installed:
+
+[source,bash,options="nowrap",subs="attributes"]
+----
+# Deploy a single node Kafka broker
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/raw/0.19.0/examples/kafka/kafka-persistent-single.yaml
+
+# Deploy a single instance of Kafka Connect with no plug-in installed
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/raw/0.19.0/examples/connect/kafka-connect-s2i-single-node-kafka.yaml
+----
+
+Optionally enable the possibility to instantiate Kafka Connectors through specific custom resource:
+[source,bash,options="nowrap"]
+----
+oc annotate kafkaconnects2is my-connect-cluster strimzi.io/use-connector-resources=true
+----
+
+### Add Camel Kafka connector binaries
+
+Strimzi uses `Source2Image` builds to allow users to add their own connectors to the existing Strimzi Docker images.
+We now need to build the connectors and add them to the image,
+if you have built the whole project (`mvn clean package`) decompress the connectors you need in a folder (i.e. like `my-connectors/`)
+so that each one is in its own subfolder
+(alternatively you can download the latest officially released and packaged connectors from maven):
+
+So we need to do something like this:
+
+```
+> cd my-connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.6.0/camel-cql-kafka-connector-0.6.0-package.zip
+> unzip camel-cql-kafka-connector-0.6.0-package.zip
+```
+
+Now we can start the build 
+
+[source,bash,options="nowrap"]
+----
+oc start-build my-connect-cluster-connect --from-dir=./my-connectors/ --follow
+----
+
+We should now wait for the rollout of the new image to finish and the replica set with the new connector to become ready.
+Once it is done, we can check that the connectors are available in our Kafka Connect cluster.
+Strimzi is running Kafka Connect in a distributed mode.
+
+To check the available connector plugins, you can run the following command:
+
+[source,bash,options="nowrap"]
+----
+oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name=my-connect-cluster-connect -o=jsonpath='{.items[0].metadata.name}'` -- curl -s http://my-connect-cluster-connect-api:8083/connector-plugins | jq .
+----
+
+You should see something like this:
+
+[source,json,options="nowrap"]
+----
+[
+  {
+    "class": "org.apache.camel.kafkaconnector.CamelSinkConnector",
+    "type": "sink",
+    "version": "0.6.0"
+  },
+  {
+    "class": "org.apache.camel.kafkaconnector.CamelSourceConnector",
+    "type": "source",
+    "version": "0.6.0"
+  },
+  {
+    "class": "org.apache.camel.kafkaconnector.cql.CamelCqlSinkConnector",
+    "type": "sink",
+    "version": "0.6.0"
+  },
+  {
+    "class": "org.apache.camel.kafkaconnector.cql.CamelCqlSourceConnector",
+    "type": "source",
+    "version": "0.6.0"
+  },
+  {
+    "class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
+    "type": "sink",
+    "version": "2.5.0"
+  },
+  {
+    "class": "org.apache.kafka.connect.file.FileStreamSourceConnector",
+    "type": "source",
+    "version": "2.5.0"
+  },
+  {
+    "class": "org.apache.kafka.connect.mirror.MirrorCheckpointConnector",
+    "type": "source",
+    "version": "1"
+  },
+  {
+    "class": "org.apache.kafka.connect.mirror.MirrorHeartbeatConnector",
+    "type": "source",
+    "version": "1"
+  },
+  {
+    "class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+    "type": "source",
+    "version": "1"
+  }
+]
+----
+
+
+### Deploy the Cassandra instance
+
+Next, we need to deploy a Cassandra instance:
+
+[source,bash,options="nowrap"]
+----
+oc create -f config/openshift/cassandra.yaml
+----
+
+This will create a Cassandra deployment and a service that will allow other pods to connect to it.
+
+
+We then create the table in cassandra using the following command:
+
+----
+cat config/openshift/cql-init | oc run -i --restart=Never --attach --rm --image centos/cassandra-311-centos7 cassandra-client --command bash  -- -c 'cqlsh -u admin -p admin cassandra'
+----
+
+
+### Create connector instance
+
+Now we can create some instance of the CQL sink connector:
+
+[source,bash,options="nowrap"]
+----
+oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name=my-connect-cluster-connect -o=jsonpath='{.items[0].metadata.name}'` -- curl -X POST \
+    -H "Accept:application/json" \
+    -H "Content-Type:application/json" \
+    http://my-connect-cluster-connect-api:8083/connectors -d @- <<'EOF'
+{
+  "name": "cql-sink-connector",
+  "config": {
+    "connector.class": "org.apache.camel.kafkaconnector.cql.CamelCqlSinkConnector",
+    "tasks.max": "1",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "topics": "mytopic",
+    "camel.sink.path.hosts": "cassandra",
+    "camel.sink.path.port": "9042",
+    "camel.sink.path.keyspace": "test",
+    "camel.sink.endpoint.cql": "insert into users(id, name) values (now(), ?)",
+    "camel.sink.endpoint.username": "admin",
+    "camel.sink.endpoint.password": "admin"
+  }
+}
+EOF
+----
+
+Altenatively, if have enabled `use-connector-resources`, you can create the connector instance by creating a specific custom resource:
+
+[source,bash,options="nowrap"]
+----
+oc create -f config/openshift/cql-sink-connector.yaml
+----
+
+
+You can check the status of the connector using
+
+[source,bash,options="nowrap"]
+----
+oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name=my-connect-cluster-connect -o=jsonpath='{.items[0].metadata.name}'` -- curl -s http://my-connect-cluster-connect-api:8083/connectors/cql-sink-connector/status
+----
+
+Run the following command and send some messages to the broker:
+
+```
+oc exec -i -c kafka my-cluster-kafka-0 -- bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic mytopic
+>message1
+>message2
+```
+
+
+### Verify the data in Cassandra
+
+Run the following command to get an interactive cqlsh session:
+
+----
+oc run -ti --restart=Never --attach --rm --image centos/cassandra-311-centos7 cassandra-client --command bash  -- -c 'cqlsh -u admin -p admin cassandra'
+If you don't see a command prompt, try pressing enter.
+Connected to Test Cluster at cassandra:9042.
+[cqlsh 5.0.1 | Cassandra 3.11.1 | CQL spec 3.4.4 | Native protocol v4]
+Use HELP for help.
+admin@cqlsh> select * from test.users;
+ id                                   | name
+--------------------------------------+----------
+ 4e4dfda0-19d3-11eb-9012-47ac9a308b13 | message1
+ 4f84a8e0-19d3-11eb-9012-47ac9a308b13 | message2
+----
+

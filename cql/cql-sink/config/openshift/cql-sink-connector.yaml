@@ -1,0 +1,23 @@
+---
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: cql-sink-connector
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.cql.CamelCqlSinkConnector
+  tasksMax: 1
+  config:
+    topics: mytopic
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.storage.StringConverter
+
+    camel.sink.path.hosts: cassandra
+    camel.sink.path.port: 9042
+    camel.sink.path.keyspace: test
+    camel.sink.endpoint.cql: insert into users(id, name) values (now(), ?)
+    camel.sink.endpoint.username: admin
+    camel.sink.endpoint.password: admin
+
+
