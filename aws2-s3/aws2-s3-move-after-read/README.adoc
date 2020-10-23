@@ -13,7 +13,7 @@ This is an example for Camel-Kafka-connector AW2-S3 with move after read option
 ```
 $KAFKA_HOME/bin/zookeeper-server-start.sh config/zookeeper.properties
 $KAFKA_HOME/bin/kafka-server-start.sh config/server.properties
-$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test1
 ```
 
 ### Setting up the needed bits and running the example
@@ -63,7 +63,7 @@ You need to have the camel-1 bucket already created in your AWS S3.
 Now you can run the example
 
 ```
-$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWSS3SourceConnector.properties 
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWSS3SourceConnector.properties
 ```
 Load a file in camel-kafka-connector bucket.
 
@@ -147,7 +147,7 @@ So we need to do something like this:
 > unzip camel-aws2-s3-kafka-connector-0.5.0-package.zip
 ```
 
-Now we can start the build 
+Now we can start the build
 
 [source,bash,options="nowrap"]
 ----
