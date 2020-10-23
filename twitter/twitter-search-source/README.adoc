@@ -1,0 +1,75 @@
+# Camel-Kafka-connector Twitter Search Source
+
+This is an example for Camel-Kafka-connector Twitter Search Source
+
+## Standalone
+
+### What is needed
+
+- A Twitter App
+
+### Setting up Twitter App and get credentials
+
+You'll need to create a twitter app and take note of access token, access token secret, consumer key and consumer secret.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-search-kafka-connector/0.5.0/camel-twitter-search-kafka-connector-0.5.0-package.zip
+> unzip camel-twitter-search-kafka-connector-0.5.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Twitter source configuration file
+
+```
+name=CamelTwitter-searchSourceConnector
+connector.class=org.apache.camel.kafkaconnector.twittersearch.CamelTwittersearchSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.source.path.keywords=Apache Camel
+camel.source.endpoint.accessToken=<access_token>
+camel.source.endpoint.accessTokenSecret=<access_token_secret>
+camel.source.endpoint.consumerKey=<consumer_key>
+camel.source.endpoint.consumerSecret=<consumer_secret>
+camel.source.endpoint.count=1
+```
+
+Set the correct options in the file for the credentials part.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelTwittersearchSourceConnector.properties
+```
+
+In another terminal, using kafkacat, you can consume the messages
+
+```
+> ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Consumer mode (use -P or -C to override)
+StatusJSONImpl{createdAt=Fri Oct 23 15:47:28 CEST 2020, id=1319636559298252801, text='How to Handle Errors with Spring and Apache Camel - https://t.co/Zwhnyw4SQc https://t.co/3GOZ11qZtX', source='<a href="https://ifttt.com" rel="nofollow">IFTTT</a>', isTruncated=false, inReplyToStatusId=-1, inReplyToUserId=-1, isFavorited=false, isRetweeted=false, favoriteCount=0, inReplyToScreenName='null', geoLocation=null, place=null, retweetCount=0, isPossiblySensitive=false, lang='en', contributorsIDs=[], retweetedStatus=null, userMentionEntities=[], urlEntities=[URLEntityJSONImpl{url='https://t.co/Zwhnyw4SQc', expandedURL='https://ift.tt/37utjoS', displayURL='ift.tt/37utjoS'}], hashtagEntities=[], mediaEntities=[MediaEntityJSONImpl{id=1319636558480347141, url='https://t.co/3GOZ11qZtX', mediaURL='http://pbs.twimg.com/media/ElBKdUzXEAUpVFk.png', mediaURLHttps='https://pbs.twimg.com/media/ElBKdUzXEAUpVFk.png', expandedURL='https://twitter.com/metavige_rssbot/status/1319636559298252801/photo/1', displayURL='pic.twitter.com/3GOZ11qZtX', sizes={0=Size{width=96, height=96, resize=101}, 1=Size{width=96, height=96, resize=100}, 2=Size{width=96, height=96, resize=100}, 3=Size{width=96, height=96, resize=100}}, type='photo', videoAspectRatioWidth=0, videoAspectRatioHeight=0, videoDurationMillis=0, videoVariants=0, extAltText='null'}], symbolEntities=[], currentUserRetweetId=-1, user=UserJSONImpl{id=991108612255662080, name='metavige_rss_bot', email='null', screenName='metavige_rssbot', location='', description='', isContributorsEnabled=false, profileImageUrl='http://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png', profileImageUrlHttps='https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png', isDefaultProfileImage=true, url='null', isProtected=false, followersCount=2, status=null, profileBackgroundColor='F5F8FA', profileTextColor='333333', profileLinkColor='1DA1F2', profileSidebarFillColor='DDEEF6', profileSidebarBorderColor='C0DEED', profileUseBackgroundImage=true, isDefaultProfile=true, showAllInlineMedia=false, friendsCount=0, createdAt=Tue May 01 02:14:41 CEST 2018, favouritesCount=0, utcOffset=-1, timeZone='null', profileBackgroundImageUrl='null', profileBackgroundImageUrlHttps='null', profileBackgroundTiled=false, lang='null', statusesCount=351, isGeoEnabled=false, isVerified=false, translator=false, listedCount=0, isFollowRequestSent=false, withheldInCountries=null}, withHeldInCountries=null, quotedStatusId=-1, quotedStatus=null}
+% Reached end of topic mytopic [0] at offset 1
+```
+
