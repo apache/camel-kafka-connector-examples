@@ -196,6 +196,8 @@ camel.source.endpoint.cql=select * from users
 camel.source.endpoint.resultSetConversionStrategy=#class:org.apache.camel.kafkaconnector.cql.extended.RowConversionStrategy
 ```
 
+Set the correct options in the file.
+
 Now you can run the example
 
 ```
