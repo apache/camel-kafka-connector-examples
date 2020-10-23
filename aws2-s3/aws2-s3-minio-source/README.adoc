@@ -68,7 +68,7 @@ camel.component.aws2-s3.region=eu-west-1
 Now you can run the example
 
 ```
-$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWSS3SourceConnector.properties config/CamelAWS2SQSSourceConnector.properties
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWSS3SourceConnector.properties
 ```
 
 Just connect to your MinIO console and upload a file into your bucket.
