@@ -19,3 +19,4 @@ List of existing examples:
 - RabbitMQ source and sink examples
 - Slack source and sink examples
 - Telegram source and sink examples
+- Twitter Search source example
