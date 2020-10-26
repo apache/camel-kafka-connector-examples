@@ -75,8 +75,7 @@ IncomingMessage{messageId=7, date=2020-10-21T12:13:10Z, from=User{id=217879046, 
 
 ### What is needed
 
-- A Slack App
-- A Slack channel
+- A Telegram BOT
 - An Openshift instance
 
 ### Running Kafka using Strimzi Operator
