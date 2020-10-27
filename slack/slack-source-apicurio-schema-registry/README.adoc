@@ -1,6 +1,6 @@
-# Camel-Kafka-connector Slack Source
+# Camel-Kafka-connector Slack Source with Apicurio Registry
 
-This is an example for Camel-Kafka-connector Slack Source 
+This is an example for Camel-Kafka-connector Slack Source with Apicurio Registry
 
 ## Standalone
 
