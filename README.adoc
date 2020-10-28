@@ -11,6 +11,7 @@ List of existing examples:
 - AWS2-SQS source and sink examples
 - Braintree sink example
 - CQL source and sink examples
+- Exec sink example
 - File source and sink examples
 - Infinispan source and sink examples
 - MinIO source and sink examples
