@@ -1,7 +1,5 @@
-## Infinispan Kafka Producer
-
-Related to https://github.com/oscerd/infinispan-kafka-demo
+## Camel Simple Exec Producer
 
 To run the producer:
 
-mvn clean compile exec:exec
+mvn compile exec:exec -Dkafka.topic.name=mytopic -Dkafka.key=1 -Dcamel.body="FileName" -Dcamel.header.detail="detail1"
