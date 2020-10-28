@@ -1,0 +1,81 @@
+# Camel-Kafka-connector Exec Sink
+
+This is an example for Camel-Kafka-connector Exec Sink 
+
+## Standalone
+
+### What is needed
+
+- The touch command
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-exec-kafka-connector/0.6.0/camel-exec-kafka-connector-0.6.0-package.zip
+> unzip camel-exec-kafka-connector-0.6.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Exec sink configuration file
+
+```
+name=CamelExecSinkConnector
+connector.class=org.apache.camel.kafkaconnector.exec.CamelExecSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.executable=touch
+camel.sink.endpoint.args=/tmp/${body}-${headers.detail}.txt 
+```
+
+Set the correct options in the file.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelExecSinkConnector.properties
+```
+
+You'll need to send messages to mytopic. You can run the simple producer included in this project. So cd in the folder:
+
+```
+> cd camel-kafka-exec-simple-producer
+> mvn compile exec:exec -Dkafka.topic.name=mytopic -Dkafka.key=1 -Dcamel.body="FileName" -Dcamel.header.detail="detail1"
+```
+
+Under tmp folder you should see the file created
+
+```
+> cd /tmp/
+> ls | grep FileName
+FileName-detail1.txt
+```
+
+In the mytopic topic you should see the message too
+
+```
+> ./kafkacat -b localhost:9092 -t mytopic -f 'Headers: %h: Message value: %s\n'
+Headers: CamelHeader.detail=detail1: Message value: FileName
+% Reached end of topic mytopic [0] at offset 1
+```
+
