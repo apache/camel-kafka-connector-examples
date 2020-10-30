@@ -40,7 +40,7 @@ Open the AWS2 S3 configuration file
 name=CamelAWS2S3SourceConnector
 connector.class=org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector
 key.converter=org.apache.kafka.connect.storage.StringConverter
-value.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
 
 camel.source.maxPollDuration=10000
 
@@ -212,7 +212,7 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "connector.class": "org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector",
     "tasks.max": "1",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
-    "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
     "topics": "sqs-topic",
     "camel.source.path.bucketNameOrArn": "camel-kafka-connector",
     "camel.source.maxPollDuration": 10000,
@@ -241,7 +241,7 @@ spec:
   tasksMax: 1
   config:
     key.converter: org.apache.kafka.connect.storage.StringConverter
-    value.converter: org.apache.kafka.connect.storage.StringConverter
+    value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
     topics: s3-topic
     camel.source.path.bucketNameOrArn: camel-kafka-connector
     camel.source.maxPollDuration: 10000
