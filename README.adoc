@@ -4,6 +4,7 @@ List of existing examples:
 
 - AMQP source and sink examples
 - AWS-S3 to JMS example
+- AWS2-IAM sink example
 - AWS2-lambda sink example
 - AWS2-kinesis-firehose sink example
 - AWS2-S3 source and sink examples
