@@ -1,0 +1,84 @@
+= Camel-Kafka-connector AWS2 IAM Sink for creating a group
+
+This is an example for Camel-Kafka-connector AWS2-IAM Sink for creating a group
+
+== Standalone
+
+=== What is needed
+
+- An AWS Account
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Download the connector package
+
+Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-iam-kafka-connector/0.6.0/camel-aws2-iam-kafka-connector-0.6.0-package.zip
+> unzip camel-aws2-iam-kafka-connector-0.6.0-package.zip
+----
+
+=== Configuring Kafka Connect
+
+You'll need to set up the `plugin.path` property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties` and set the `plugin.path` property to your choosen location:
+
+[source]
+----
+...
+plugin.path=/home/oscerd/connectors
+...
+----
+
+=== Setup the connectors
+
+Open the AWS2 IAM configuration file at `$EXAMPLES/aws2-iam/aws2-iam-sink-create-group/config/CamelAWS2IAMSinkConnector.properties`
+
+[source]
+----
+name=CamelAWS2IAMSinkConnector
+connector.class=org.apache.camel.kafkaconnector.aws2iam.CamelAws2iamSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.label=iam-point
+
+camel.component.aws2-iam.operation=createGroup
+
+camel.component.aws2-iam.access-key=<accessKey>
+camel.component.aws2-iam.secret-key=<secretKey>
+camel.component.aws2-iam.region=aws-global
+----
+
+and add the correct credentials for AWS.
+
+=== Running the example
+
+Run the kafka connect with the IAM Sink connector:
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/aws2-iam/aws2-iam-sink/config/CamelAWS2IAMSinkConnector.properties
+----
+
+On a different terminal run the kafkacat producer and send the following message
+
+[source]
+----
+> echo "Test1" | ./kafkacat -b localhost:9092 -t mytopic -H "CamelHeader.CamelAwsIAMGroupName=Camel"
+----
+
+On your AWS IAM console, you should see a new group called Camel.
