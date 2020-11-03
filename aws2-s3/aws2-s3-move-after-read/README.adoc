@@ -286,3 +286,5 @@ oc exec -i -c kafka my-cluster-kafka-0 -- bin/kafka-console-consumer.sh --bootst
 <content of file>
 ----
 
+You can also check in the camel-1 bucket the presence of the same files consumed on the original bucket and moved.
+
