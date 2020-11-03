@@ -217,7 +217,7 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "tasks.max": "1",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
-    "topics": "sqs-topic",
+    "topics": "s3-topic",
     "camel.source.path.bucketNameOrArn": "camel-kafka-connector",
     "camel.source.maxPollDuration": 10000,
     "camel.source.endpoint.moveAfterRead": "true",
