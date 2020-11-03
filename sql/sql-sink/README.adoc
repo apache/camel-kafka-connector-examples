@@ -35,7 +35,7 @@ There is also the need of the driver for this example
 [source]
 ----
 > cd /home/oscerd/connectors/camel-sql-kafka-connector/
-> wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.4/postgresql-42.2.4.jar
+> wget https://repo1.maven.org/maven2/org/postgresql/postgresql/42.2.14/postgresql-42.2.14.jar
 ----
 
 === Configuring Kafka Connect
