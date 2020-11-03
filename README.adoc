@@ -20,6 +20,6 @@ List of existing examples:
 - NSQ source and sink examples
 - RabbitMQ source and sink examples
 - Slack source, sink and apicurio registry example
-- SQL sink example
+- SQL source and sink examples
 - Telegram source and sink examples
 - Twitter Search source example
