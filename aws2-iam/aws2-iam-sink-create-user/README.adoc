@@ -1,6 +1,6 @@
-= Camel-Kafka-connector AWS2 IAM Sink
+= Camel-Kafka-connector AWS2 IAM Sink for creating user
 
-This is an example for Camel-Kafka-connector AWS2-IAM Sink
+This is an example for Camel-Kafka-connector AWS2-IAM Sink for creating user
 
 == Standalone
 
@@ -43,7 +43,7 @@ plugin.path=/home/oscerd/connectors
 
 === Setup the connectors
 
-Open the AWS2 IAM configuration file at `$EXAMPLES/aws2-sqs/aws2-sqs-sink/config/CamelAWS2IAMSinkConnector.properties`
+Open the AWS2 IAM configuration file at `$EXAMPLES/aws2-iam/aws2-iam-sink-create-user/config/CamelAWS2IAMSinkConnector.properties`
 
 [source]
 ----
@@ -67,11 +67,11 @@ and add the correct credentials for AWS.
 
 === Running the example
 
-Run the kafka connect with the SQS Sink connector:
+Run the kafka connect with the IAM Sink connector:
 
 [source]
 ----
-$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/aws2-sqs/aws2-sqs-sink/config/CamelAWS2IAMSinkConnector.properties
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/aws2-iam/aws2-iam-sink-create-user/config/CamelAWS2IAMSinkConnector.properties
 ----
 
 On a different terminal run the kafkacat producer and send the following message
