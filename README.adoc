@@ -18,6 +18,7 @@ List of existing examples:
 - MinIO source and sink examples
 - Nats source and sink examples
 - NSQ source and sink examples
+- PGEvent source example
 - RabbitMQ source and sink examples
 - Slack source, sink and apicurio registry example
 - SQL source and sink examples
