@@ -77,7 +77,7 @@ On a different terminal run the kafka-producer and send messages to your Kafka B
 
 [source]
 ----
-bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic mytopic
+$KAFKA_HOME/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic mytopic
 Kafka to SQS message 1
 Kafka to SQS message 2
 ----
