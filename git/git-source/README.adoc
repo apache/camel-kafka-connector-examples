@@ -1,0 +1,114 @@
+= Camel-Kafka-connector Git Source
+
+This is an example for Camel-Kafka-connector Git Source
+
+== Standalone
+
+=== What is needed
+
+- An AWS Account
+- A local git repository
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Download the connector package
+
+Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-git-kafka-connector/0.6.0/camel-git-kafka-connector-0.6.0-package.zip
+> unzip camel-git-kafka-connector-0.6.0-package.zip
+----
+
+=== Configuring Kafka Connect
+
+You'll need to set up the `plugin.path` property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties` and set the `plugin.path` property to your choosen location:
+
+[source]
+----
+...
+plugin.path=/home/oscerd/connectors
+...
+----
+
+=== Setup the git repository
+
+We'll need a git repository at the beginning.
+
+[source]
+----
+> mkdir -p /tmp/test_repo/
+> cd /tmp/test_repo/
+> touch test.txt
+> git add test.txt
+> git commit -a -m "first commit"
+----
+
+Now we are ready to go
+
+=== Setup the connectors
+
+Open the Git configuration file at `$EXAMPLES/git/git-source/config/CamelGitSourceConnector.properties`
+
+[source]
+----
+name=CamelGitSourceConnector
+connector.class=org.apache.camel.kafkaconnector.git.CamelGitSourceConnector
+tasks.max=1
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.source.path.localPath=/tmp/test_repo/
+camel.source.endpoint.branchName=master
+camel.source.endpoint.type=commit
+----
+
+=== Running the example
+
+Run the kafka connect with the Git Source connector:
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/git/git-source/config/CamelGitSourceConnector.properties
+----
+
+On a different terminal run the kafkacat consumer
+
+[source]
+----
+> ./kafkacat -b  localhost:9092 -t mytopic
+% Auto-selecting Consumer mode (use -P or -C to override)
+commit eea5e9e7d643d426879e833d8804a38927a933a8 1604509986 -----sp
+% Reached end of topic mytopic [0] at offset 1
+----
+
+Now let's commit something else
+
+[source]
+----
+> cd /tmp/test_repo/
+> touch test1.txt
+> git add test1.txt
+> git commit -a -m "second commit"
+----
+
+Getting back to the consumer terminal we should see something like
+
+[source]
+----
+commit 21b559e8aba11dcfdf1325260853844c1b3fbd72 1604510081 -----sp
+% Reached end of topic mytopic [0] at offset 2
+----
