@@ -11,7 +11,7 @@ spec:
   config:
     key.converter: org.apache.kafka.connect.storage.StringConverter
     transforms: SlackTransformer
-    transforms.SlackTransformer.type: org.apache.camel.kafkaconnector.SlackTransformer
+    transforms.SlackTransformer.type: org.apache.camel.kafkaconnector.slack.transformers.SlackTransforms
     topics: slack-topic
     camel.source.path.channel: general
     camel.source.endpoint.token: ${file:/opt/kafka/external-configuration/slack-token/slack-token.properties:token}
