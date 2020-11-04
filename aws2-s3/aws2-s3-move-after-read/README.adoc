@@ -74,6 +74,8 @@ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test1 --
 Hello from Camel Kafka connector!
 ```
 
+You can also check in the camel-1 bucket the presence of the same files consumed on the original bucket and moved.
+
 ## Openshift
 
 ### What is needed
