@@ -59,7 +59,7 @@ Now we are ready to go
 
 === Setup the connectors
 
-Open the Git configuration file at `$EXAMPLES/git/git-source/config/CamelGitSourceConnector.properties`
+Open the Git configuration file at `$EXAMPLES/git/git-source-commit/config/CamelGitSourceConnector.properties`
 
 [source]
 ----
@@ -82,7 +82,7 @@ Run the kafka connect with the Git Source connector:
 
 [source]
 ----
-$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/git/git-source/config/CamelGitSourceConnector.properties
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/git/git-source-commit/config/CamelGitSourceConnector.properties
 ----
 
 On a different terminal run the kafkacat consumer
