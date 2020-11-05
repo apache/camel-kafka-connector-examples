@@ -1,0 +1,114 @@
+# Camel-Kafka-connector SFTP Sink
+
+This is an example for Camel-Kafka-connector SFTP Sink 
+
+## Standalone
+
+### What is needed
+
+- An SFTP server
+
+### Setting up SFTP Server
+
+We'll use the emberstack/sftp docker image
+
+Run the following command:
+
+```
+docker run -p 24:22 -d emberstack/sftp --name sftp
+1cb0cdd7b9a24112ecb9e4c7e195f01552e0c9187a173e29e6642c1f9d9b3455
+```
+We are mapping container port 22 to host port 24 for convenience.
+
+take note of the container id. In our case it is 1cb0cdd7b9a24112ecb9e4c7e195f01552e0c9187a173e29e6642c1f9d9b3455
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+Now it's time to setup the connector
+
+=== Configuring Kafka Connect
+
+You'll need to set up the `plugin.path` property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties` and set the `plugin.path` property to your choosen location:
+
+[source]
+----
+...
+plugin.path=/home/oscerd/connectors
+...
+----
+
+=== Download the connector package
+
+Download the connector package zip and extract the content to the plugin.path directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sftp-kafka-connector/0.6.0/camel-sftp-kafka-connector-0.6.0-package.zip
+> unzip camel-sftp-kafka-connector-0.6.0-package.zip
+----
+
+Open the SFTP sink configuration file
+
+```
+name=CamelSftpSinkConnector
+connector.class=org.apache.camel.kafkaconnector.sftp.CamelSftpSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.host=localhost
+camel.sink.path.port=24
+camel.sink.path.directoryName=demos/
+camel.sink.endpoint.username=demo
+camel.sink.endpoint.password=demo
+camel.sink.endpoint.fileName=mydata-${date:now:yyyyMMdd}.txt
+camel.sink.endpoint.fileExist=append
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelSftpSinkConnector.properties
+```
+
+Now we need to provide data to SFTP server.
+
+In another terminal, using kafkacat, you should run the following command
+
+```
+echo "File test" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+On a different terminal connect to the docker container
+
+```
+> docker exec -it 1cb0cdd7b9a24112ecb9e4c7e195f01552e0c9187a173e29e6642c1f9d9b3455 bash
+root@1cb0cdd7b9a2:/app#
+root@1cb0cdd7b9a2:/app# cd /home/demo/sftp/
+root@1cb0cdd7b9a2:/home/demo/sftp# cd demos/
+root@1cb0cdd7b9a2:/home/demo/sftp/demos# cat mydata-20201105.txt 
+File test
+root@1cb0cdd7b9a2:/home/demo/sftp/demos# 
+```
+
+As you see there is a file correctly named containing the record value we sent to Kafka.
+
