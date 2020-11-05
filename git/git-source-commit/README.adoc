@@ -1,6 +1,6 @@
-= Camel-Kafka-connector Git Source
+= Camel-Kafka-connector Git Source for consuming Commit
 
-This is an example for Camel-Kafka-connector Git Source
+This is an example for Camel-Kafka-connector Git Source for consuming Commit
 
 == Standalone
 
@@ -50,6 +50,7 @@ We'll need a git repository at the beginning.
 ----
 > mkdir -p /tmp/test_repo/
 > cd /tmp/test_repo/
+> git init
 > touch test.txt
 > git add test.txt
 > git commit -a -m "first commit"
