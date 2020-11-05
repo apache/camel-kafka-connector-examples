@@ -21,6 +21,7 @@ List of existing examples:
 - NSQ source and sink examples
 - PGEvent source example
 - RabbitMQ source and sink examples
+- SFTP source example
 - Slack source, sink and apicurio registry example
 - SQL source and sink examples
 - Telegram source and sink examples
