@@ -6,7 +6,6 @@ This is an example for Camel-Kafka-connector Git Source for consuming Commit
 
 === What is needed
 
-- An AWS Account
 - A local git repository
 
 === Running Kafka
