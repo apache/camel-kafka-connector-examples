@@ -1,0 +1,108 @@
+# Camel-Kafka-connector FTPS Sink
+
+This is an example for Camel-Kafka-connector FTPS Sink 
+
+## Standalone
+
+### What is needed
+
+- An FTPS server
+
+### Setting up FTPS Server
+
+We'll use the fauria/vsftpd docker image
+
+Run the following command:
+
+```
+> docker run -p 21:21 -p21100-21110:21100-21110 --env PASV_ADDRESS=127.0.0.1 loicmathieu/vsftpd ftps
+Launching vsftp on ftps protocol
+Activating passv on 127.0.0.1
+Generating self-signed certificate
+Generating a 2048 bit RSA private key
+..........................+++
+..................................+++
+writing new private key to '/etc/vsftpd/private/vsftpd.pem'
+```
+
+In another terminal
+
+```
+> docker ps
+CONTAINER ID        IMAGE                COMMAND             CREATED             STATUS              PORTS                                                              NAMES
+ce99af9141c9        loicmathieu/vsftpd   "/start.sh ftps"    7 seconds ago       Up 6 seconds        0.0.0.0:21->21/tcp, 20/tcp, 0.0.0.0:21100-21110->21100-21110/tcp   confident_leavitt
+```
+
+take note of the container id. In our case it is ce99af9141c9
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ftps-kafka-connector/0.6.0/camel-ftps-kafka-connector-0.6.0-package.zip
+> unzip camel-ftps-kafka-connector-0.6.0-package.zip
+----
+
+Now it's time to setup the connector
+
+Open the FTPS sink configuration file
+
+```
+name=CamelFtpsSinkConnector
+connector.class=org.apache.camel.kafkaconnector.ftps.CamelFtpsSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.host=127.0.0.1
+camel.sink.path.port=21
+camel.sink.endpoint.passiveMode=true
+camel.sink.endpoint.username=guest
+camel.sink.endpoint.password=guest
+camel.sink.endpoint.fileName=mydata-${date:now:yyyyMMdd}.txt
+camel.sink.endpoint.fileExist=append
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelFtpsSinkConnector.properties
+```
+
+In a different terminal we need to send something to mytopic
+
+```
+> echo "Hello from ckc" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+Now we need to connect to the ftp server and check the file
+
+```
+> docker exec -it ce99af9141c9 bash
+[root@ce99af9141c9 /]# cd /home/
+[root@ce99af9141c9 home]# cd guest/
+[root@ce99af9141c9 guest]# su guest
+[guest@ce99af9141c9 ~]$ cat mydata-20201111.txt 
+Hello from ckc
+```
+
