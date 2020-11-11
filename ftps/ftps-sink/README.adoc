@@ -10,7 +10,7 @@ This is an example for Camel-Kafka-connector FTPS Sink
 
 ### Setting up FTPS Server
 
-We'll use the fauria/vsftpd docker image
+We'll use the loicmathieu/vsftpd docker image
 
 Run the following command:
 
