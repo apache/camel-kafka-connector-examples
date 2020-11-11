@@ -18,9 +18,8 @@ Run the following command:
 docker run -d -v /my/data/directory:/home/vsftpd -p 20:20 -p 21:21 -p 21100-21110:21100-21110 -e FTP_USER=admin -e FTP_PASS=password -e PASV_ADDRESS=127.0.0.1 -e PASV_MIN_PORT=21100 -e PASV_MAX_PORT=21110 --name vsftpd --restart=always fauria/vsftpd
 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe6039b038370a12
 ```
-We are mapping container port 22 to host port 24 for convenience.
 
-take note of the container id. In our case it is 1cb0cdd7b9a24112ecb9e4c7e195f01552e0c9187a173e29e6642c1f9d9b3455
+take note of the container id. In our case it is 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe6039b038370a12
 
 ### Running Kafka
 
