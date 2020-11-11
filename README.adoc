@@ -14,6 +14,7 @@ List of existing examples:
 - CQL source and sink examples
 - Exec sink example
 - File source and sink examples
+- FTP source and sink examples
 - Git source multiple examples
 - Google Calendar Stream source example
 - Google Mail Stream source example
