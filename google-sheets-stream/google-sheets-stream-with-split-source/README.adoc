@@ -64,7 +64,7 @@ plugin.path=/home/oscerd/connectors
 
 === Setup the connectors
 
-Open the Git configuration file at `$EXAMPLES/google-sheets-stream/google-sheets-stream-source/config/CamelGoogleSheetsStreamSourceConnector.properties`
+Open the Git configuration file at `$EXAMPLES/google-sheets-stream/google-sheets-stream-with-split-source/config/CamelGoogleSheetsStreamSourceConnector.properties`
 
 [source]
 ----
@@ -94,7 +94,7 @@ Run the kafka connect with the Google Sheets Stream Source connector:
 
 [source]
 ----
-$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/google-sheets-stream/google-sheets-stream-source/config/CamelGoogleSheetsStreamSourceConnector.properties
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/google-sheets-stream/google-sheets-stream-with-split-source/config/CamelGoogleSheetsStreamSourceConnector.properties
 ----
 
 On a different terminal run the kafkacat consumer
