@@ -1,6 +1,6 @@
-= Camel-Kafka-connector Calendar Stream Source Example
+= Camel-Kafka-connector Sheets Stream Source Example
 
-This is an example for Camel-Kafka-connector Calendar Stream Source Example
+This is an example for Camel-Kafka-connector Sheets Stream Source Example
 
 == Standalone
 
