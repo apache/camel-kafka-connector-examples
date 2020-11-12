@@ -1,0 +1,104 @@
+= Camel-Kafka-connector Calendar Stream Source Example
+
+This is an example for Camel-Kafka-connector Calendar Stream Source Example
+
+== Standalone
+
+=== What is needed
+
+- A google account
+- A google application authorized to deal with calendar API
+
+=== Setting up Google Application
+
+The step-by-step guide is a bit long, so follow it with attention:
+
+1. Create a project
+2. Note down clientSecret and clientId
+2. Create an OAuth consent screen
+3. Create OAuth Client credentials (OAuth for WebApp)
+4. Add https://developers.google.com/oauthplayground to Authorized redirect URIs
+5. Setup https://developers.google.com/oauthplayground using credentials from above
+6. Authorize APIs for Sheets API v4 scope https://www.googleapis.com/auth/spreadsheets
+7. Exchange authorization code for tokens
+8. Note down Access token & Refresh token
+9. Create a google sheets document and add two column in A1 and B1, named username and city
+10. In A2 and B2, add "John" and "New York"
+10. Note down the sheets document Id
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Download the connector package
+
+Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-google-sheets-stream-kafka-connector/0.6.0/camel-google-sheets-stream-kafka-connector-0.6.0-package.zip
+> unzip camel-google-sheets-stream-kafka-connector-0.6.0-package.zip
+----
+
+=== Configuring Kafka Connect
+
+You'll need to set up the `plugin.path` property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties` and set the `plugin.path` property to your choosen location:
+
+[source]
+----
+...
+plugin.path=/home/oscerd/connectors
+...
+----
+
+=== Setup the connectors
+
+Open the Git configuration file at `$EXAMPLES/google-sheets-stream/google-sheets-stream-source/config/CamelGoogleSheetsStreamSourceConnector.properties`
+
+[source]
+----
+name=CamelGoogle-sheets-streamSourceConnector
+connector.class=org.apache.camel.kafkaconnector.googlesheetsstream.CamelGooglesheetsstreamSourceConnector
+tasks.max=1
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.source.path.apiName=data
+camel.source.endpoint.clientId=<client_id>
+camel.source.endpoint.spreadsheetId=<spreadsheet_id>
+camel.source.endpoint.accessToken=<access_token>
+camel.source.endpoint.refreshToken=<refresh_token>
+camel.source.endpoint.clientSecret=<client_secret>
+camel.source.endpoint.applicationName=ckc
+camel.source.endpoint.delay=60000
+camel.component.google-sheets-stream.range=A1:B2
+----
+
+=== Running the example
+
+Run the kafka connect with the Google Sheets Stream Source connector:
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/google-sheets-stream/google-sheets-stream-source/config/CamelGoogleSheetsStreamSourceConnector.properties
+----
+
+On a different terminal run the kafkacat consumer
+
+[source]
+----
+> ./kafkacat -b localhost:9092 -t db899 -f 'Headers: %h: Message value: %s\n'
+% Auto-selecting Consumer mode (use -P or -C to override)
+Headers: CamelHeader.CamelGoogleSheetsMajorDimension=ROWS,CamelHeader.CamelGoogleSheetsRange=Foglio1!A1:B2,CamelHeader.CamelGoogleSheetsRangeIndex=1,CamelHeader.CamelGoogleSheetsSpreadsheetId=1rkX3YNc0IEbIouNsQEzOVu0s5QmeyOlyiqjwQFK_hmI,CamelProperty.CamelBatchSize=1,CamelProperty.CamelBatchComplete=true,CamelProperty.CamelBatchIndex=0,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000: Message value: {"majorDimension":"ROWS","range":"Foglio1!A1:B2","values":[["Username","City"],["John","New York"]]}
+% Reached end of topic db899 [0] at offset 1
+----
