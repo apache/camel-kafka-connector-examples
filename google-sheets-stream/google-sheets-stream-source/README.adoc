@@ -7,7 +7,7 @@ This is an example for Camel-Kafka-connector Sheets Stream Source Example
 === What is needed
 
 - A google account
-- A google application authorized to deal with calendar API
+- A google application authorized to deal with Sheets API
 
 === Setting up Google Application
 
