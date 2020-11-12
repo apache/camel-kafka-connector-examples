@@ -19,6 +19,7 @@ List of existing examples:
 - Git source multiple examples
 - Google Calendar Stream source example
 - Google Mail Stream source example
+- Google Sheets Stream source example
 - Infinispan source and sink examples
 - MinIO source and sink examples
 - Nats source and sink examples
