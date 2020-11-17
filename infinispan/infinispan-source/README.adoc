@@ -82,7 +82,7 @@ bin/server.sh
 So, you'll need to run
 
 ```
-> cd $INFINISPAN_HOME/bin/cli.sh
+> $INFINISPAN_HOME/bin/cli.sh
 [disconnected]> connect
 [ghost-35169@cluster//containers/default]> create cache --template=org.infinispan.DIST_SYNC mycache
 [ghost-35169@cluster//containers/default]> describe caches/mycache
@@ -188,7 +188,7 @@ $KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.prop
 On a different terminal run your cli.sh from the Infinispan server
 
 ```
-> bin/cli.sh 
+> $INFINISPAN_HOME/bin/cli.sh 
 [disconnected]> connect
 [ghost-43981@cluster//containers/default]> cache mycache
 [ghost-43981@cluster//containers/default/caches/mycache]> put test test
