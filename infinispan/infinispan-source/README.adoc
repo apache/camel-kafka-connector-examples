@@ -200,7 +200,7 @@ In another terminal, using kafkacta, you should be able to see the headers.
 > kafkacat -b localhost:9092 -t mytopic -C   -f 'Headers: %h\n'
 
 Headers: CamelHeader.CamelInfinispanCacheName=mycache,CamelHeader.CamelInfinispanEventType=CLIENT_CACHE_ENTRY_CREATED,CamelHeader.CamelInfinispanIsPre=false,CamelHeader.CamelInfinispanKey=test,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000
-% Reached end of topic test290 [0] at offset 1
+% Reached end of topic mytopic [0] at offset 1
 
 ```
 
