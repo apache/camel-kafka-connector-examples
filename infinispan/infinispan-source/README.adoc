@@ -194,7 +194,7 @@ On a different terminal run your cli.sh from the Infinispan server
 [ghost-43981@cluster//containers/default/caches/mycache]> put test test
 ```
 
-In another terminal, using kafkacta, you should be able to see the headers.
+In another terminal, using kafkacat, you should be able to see the headers.
 
 ```
 > kafkacat -b localhost:9092 -t mytopic -C   -f 'Headers: %h\n'
