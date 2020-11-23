@@ -3,6 +3,7 @@ This is camel-kafka-connector examples repository
 List of existing examples:
 
 - AMQP source and sink examples
+- ArangoDB sink example
 - AWS-S3 to JMS example
 - AWS2-IAM sink multiple examples
 - AWS2-lambda sink example
