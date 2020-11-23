@@ -1,0 +1,193 @@
+# Camel-Kafka-connector ArangoDB Sink with document collection
+
+This is an example for Camel-Kafka-connector ArangoDB Sink with document collection
+
+## Standalone
+
+### What is needed
+
+- An ArangoDB server
+
+### Setting up FTPS Server
+
+We'll use the official arangodb docker image
+
+Run the following command:
+
+```
+> docker run -e ARANGO_RANDOM_ROOT_PASSWORD=1 -d --name arangodb-instance arangodb
+30d9cf14190d83552112c87dc59edebfbf940b64b51fdf9c0708689a69f44c5a
+```
+We need to have a look at the logs for having the root password
+
+```
+> docker logs 30d9cf14190d83552112c87dc59edebfbf940b64b51fdf9c0708689a69f44c5a
+automatically choosing storage engine
+===========================================
+GENERATED ROOT PASSWORD: KKvnmXog6hqLcTIY
+===========================================
+Initializing root user...Hang on...
+2020-11-23T08:05:38Z [8] INFO [a1c60] {syscall} file-descriptors (nofiles) hard limit is 1048576, soft limit is 1048576
+2020-11-23T08:05:38Z [8] INFO [7da27] {startup} server will now shut down due to upgrade, database initialization or admin restoration.
+Initializing database...Hang on...
+Database initialized...Starting System...
+2020-11-23T08:05:44Z [1] INFO [e52b0] ArangoDB 3.7.3 [linux] 64bit, using jemalloc, build tags/v3.7.3-0-g8ad8edb71f, VPack 0.1.33, RocksDB 6.8.0, ICU 64.2, V8 7.9.317, OpenSSL 1.1.1g  21 Apr 2020
+2020-11-23T08:05:44Z [1] INFO [75ddc] detected operating system: Linux version 3.10.0-1127.19.1.el7.x86_64 (mockbuild@kbuilder.bsys.centos.org) (gcc version 4.8.5 20150623 (Red Hat 4.8.5-39) (GCC) ) #1 SMP Tue Aug 25 17:23:54 UTC 2020
+2020-11-23T08:05:44Z [1] INFO [25362] {memory} Available physical memory: 33406672896 bytes, available cores: 8
+2020-11-23T08:05:44Z [1] WARNING [118b0] {memory} maximum number of memory mappings per process is 65530, which seems too low. it is recommended to set it to at least 512000
+2020-11-23T08:05:44Z [1] WARNING [49528] {memory} execute 'sudo sysctl -w "vm.max_map_count=512000"'
+2020-11-23T08:05:44Z [1] WARNING [e8b68] {memory} /sys/kernel/mm/transparent_hugepage/enabled is set to 'always'. It is recommended to set it to a value of 'never' or 'madvise'
+2020-11-23T08:05:44Z [1] WARNING [e8b68] {memory} /sys/kernel/mm/transparent_hugepage/defrag is set to 'always'. It is recommended to set it to a value of 'never' or 'madvise'
+2020-11-23T08:05:44Z [1] WARNING [f3108] {memory} execute 'sudo bash -c "echo madvise > /sys/kernel/mm/transparent_hugepage/enabled"'
+2020-11-23T08:05:44Z [1] WARNING [f3108] {memory} execute 'sudo bash -c "echo madvise > /sys/kernel/mm/transparent_hugepage/defrag"'
+2020-11-23T08:05:44Z [1] INFO [43396] {authentication} Jwt secret not specified, generating...
+2020-11-23T08:05:44Z [1] INFO [144fe] using storage engine 'rocksdb'
+2020-11-23T08:05:44Z [1] INFO [3bb7d] {cluster} Starting up with role SINGLE
+2020-11-23T08:05:44Z [1] INFO [6ea38] using endpoint 'http+tcp://0.0.0.0:8529' for non-encrypted requests
+2020-11-23T08:05:44Z [1] INFO [a1c60] {syscall} file-descriptors (nofiles) hard limit is 1048576, soft limit is 1048576
+2020-11-23T08:05:44Z [1] INFO [3844e] {authentication} Authentication is turned on (system only), authentication for unix sockets is turned on
+2020-11-23T08:05:44Z [1] INFO [cf3f4] ArangoDB (version 3.7.3 [linux]) is ready for business. Have fun!
+```
+
+Take note of the generated root password. In our case is KKvnmXog6hqLcTIY
+
+Now we need to create a database and a document collection, so lets use the arangosh command line
+
+```
+> docker exec -it 30d9cf14190d83552112c87dc59edebfbf940b64b51fdf9c0708689a69f44c5a sh
+/ # arangosh
+Please specify a password:
+                                       _     
+  __ _ _ __ __ _ _ __   __ _  ___  ___| |__  
+ / _` | '__/ _` | '_ \ / _` |/ _ \/ __| '_ \ 
+| (_| | | | (_| | | | | (_| | (_) \__ \ | | |
+ \__,_|_|  \__,_|_| |_|\__, |\___/|___/_| |_|
+                       |___/                 
+
+arangosh (ArangoDB 3.7.3 [linux] 64bit, using jemalloc, build tags/v3.7.3-0-g8ad8edb71f, VPack 0.1.33, RocksDB 6.8.0, ICU 64.2, V8 7.9.317, OpenSSL 1.1.1g  21 Apr 2020)
+Copyright (c) ArangoDB GmbH
+
+Command-line history will be persisted when the shell is exited. You can use `--console.history false` to turn this off
+Connected to ArangoDB 'http+tcp://127.0.0.1:8529, version: 3.7.3 [SINGLE, server], database: '_system', username: 'root'
+
+Type 'tutorial' for a tutorial or 'help' to see common examples
+127.0.0.1:8529@_system> db._createDatabase("testdb")
+true
+
+127.0.0.1:8529@_system> db._useDatabase("testdb")
+true
+
+127.0.0.1:8529@testdb> db._createDocumentCollection("arangodbCollection")
+[ArangoCollection 901, "arangodbCollection" (type document, status loaded)]
+```
+
+In this way, we'll use the database testdb with collection arangodb-test
+
+Also we need to take note of the container IP address
+
+```
+> docker inspect --format '{{ .NetworkSettings.IPAddress }}' arangodb-instance
+172.17.0.2
+```
+
+Take a note of the IP address too.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-arangodb-kafka-connector/0.6.0/camel-arangodb-kafka-connector-0.6.0-package.zip
+> unzip camel-arangodb-kafka-connector-0.6.0-package.zip
+----
+
+Now it's time to setup the connector
+
+Open the Arangodb sink configuration file
+
+```
+name=CamelArangodbSinkConnector
+connector.class=org.apache.camel.kafkaconnector.arangodb.CamelArangodbSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.database=testdb
+camel.sink.endpoint.host=172.17.0.2
+camel.sink.endpoint.port=8529
+camel.sink.endpoint.user=root
+camel.sink.endpoint.password=KKvnmXog6hqLcTIY
+camel.component.arangodb.operation=SAVE_DOCUMENT
+camel.component.arangodb.documentCollection=arangodbCollection
+```
+
+Fill the options with the parameters coming from your local container.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelArangodbSinkConnector.properties
+```
+
+In a different terminal we need to send something to mytopic
+
+```
+> echo '{"Name":"Andrea","City":"Rome"}' | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+Now we need to connect to the arangodb instance and through arangosh query the document collection
+
+```
+> docker exec -it 30d9cf14190d83552112c87dc59edebfbf940b64b51fdf9c0708689a69f44c5a sh
+/ # arangosh
+Please specify a password:
+                                       _     
+  __ _ _ __ __ _ _ __   __ _  ___  ___| |__  
+ / _` | '__/ _` | '_ \ / _` |/ _ \/ __| '_ \ 
+| (_| | | | (_| | | | | (_| | (_) \__ \ | | |
+ \__,_|_|  \__,_|_| |_|\__, |\___/|___/_| |_|
+                       |___/                 
+
+arangosh (ArangoDB 3.7.3 [linux] 64bit, using jemalloc, build tags/v3.7.3-0-g8ad8edb71f, VPack 0.1.33, RocksDB 6.8.0, ICU 64.2, V8 7.9.317, OpenSSL 1.1.1g  21 Apr 2020)
+Copyright (c) ArangoDB GmbH
+
+Command-line history will be persisted when the shell is exited. You can use `--console.history false` to turn this off
+Connected to ArangoDB 'http+tcp://127.0.0.1:8529, version: 3.7.3 [SINGLE, server], database: '_system', username: 'root'
+
+Type 'tutorial' for a tutorial or 'help' to see common examples
+127.0.0.1:8529@_system> db._useDatabase("testdb")
+true
+
+127.0.0.1:8529@testdb> db._query("FOR c in arangodbCollection RETURN c");
+[object ArangoQueryCursor, count: 1, cached: false, hasMore: false]
+
+[ 
+  { 
+    "_key" : "936", 
+    "_id" : "arangodbCollection/936", 
+    "_rev" : "_bdOzH7m---", 
+    "Name" : "Andrea", 
+    "City" : "Rome" 
+  } 
+]
+```
+
