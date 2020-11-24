@@ -6,7 +6,7 @@ This is an example for Camel-Kafka-connector Twitter Search Source
 
 ### What is needed
 
-- A Twitter App
+- A Twitter App with Read and Write permissions
 
 ### Setting up Twitter App and get credentials
 
