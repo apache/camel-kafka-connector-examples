@@ -1,0 +1,74 @@
+# Camel-Kafka-connector Twitter Direct Message Sink
+
+This is an example for Camel-Kafka-connector Twitter Direct Message Sink
+
+## Standalone
+
+### What is needed
+
+- A Twitter App with Read, write and direct message permissions
+
+### Setting up Twitter App and get credentials
+
+You'll need to create a twitter app and take note of access token, access token secret, consumer key and consumer secret.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-directmessage-kafka-connector/0.6.0/camel-twitter-directmessage-kafka-connector-0.6.0-package.zip
+> unzip camel-twitter-directmessage-kafka-connector-0.6.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Twitter sink configuration file
+
+```
+name=CamelTwitter-directmessageSinkConnector
+connector.class=org.apache.camel.kafkaconnector.twitterdirectmessage.CamelTwitterdirectmessageSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.user=<user_id>
+camel.sink.endpoint.accessToken=<access_token>
+camel.sink.endpoint.accessTokenSecret=<access_token_secret>
+camel.sink.endpoint.consumerKey=<consumer_key>
+camel.sink.endpoint.consumerSecret=<consumer_secret>
+```
+
+Set the correct options in the file for the credentials part.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelTwitterdirectmessageSinkConnector.properties
+```
+
+In another terminal, using kafkacat, you can consume the messages
+
+```
+> echo "Hello from ckc" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+The user should now receive a direct message with "Hello from ckc" as body
+
