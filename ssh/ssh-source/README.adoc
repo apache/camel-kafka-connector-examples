@@ -205,7 +205,7 @@ $KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.prop
 In another terminal, using kafkacat, you should be able to see the headers.
 
 ```
->  kafkacat -b localhost:9092 -t mytopic -f 'Topic %t[%p], offset: %o, key: %k, payload: %s \n'
+> ./kafkacat -b localhost:9092 -t mytopic
 {"schema":{"type":"string","optional":false},"payload":"Wed Nov 25 12:32:42 UTC 2020\n"}
 % Reached end of topic mytopic [0] at offset 1
 ```
