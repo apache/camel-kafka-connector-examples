@@ -52,7 +52,7 @@ In this example we'll use `/home/oscerd/connectors/`
 
 Now it's time to setup the connectors
 
-Open the Slack sink configuration file
+Open the SSH sink configuration file
 
 ```
 name=CamelSshSinkConnector
