@@ -1,0 +1,212 @@
+# Camel-Kafka-connector SSH Source
+
+This is an example for Camel-Kafka-connector SSH Source 
+
+## Standalone
+
+### What is needed
+
+- An SSH server
+
+### Setting up an SSH server
+
+We'll use a docker image for this purpose. Any docker image with ssh enabled should be ok.
+
+```
+> docker run -d -P --name test_sshd rastasheep/ubuntu-sshd:14.04
+d77dfccf3a5fe96dfa04b48a359edf572953b1b2086cab498ea7d52830eca5ee
+```
+
+Now we need to check where the port 22 has been exposed into the host
+
+```
+> docker port test_sshd 22
+0.0.0.0:32768
+```
+
+So we'll point to localhost and port 32768
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+You'll need to build your connector starting from an archetype:
+
+```
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.6.0
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.apache.maven:standalone-pom >-------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] >>> maven-archetype-plugin:3.1.2:generate (default-cli) > generate-sources @ standalone-pom >>>
+[INFO] 
+[INFO] <<< maven-archetype-plugin:3.1.2:generate (default-cli) < generate-sources @ standalone-pom <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-archetype-plugin:3.1.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Interactive mode
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.6.0] found in catalog remote
+Define value for property 'groupId': org.apache.camel.kafkaconnector
+Define value for property 'artifactId': ssh-extended
+Define value for property 'version' 1.0-SNAPSHOT: : 0.6.0
+Define value for property 'package' org.apache.camel.kafkaconnector: : 
+Define value for property 'camel-kafka-connector-name': camel-ssh-kafka-connector
+[INFO] Using property: camel-kafka-connector-version = 0.6.0
+Confirm properties configuration:
+groupId: org.apache.camel.kafkaconnector
+artifactId: ssh-extended
+version: 0.6.0
+package: com.github.oscerd
+camel-kafka-connector-name: camel-ssh-kafka-connector
+camel-kafka-connector-version: 0.6.0
+ Y: : Y
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.6.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: artifactId, Value: ssh-extended
+[INFO] Parameter: version, Value: 0.6.0
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: version, Value: 0.6.0
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: camel-kafka-connector-name, Value: camel-ssh-kafka-connector
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.6.0
+[INFO] Parameter: artifactId, Value: ftps-extended
+[INFO] Project created from Archetype in dir: /home/workspace/miscellanea/ssh-extended
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.590 s
+[INFO] Finished at: 2020-11-05T07:45:43+01:00
+[INFO] ------------------------------------------------------------------------
+> cd /home/workspace/miscellanea/ssh-extended
+```
+
+We'll need to add a little transform for this example. So import the ftp-extended project in your IDE and create a class in the only package there
+
+```
+package org.apache.camel.kafkaconnector;
+
+import java.util.Map;
+
+import org.apache.camel.kafkaconnector.utils.SchemaHelper;
+import org.apache.kafka.common.config.ConfigDef;
+import org.apache.kafka.connect.connector.ConnectRecord;
+import org.apache.kafka.connect.transforms.Transformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class SshTransforms <R extends ConnectRecord<R>> implements Transformation<R> {
+    public static final String FIELD_KEY_CONFIG = "key";
+    public static final ConfigDef CONFIG_DEF = new ConfigDef()
+            .define(FIELD_KEY_CONFIG, ConfigDef.Type.STRING, null, ConfigDef.Importance.MEDIUM,
+                    "Transforms String-based content from Kafka into a map");
+
+    private static final Logger LOG = LoggerFactory.getLogger(Pippo.class);
+
+    @Override
+    public R apply(R r) {
+        Object value = r.value();
+
+        if (r.value() instanceof ByteArrayInputStream) {
+            LOG.debug("Converting record from Ssh Body Result to text");
+            ByteArrayInputStream message = (ByteArrayInputStream) r.value();
+            String m = null;
+			try {
+				m = IOUtils.toString(message, Charset.defaultCharset());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+            return r.newRecord(r.topic(), r.kafkaPartition(), null, r.key(),
+            		SchemaHelper.buildSchemaBuilderForType(m), m, r.timestamp());
+
+        } else {
+            LOG.debug("Unexpected message type: {}", r.value().getClass());
+
+            return r;
+        }
+    }
+
+    @Override
+    public ConfigDef config() {
+        return CONFIG_DEF;
+    }
+
+    @Override
+    public void close() {
+
+    }
+
+    @Override
+    public void configure(Map<String, ?> map) {
+
+    }
+}
+```
+
+Now we need to build the connector:
+
+```
+> mvn clean package
+```
+
+In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated zip from the previois build
+
+```
+> cd /home/oscerd/connectors/
+> cp /home/workspace/miscellanea/ftps-extended/target/ssh-extended-0.6.0-package.zip .
+> unzip ssh-extended-0.6.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the SSH source configuration file
+
+```
+name=CamelSshSourceConnector
+connector.class=org.apache.camel.kafkaconnector.ssh.CamelSshSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+transforms=SshTransformer
+transforms.SshTransformer.type=org.apache.camel.kafkaconnector.SshTransforms
+
+topics=mytopic
+
+camel.source.path.host=localhost
+camel.source.path.port=32768
+camel.source.endpoint.delay=10000
+camel.source.endpoint.username=root
+camel.source.endpoint.password=root
+camel.source.endpoint.pollCommand=date
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelSshSourceConnector.properties
+```
+
+In another terminal, using kafkacat, you should be able to see the headers.
+
+```
+>  kafkacat -b localhost:9092 -t mytopic -f 'Topic %t[%p], offset: %o, key: %k, payload: %s \n'
+{"schema":{"type":"string","optional":false},"payload":"Wed Nov 25 12:32:42 UTC 2020\n"}
+% Reached end of topic mytopic [0] at offset 1
+```
+
