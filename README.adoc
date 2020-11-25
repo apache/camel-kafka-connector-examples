@@ -31,5 +31,5 @@ List of existing examples:
 - Slack source, sink and apicurio registry example
 - SQL source and sink examples
 - Telegram source and sink examples
-- Twitter Direct message sink example
+- Twitter Direct message source and sink examples
 - Twitter Search source example
