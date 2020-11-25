@@ -1,0 +1,77 @@
+# Camel-Kafka-connector Twitter Direct Message Source
+
+This is an example for Camel-Kafka-connector Twitter Direct Message Source
+
+## Standalone
+
+### What is needed
+
+- A Twitter App with Read, Write and direct message permissions
+
+### Setting up Twitter App and get credentials
+
+You'll need to create a twitter app and take note of access token, access token secret, consumer key and consumer secret.
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-directmessage-kafka-connector/0.6.0/camel-twitter-directmessage-kafka-connector-0.6.0-package.zip
+> unzip camel-twitter-directmessage-kafka-connector-0.6.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Twitter source configuration file
+
+```
+name=CamelTwitter-directmessageSourceConnector
+connector.class=org.apache.camel.kafkaconnector.twitterdirectmessage.CamelTwitterdirectmessageSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.source.path.user=<account_id>
+camel.source.endpoint.accessToken=<access_token>
+camel.source.endpoint.accessTokenSecret=<access_token_secret>
+camel.source.endpoint.consumerKey=<consumer_key>
+camel.source.endpoint.consumerSecret=<consumer_secret>
+camel.source.endpoint.type=polling
+camel.source.endpoint.delay=60000
+camel.source.endpoint.count=5
+```
+
+Set the correct options in the file for the credentials part.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelTwitterdirectmessageSourceConnector.properties
+```
+
+In another terminal, using kafkacat, you can consume the messages
+
+```
+> ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Consumer mode (use -P or -C to override)
+DirectMessageJSONImpl{id=1331192592978030596, text='hello from ckc', senderId=xxxxx, recipientId=xxxxx, createdAt=Tue Nov 24 12:07:01 CET 2020, userMentionEntities=[], urlEntities=[], hashtagEntities=[], mediaEntities=[], symbolEntities=[]}
+% Reached end of topic mytopic [0] at offset 1
+```
+
