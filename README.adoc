@@ -29,7 +29,7 @@ List of existing examples:
 - RabbitMQ source and sink examples
 - SFTP source and sink examples
 - Slack source, sink and apicurio registry example
-- SSH source and sink example
+- SSH source and sink examples
 - SQL source and sink examples
 - Telegram source and sink examples
 - Twitter Direct message source and sink examples
