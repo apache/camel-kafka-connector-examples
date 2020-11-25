@@ -1,0 +1,101 @@
+# Camel-Kafka-connector SSH Sink
+
+This is an example for Camel-Kafka-connector SSH Sink 
+
+## Standalone
+
+### What is needed
+
+- An SSH server
+
+### Setting up an SSH server
+
+We'll use a docker image for this purpose. Any docker image with ssh enabled should be ok.
+
+```
+> docker run -d -P --name test_sshd rastasheep/ubuntu-sshd:14.04
+d77dfccf3a5fe96dfa04b48a359edf572953b1b2086cab498ea7d52830eca5ee
+```
+
+Now we need to check where the port 22 has been exposed into the host
+
+```
+> docker port test_sshd 22
+0.0.0.0:32768
+```
+
+So we'll point to localhost and port 32768
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ssh-kafka-connector/0.6.0/camel-ssh-kafka-connector-0.6.0-package.zip
+> unzip camel-ssh-kafka-connector-0.6.0-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the Slack sink configuration file
+
+```
+name=CamelSshSinkConnector
+connector.class=org.apache.camel.kafkaconnector.ssh.CamelSshSinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.host=localhost
+camel.sink.path.port=32768
+camel.sink.endpoint.username=root
+camel.sink.endpoint.password=root
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelSshSinkConnector.properties
+```
+
+In another terminal, using kafkacat, you should be able to send messages
+
+```
+> echo "touch example.txt" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+> echo "echo 'My raw data line 1' >> example.txt" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+> echo "echo 'My raw data line 2' >> example.txt" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+> echo "echo 'My raw data line 3' >> example.txt" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+Now we can check our docker container.
+
+```
+> ssh root@localhost -p 32768
+root@localhost's password: 
+Last login: Wed Nov 25 13:10:18 2020 from 172.17.0.1
+root@d77dfccf3a5f:~# cat example.txt 
+My raw data line 1
+My raw data line 2
+My raw data line 3
+```
+
