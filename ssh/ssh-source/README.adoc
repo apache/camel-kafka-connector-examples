@@ -118,7 +118,7 @@ public class SshTransforms <R extends ConnectRecord<R>> implements Transformatio
             .define(FIELD_KEY_CONFIG, ConfigDef.Type.STRING, null, ConfigDef.Importance.MEDIUM,
                     "Transforms String-based content from Kafka into a map");
 
-    private static final Logger LOG = LoggerFactory.getLogger(Pippo.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SshTransforms.class);
 
     @Override
     public R apply(R r) {
