@@ -28,8 +28,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-s3-kafka-connector/0.6.0/camel-aws2-s3-kafka-connector-0.6.0-package.zip
-> unzip camel-aws2-s3-kafka-connector-0.6.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-s3-kafka-connector/0.6.1/camel-aws2-s3-kafka-connector-0.6.1-package.zip
+> unzip camel-aws2-s3-kafka-connector-0.6.1-package.zip
 ```
 
 Now it's time to setup the connectors
@@ -139,8 +139,8 @@ So we need to do something like this:
 
 ```
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-s3-kafka-connector/0.6.0/camel-aws2-s3-kafka-connector-0.6.0-package.zip
-> unzip camel-aws2-s3-kafka-connector-0.6.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-s3-kafka-connector/0.6.1/camel-aws2-s3-kafka-connector-0.6.1-package.zip
+> unzip camel-aws2-s3-kafka-connector-0.6.1-package.zip
 ```
 
 Now we can start the build
@@ -165,7 +165,7 @@ You should see something like this:
 
 [source,json,options="nowrap"]
 ----
-[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.6.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.6.0"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SinkConnector","type":"sink","version":"0.6.0"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector","type":"source","version":"0.6.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
+[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.6.1"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.6.1"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SinkConnector","type":"sink","version":"0.6.1"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector","type":"source","version":"0.6.1"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
 ----
 
 ### Set the AWS credential as secret (optional)

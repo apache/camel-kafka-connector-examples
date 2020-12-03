@@ -27,17 +27,17 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.6.0
-[INFO] Using property: camel-kafka-connector-version = 0.6.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.6.1
+[INFO] Using property: camel-kafka-connector-version = 0.6.1
 Confirm properties configuration:
 groupId: org.apache.camel.ckc
 artifactId: aws2s3
 version: 1.0-SNAPSHOT
 package: org.apache.camel.ckc
-camel-kafka-connector-version: 0.6.0
+camel-kafka-connector-version: 0.6.1
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.6.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.6.1
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.ckc
 [INFO] Parameter: artifactId, Value: aws2s3
@@ -47,7 +47,7 @@ camel-kafka-connector-version: 0.6.0
 [INFO] Parameter: package, Value: com.github.oscerd
 [INFO] Parameter: version, Value: 1.0-SNAPSHOT
 [INFO] Parameter: groupId, Value: org.apache.camel.ckc
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.6.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.6.1
 [INFO] Parameter: artifactId, Value: aws2s3
 [INFO] Project created from Archetype in dir: /home/workspace/miscellanea/aws2s3
 [INFO] ------------------------------------------------------------------------
@@ -93,12 +93,12 @@ Now we need to edit the POM
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-kafka-connector</artifactId>
-      <version>0.6.0</version>
+      <version>0.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-aws2-s3-kafka-connector</artifactId>
-      <version>0.6.0</version>
+      <version>0.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -251,17 +251,17 @@ so that each one is in its own subfolder
 In this case we need to extend an existing connector and add a ZipAggregationStrategy, so we need to leverage the archetype
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.6.0
-[INFO] Using property: camel-kafka-connector-version = 0.6.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.6.1
+[INFO] Using property: camel-kafka-connector-version = 0.6.1
 Confirm properties configuration:
 groupId: org.apache.camel.ckc
 artifactId: aws2s3
 version: 1.0-SNAPSHOT
 package: org.apache.camel.ckc
-camel-kafka-connector-version: 0.6.0
+camel-kafka-connector-version: 0.6.1
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.6.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.6.1
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.ckc
 [INFO] Parameter: artifactId, Value: aws2s3
@@ -271,7 +271,7 @@ camel-kafka-connector-version: 0.6.0
 [INFO] Parameter: package, Value: com.github.oscerd
 [INFO] Parameter: version, Value: 1.0-SNAPSHOT
 [INFO] Parameter: groupId, Value: org.apache.camel.ckc
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.6.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.6.1
 [INFO] Parameter: artifactId, Value: aws2s3
 [INFO] Project created from Archetype in dir: /home/workspace/miscellanea/aws2s3
 [INFO] ------------------------------------------------------------------------
@@ -317,12 +317,12 @@ Now we need to edit the POM
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-kafka-connector</artifactId>
-      <version>0.6.0</version>
+      <version>0.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-aws2-s3-kafka-connector</artifactId>
-      <version>0.6.0</version>
+      <version>0.6.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -365,7 +365,7 @@ You should see something like this:
 
 [source,json,options="nowrap"]
 ----
-[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.6.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.6.0"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SinkConnector","type":"sink","version":"0.6.0"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector","type":"source","version":"0.6.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
+[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.6.1"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.6.1"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SinkConnector","type":"sink","version":"0.6.1"},{"class":"org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector","type":"source","version":"0.6.1"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
 ----
 
 ### Set the AWS credential as secret (optional)
