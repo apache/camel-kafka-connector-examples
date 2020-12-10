@@ -1,0 +1,90 @@
+# Camel-Kafka-connector AWS2 S3 Source
+
+This is an example for Camel-Kafka-connector AW2-S3
+
+## Standalone
+
+### What is needed
+
+- Two AWS S3 Buckets
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic test1
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+Since this is example is related to a new feature you'll need to build the latest snapshot of camel-kafka-connector, following these steps
+
+```
+> cd <ckc_project> 
+> mvn clean package
+> cp <ckc_project>/connectors/camel-aws2-s3-kafka-connector/target/camel-aws2-s3-kafka-connector-0.7.0-SNAPSHOT-package.zip /home/oscerd/connectors/
+> cd /home/oscerd/connectors/
+> unzip camel-aws2-s3-kafka-connector-0.7.0-SNAPSHOT-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the AWS2 S3 Source configuration file
+
+```
+name=CamelAWS2S3SourceConnector
+connector.class=org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+
+topics=mytopic
+
+camel.source.path.bucketNameOrArn=camel-kafka-connector
+
+camel.component.aws2-s3.access-key=<access_key>
+camel.component.aws2-s3.secret-key=<secret_key>
+camel.component.aws2-s3.region=<region>
+```
+
+and add the correct credentials for AWS.
+
+Now we need to look at the S3 sink connector configuration
+
+```
+name=CamelAWS2S3SinkConnector
+connector.class=org.apache.camel.kafkaconnector.aws2s3.CamelAws2s3SinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.bucketNameOrArn=camel-kafka-connector-1
+camel.remove.headers.pattern=CamelAwsS3BucketName
+camel.component.aws2-s3.access-key=<access_key>
+camel.component.aws2-s3.secret-key=<secret_key>
+camel.component.aws2-s3.region=<region>
+```
+
+In this case we are removing the CamelAwsS3BucketName header, because otherwise we'd rewrite on the same bucket camel-kafka-connector. It is important to point, obviously, to the same topic for both source and sink connector.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelAWSS3SourceConnector.properties config/CamelAWSS3SinkConnector.properties
+``` 
+
+Just connect to your AWS Console and upload a file into your camel-kafka-connector bucket.
+
+On a different tab check the camel-kafka-connector-1 bucket.
+
+You should see the file moved to this bucket and deleted from the camel-kafka-connector bucket.
+
