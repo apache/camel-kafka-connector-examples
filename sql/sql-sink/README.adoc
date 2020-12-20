@@ -133,9 +133,9 @@ On a different terminal run the kafkacat producer and send the following message
 
 [source]
 ----
-> echo "test" | ./kafkacat -b localhost:9092 -t dbtest1 -H "CamelHeader.username=andrea" -H "CamelHeader.city=Roma"
+> echo "test" | ./kafkacat -b localhost:9092 -t mytopic -H "CamelHeader.username=andrea" -H "CamelHeader.city=Roma"
 % Auto-selecting Producer mode (use -P or -C to override)
-> echo "test" | ./kafkacat -b localhost:9092 -t dbtest1 -H "CamelHeader.username=John" -H "CamelHeader.city=New York"
+> echo "test" | ./kafkacat -b localhost:9092 -t mytopic -H "CamelHeader.username=John" -H "CamelHeader.city=New York"
 % Auto-selecting Producer mode (use -P or -C to override)
 ----
 
