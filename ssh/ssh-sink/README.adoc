@@ -46,8 +46,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ssh-kafka-connector/0.6.1/camel-ssh-kafka-connector-0.6.1-package.zip
-> unzip camel-ssh-kafka-connector-0.6.1-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ssh-kafka-connector/0.7.0/camel-ssh-kafka-connector-0.7.0-package.zip
+> unzip camel-ssh-kafka-connector-0.7.0-package.zip
 ```
 
 Now it's time to setup the connectors
