@@ -61,11 +61,9 @@ Through kafkacat you should see the info coming in.
 
 This component return all of the information as headers.
 
-NOTE: In the camel-file-watch component we fixed a little problem in showing the kind of event. It will be available in 3.7.0, so in CKC 0.7.0.
-
 ```
-bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic mytopic
-Headers: CamelHeader.CamelFileAbsolute=true,CamelHeader.CamelFileAbsolutePath=/home/oscerd/test-file-watch/test.txt,CamelHeader.CamelFileLastModified=1603125050560,CamelHeader.CamelFileName=test.txt,CamelHeader.CamelFileNameConsumed=test.txt,CamelHeader.CamelFileNameOnly=test.txt,CamelHeader.CamelFileParent=/home/oscerd/test-file-watch,CamelHeader.CamelFilePath=/home/oscerd/test-file-watch/test.txt,CamelHeader.CamelFileRelativePath=test.txt,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000: Message value: /home/oscerd/test-file-watch/test.txt
+> ./kafkacat -b localhost:9092 -t mytopic -f 'Headers: %h Value: %s'
+Headers: CamelHeader.CamelFileAbsolute=true,CamelHeader.CamelFileAbsolutePath=/home/oscerd/test-file-watch/test.txt,CamelHeader.CamelFileEventType=CREATE,CamelHeader.CamelFileLastModified=1609758044292,CamelHeader.CamelFileName=test.txt,CamelHeader.CamelFileNameConsumed=test.txt,CamelHeader.CamelFileNameOnly=test.txt,CamelHeader.CamelFileParent=/home/oscerd/test-file-watch,CamelHeader.CamelFilePath=/home/oscerd/test-file-watch/test.txt,CamelHeader.CamelFileRelativePath=test.txt,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: /home/oscerd/test-file-watch/test.txt
 % Reached end of topic mytopic [0] at offset 1
 ```
 
