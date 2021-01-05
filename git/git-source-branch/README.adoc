@@ -88,9 +88,9 @@ On a different terminal run the kafkacat consumer
 
 [source]
 ----
-> ./kafkacat -b localhost:9092 -t mytopic
+> ./kafkacat -b localhost:9092 -t mytopic -f 'Headers: %h Value: %s'
 % Auto-selecting Consumer mode (use -P or -C to override)
-Ref[refs/heads/master=13c428bca29cd813485855df649bea7e38342694(-1)]
+Headers: CamelHeader.CamelGitBranchLeaf=refs/heads/master,CamelHeader.CamelGitBranchObjectId=13c428bca29cd813485855df649bea7e38342694,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: refs/heads/master
 % Reached end of topic db26 [0] at offset 1
 ----
 
@@ -106,6 +106,6 @@ Getting back to the consumer terminal we should see something like
 
 [source]
 ----
-Ref[refs/heads/test_repo=13c428bca29cd813485855df649bea7e38342694(-1)]
+CamelHeader.CamelGitBranchLeaf=refs/heads/test_repo,CamelHeader.CamelGitBranchObjectId=184aae4d863144a1bea5de752cf2f2f1c9800d38,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: refs/heads/test_repo
 % Reached end of topic mytopic [0] at offset 2
 ----
