@@ -89,9 +89,9 @@ On a different terminal run the kafkacat consumer
 
 [source]
 ----
-> ./kafkacat -b  localhost:9092 -t mytopic
+> ./kafkacat -b  localhost:9092 -t mytopic -f 'Headers: %h Value: %s'
 % Auto-selecting Consumer mode (use -P or -C to override)
-commit eea5e9e7d643d426879e833d8804a38927a933a8 1604509986 -----sp
+Headers: CamelHeader.CamelGitAuthorName=Andrea Cosentino,CamelHeader.CamelGitCommiterName=Andrea Cosentino,CamelHeader.CamelGitCommitTime=1604597964,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: first commit
 % Reached end of topic mytopic [0] at offset 1
 ----
 
@@ -109,6 +109,6 @@ Getting back to the consumer terminal we should see something like
 
 [source]
 ----
-commit 21b559e8aba11dcfdf1325260853844c1b3fbd72 1604510081 -----sp
+Headers: CamelHeader.CamelGitAuthorName=Andrea Cosentino,CamelHeader.CamelGitCommiterName=Andrea Cosentino,CamelHeader.CamelGitCommitTime=1609839093,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: second commit
 % Reached end of topic mytopic [0] at offset 2
 ----
