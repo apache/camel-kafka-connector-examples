@@ -6,7 +6,6 @@ This is an example for Camel-Kafka-connector PGEvent Source
 
 === What is needed
 
-- An AWS Account
 - A running postgresql instance through docker
 
 === Running Kafka
