@@ -170,7 +170,7 @@ Run the kafka connect with the SQL Source connector:
 $KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/pgevent/pgevent-source/config/CamelPgeventSourceConnector.properties
 ----
 
-Now we need to create run some insert in our database
+Now we need to run some insert in our database
 
 [source]
 ----
