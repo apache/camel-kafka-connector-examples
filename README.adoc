@@ -22,6 +22,7 @@ List of existing examples:
 - Google Mail Stream source example
 - Google Sheets Stream source examples
 - Infinispan source and sink examples
+- JDBC sink example
 - MinIO source and sink examples
 - Nats source and sink examples
 - NSQ source and sink examples
