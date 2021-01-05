@@ -89,8 +89,8 @@ On a different terminal run the kafkacat consumer
 
 [source]
 ----
-./kafkacat -b localhost:9092 -t mytopic
+./kafkacat -b localhost:9092 -t mytopic -f 'Headers: %h Value: %s'
 % Auto-selecting Consumer mode (use -P or -C to override)
-Ref[refs/tags/v1.0=c33eff7830d1d9624bd265e1998bbe7daa4c654d(-1)]
+Headers: CamelHeader.CamelGitBranchLeaf=refs/tags/v1.0,CamelHeader.CamelGitBranchObjectId=bd25966a30119fd389493638a7ce75ccfbc4bc52,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: refs/tags/v1.0
 % Reached end of topic mytopic [0] at offset 1
 ----
