@@ -148,8 +148,8 @@ camel.component.aws2-s3.region=eu-west-1
 camel.sink.endpoint.keyName=${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip
 
 camel.beans.aggregate=#class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy
-camel.beans.aggregation.size=10
-camel.beans.aggregation.timeout=5000
+camel.aggregation.size=10
+camel.aggregation.timeout=5000
 ```
 
 and add the correct credentials for AWS.
@@ -417,8 +417,8 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "camel.sink.path.bucketNameOrArn": "camel-kafka-connector",
     "camel.sink.endpoint.keyName": "${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip",
     "camel.beans.aggregate": "#class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy",
-    "camel.beans.aggregation.size": "10",
-    "camel.beans.aggregation.timeout": "5000",
+    "camel.aggregation.size": "10",
+    "camel.aggregation.timeout": "5000",
     "camel.component.aws2-s3.accessKey": "xxx",
     "camel.component.aws2-s3.secretKey": "xxx",
     "camel.component.aws2-s3.region": "xxx"
@@ -449,8 +449,8 @@ spec:
     camel.sink.path.bucketNameOrArn: camel-kafka-connector
     camel.sink.endpoint.keyName: ${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip
     camel.beans.aggregate: #class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy
-    camel.beans.aggregation.size: 10
-    camel.beans.aggregation.timeout: 5000
+    camel.aggregation.size: 10
+    camel.aggregation.timeout: 5000
     camel.component.aws2-s3.accessKey: xxxx
     camel.component.aws2-s3.secretKey: yyyy
     camel.component.aws2-s3.region: region
