@@ -14,7 +14,7 @@ spec:
     topics: s3-topic
     camel.sink.path.bucketNameOrArn: camel-kafka-connector
     camel.sink.endpoint.keyName: ${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip
-    camel.beans.aggregate: #class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy
+    camel.beans.aggregate: '#class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy'
     camel.aggregation.size: 10
     camel.aggregation.timeout: 5000
     camel.component.aws2-s3.accessKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-s3-cred.properties:accessKey}
