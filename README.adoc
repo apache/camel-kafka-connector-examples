@@ -18,6 +18,7 @@ List of existing examples:
 - FTP source and sink examples
 - FTPS source and sink examples
 - Git source multiple examples
+- Github source multiple examples
 - Google Calendar Stream source example
 - Google Mail Stream source example
 - Google Sheets Stream source examples
