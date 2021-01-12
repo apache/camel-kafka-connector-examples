@@ -1,0 +1,233 @@
+= Camel-Kafka-connector Github Source Consuming Events
+
+This is an example for Camel-Kafka-connector Github Source Consuming Events
+
+== Standalone
+
+=== What is needed
+
+- A Github account
+- A Github Personal Access Token
+- A Github repository
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+You'll need to build your connector starting from an archetype:
+
+```
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.7.0
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.apache.maven:standalone-pom >-------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] >>> maven-archetype-plugin:3.1.2:generate (default-cli) > generate-sources @ standalone-pom >>>
+[INFO] 
+[INFO] <<< maven-archetype-plugin:3.1.2:generate (default-cli) < generate-sources @ standalone-pom <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-archetype-plugin:3.1.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Interactive mode
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.7.0] found in catalog remote
+Define value for property 'groupId': org.apache.camel.kafkaconnector
+Define value for property 'artifactId': github-extended
+Define value for property 'version' 1.0-SNAPSHOT: : 0.7.0
+Define value for property 'package' org.apache.camel.kafkaconnector: : 
+Define value for property 'camel-kafka-connector-name': camel-github-kafka-connector
+[INFO] Using property: camel-kafka-connector-version = 0.7.0
+Confirm properties configuration:
+groupId: org.apache.camel.kafkaconnector
+artifactId: github-extended
+version: 0.7.0
+package: org.apache.camel.kafkaconnector
+camel-kafka-connector-name: camel-github-kafka-connector
+camel-kafka-connector-version: 0.7.0
+ Y: : Y
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.7.0
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: artifactId, Value: github-extended
+[INFO] Parameter: version, Value: 0.7.0
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: version, Value: 0.7.0
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: camel-kafka-connector-name, Value: camel-github-kafka-connector
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.7.0
+[INFO] Parameter: artifactId, Value: ftps-extended
+[INFO] Project created from Archetype in dir: /home/workspace/miscellanea/github-extended
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.590 s
+[INFO] Finished at: 2020-11-05T07:45:43+01:00
+[INFO] ------------------------------------------------------------------------
+> cd /home/workspace/miscellanea/ftps-extended
+```
+
+We'll need to add a little transform for this example. So import the ftp-extended project in your IDE and create a class in the only package there
+
+```
+package org.apache.camel.kafkaconnector;
+
+import java.util.Map;
+
+import org.apache.camel.kafkaconnector.utils.SchemaHelper;
+import org.apache.kafka.common.config.ConfigDef;
+import org.apache.kafka.connect.connector.ConnectRecord;
+import org.apache.kafka.connect.transforms.Transformation;
+import org.eclipse.egit.github.core.event.Event;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class EventTransforms <R extends ConnectRecord<R>> implements Transformation<R> {
+    public static final String FIELD_KEY_CONFIG = "key";
+    public static final ConfigDef CONFIG_DEF = new ConfigDef()
+            .define(FIELD_KEY_CONFIG, ConfigDef.Type.STRING, null, ConfigDef.Importance.MEDIUM,
+                    "Transforms Remote File to String");
+
+    private static final Logger LOG = LoggerFactory.getLogger(EventTransforms.class);
+
+    @Override
+    public R apply(R r) {
+        Object value = r.value();
+
+        if (r.value() instanceof Event) {
+            LOG.debug("Converting record from Event to text");
+            Event message = (Event) r.value();
+
+            LOG.debug("Received text: {}", message.getType());
+
+            return r.newRecord(r.topic(), r.kafkaPartition(), null, r.key(),
+                    SchemaHelper.buildSchemaBuilderForType(message.getType()), message.getType(), r.timestamp());
+
+        } else {
+            LOG.debug("Unexpected message type: {}", r.value().getClass());
+
+            return r;
+        }
+    }
+
+    @Override
+    public ConfigDef config() {
+        return CONFIG_DEF;
+    }
+
+    @Override
+    public void close() {
+
+    }
+
+    @Override
+    public void configure(Map<String, ?> map) {
+
+    }
+}
+```
+
+Now we need to build the connector:
+
+```
+> mvn clean package
+```
+
+In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated zip from the previois build
+
+```
+> cd /home/oscerd/connectors/
+> cp /home/workspace/miscellanea/github-extended/target/github-extended-0.7.0-package.zip .
+> unzip github-extended-0.7.0-package.zip
+```
+
+Now we are ready to go.
+
+=== Setup the connectors
+
+Open the Github configuration file at `$EXAMPLES/github/github-source-events/config/CamelGithubSourceConnector.properties`
+
+[source]
+----
+name=CamelGithubSourceConnector
+connector.class=org.apache.camel.kafkaconnector.github.CamelGithubSourceConnector
+tasks.max=1
+
+key.converter=org.apache.kafka.connect.storage.StringConverter
+transforms=EventTransforms
+transforms.EventTransforms.type=org.apache.camel.kafkaconnector.EventTransforms
+
+topics=mytopic
+
+camel.source.endpoint.repoName=finnhub-java-client
+camel.source.endpoint.repoOwner=oscerd
+camel.source.path.type=event
+camel.source.endpoint.oauthToken=<personal_access_token>
+----
+
+Modify the oauthToken with your personal access token and a repository of your choice.
+
+In the example I'm pointing an oscerd's personal project https://github.com/oscerd/finnhub-java-client
+
+=== Running the example
+
+Run the kafka connect with the Git Source connector:
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/github/github-source-events/config/CamelGithubSourceConnector.properties
+----
+
+Now create a Pull request on the selected repository.
+
+On a different terminal run the kafkacat consumer
+
+[source]
+----
+./kafkacat -b localhost:9092 -t mytopic -f 'Headers: %h Value: %s'
+% Auto-selecting Consumer mode (use -P or -C to override)
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"CreateEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"CreateEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"CreateEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"CreateEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"CreateEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PullRequestEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PullRequestEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"CreateEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PullRequestEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PullRequestEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"CreateEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PullRequestEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PullRequestEvent"}
+Headers: CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000 Value: {"schema":{"type":"string","optional":false},"payload":"PushEvent"}
+Reached end of topic mytopic [0] at offset 27
+----
