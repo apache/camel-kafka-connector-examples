@@ -1,0 +1,19 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: kinesis-source-connector
+  namespace: myproject
+  labels:
+    strimzi.io/cluster: my-connect-cluster
+spec:
+  class: org.apache.camel.kafkaconnector.aws2kinesis.CamelAws2kinesisSourceConnector
+  tasksMax: 1
+  config:
+    key.converter: org.apache.kafka.connect.storage.StringConverter
+    transforms: KinesisRecordDataTransforms
+    transforms.KinesisRecordDataTransforms.type: org.apache.camel.kafkaconnector.KinesisRecordDataTransforms
+    topics: kinesis-topic
+    camel.source.path.streamName: streamTest
+    camel.source.endpoint.accessKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-kinesis-cred.properties:accessKey}
+    camel.source.endpoint.secretKey: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-kinesis-cred.properties:secretKey}
+    camel.source.endpoint.region: ${file:/opt/kafka/external-configuration/aws-credentials/aws2-kinesis-cred.properties:region}
