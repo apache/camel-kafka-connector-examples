@@ -27,3 +27,5 @@ github:
     merge: false
     rebase: true
     squash: true
+  features:
+    issues: true
