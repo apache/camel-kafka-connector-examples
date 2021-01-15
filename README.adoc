@@ -7,8 +7,8 @@ List of existing examples:
 - AWS-S3 to JMS example
 - AWS2-IAM sink multiple examples
 - AWS2-lambda sink example
-- AWS2-kinesis-firehose sink example
-- AWS2-Kinesis source example
+- AWS2-Kinesis-firehose sink example
+- AWS2-Kinesis source and sink example
 - AWS2-S3 source and sink examples
 - AWS2-SNS sink example
 - AWS2-SQS source and sink examples
