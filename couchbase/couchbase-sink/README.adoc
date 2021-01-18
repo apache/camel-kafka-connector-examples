@@ -1,0 +1,110 @@
+# Camel-Kafka-connector Couchbase Sink
+
+## Introduction
+
+This is an example for Camel-Kafka-connector Couchbase.The support for Couchbase is *experimental* at
+this moment.
+
+## What is needed
+
+- A Couchbase instance
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/otavio/connectors/`
+
+```
+> cd /home/otavio/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-couchbase-kafka-connector/0.7.0/camel-couchbase-kafka-connector-0.7.0-package.zip
+> unzip camel-couchbase-kafka-connector-0.7.0-package.zip
+```
+
+## Setting up Couchbase
+
+This examples require a running Couchbase instance, for simplicity the steps below show how to start Couchbase using
+Docker. We will use the community image, therefore Couchbase Enterprise features will not be available. First you'll
+need to run a Couchbase instance:
+
+[source,bash]
+----
+docker run --name couchbase -p 8091-8096:8091-8096 -p 11210-11211:11210-11211 couchbase/server:community-6.5.1
+----
+
+Next, access the Couchbase UI and proceed with the configuration.
+
+----
+http://couchbase-host:8091
+----
+
+Select "Setup New Cluster" and fill the form with the following values:
+
+|===
+| Field | Value
+
+| Cluster Name | exampleCluster
+| Create Admin UserName | Administrator
+| Create Password | MyPassword
+| Confirm Password | MyPassword
+|===
+
+Click on "Next: Accept Terms" to review the licensing conditions for using Couchbase. If satisfied
+with the terms and conditions, accept them and click on "Finish With Defaults".
+
+
+To create the bucket, you can use "Add Bucket" link on the UI or run the following command:
+
+[source,bash]
+----
+curl -u Administrator:MyPassword -v -X POST http://couchbase-host:8091/pools/default/buckets -d name=ExampleBucket -d ramQuotaMB=100
+----
+
+*Note*: replace `couchbase-host` with the actual host running Couchbase on the command above and
+all subsequent commands below.
+
+Now it's time to setup the connectors
+
+Open the Couchbase Sink configuration file
+
+```
+name=CamelCouchbaseSinkConnector
+
+connector.class=org.apache.camel.kafkaconnector.couchbase.CamelCouchbaseSinkConnector
+value.converter=org.apache.kafka.connect.storage.StringConverter
+key.converter=org.apache.kafka.connect.storage.StringConverter
+tasks.max=1
+
+topics=couchbase-sink-topic
+
+camel.sink.url=couchbase:http://couchbase-host:11210?bucket=ExampleBucket&username=Administrator&password=MyPassword&connectTimeout=5000&queryTimeout=5000&producerRetryAttempts=10&producerRetryPause=7500
+```
+
+Set the correct options in the file.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelCouchbaseSinkConnector.properties
+```
+
+On a different terminal run the kafka-producer and use it to populate Couchbase with messages
+
+```
+kafka-console-producer.sh --broker-list localhost:9092 --topic couchbase-sink-topic
+>message
+```
+You can verify the behavior by accessing Documents page on the Buckets package in the
+Couchbase UI.
