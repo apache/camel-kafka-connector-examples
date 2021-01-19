@@ -32,6 +32,12 @@ In this example we'll use `/home/otavio/connectors/`
 > wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-couchbase-kafka-connector/0.7.0/camel-couchbase-kafka-connector-0.7.0-package.zip
 > unzip camel-couchbase-kafka-connector-0.7.0-package.zip
 ```
+There is a little bug in 0.7.0, so we'll need to add explicitly the couchbase driver
+
+```
+> cd /home/otavio/connectors/camel-couchbase-kafka-connector
+> wget https://repo1.maven.org/maven2/com/couchbase/client/java-client/3.1.0/java-client-3.1.0.jar
+```
 
 ## Setting up Couchbase
 
