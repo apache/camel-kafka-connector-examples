@@ -13,6 +13,7 @@ List of existing examples:
 - AWS2-SNS sink example
 - AWS2-SQS source and sink examples
 - Braintree sink example
+- Couchbase sink example
 - CQL source and sink examples
 - Exec sink example
 - File source and sink examples
