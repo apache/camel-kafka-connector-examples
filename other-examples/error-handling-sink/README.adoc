@@ -1,0 +1,87 @@
+# Camel-Kafka-connector Error Handling Example
+
+## Introduction
+
+This shows how to use dead letter queues for sink error handling with Camel Kafka Connector.
+It tries to send a message to an invalid JMS message broker. Because the message broker does
+not exist, the message will be routed to the dead letter queue (DLQ).
+
+## What is needed
+
+- Kafka
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/otavio/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sjms2-kafka-connector/0.7.0/camel-sjms2-kafka-connector-0.7.0-package.zip
+> unzip camel-sjms2-kafka-connector-0.7.0-package.zip
+```
+
+Open the SJMS2 configuration file
+
+```
+name=CamelJmsSinkConnector
+topics=mytopic
+tasks.max=1
+connector.class=org.apache.camel.kafkaconnector.sjms2.CamelSjms2SinkConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+camel.sink.url=sjms2://queue:myqueue
+
+camel.component.sjms2.connection-factory=#class:org.apache.activemq.ActiveMQConnectionFactory
+
+# Note the invalid address below
+camel.component.sjms2.connection-factory.brokerURL=tcp://invalid-host.some-domain.com
+
+# This is the topic where they will be sent on errors
+errors.deadletterqueue.topic.name=example-dlq
+errors.deadletterqueue.topic.replication.factor=1
+```
+
+And add the correct address for the server.
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelSjms2Invalid.properties
+```
+
+To read the messages from the DLQ, first open a consumer attached to it:
+
+```
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic example-dlq
+```
+
+On a different terminal run the kafka-producer and send a message to your Kafka Broker.
+
+```
+bin/kafka-console-producer.sh --broker-list localhost:9092 --topic mytopic
+Invalid messsage
+```
+
+On the consumer, you should receive the message that was routed to the DLQ because it could
+not be delivered to the JMS broker.
+
+```
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic example-dlq
+Invalid messsage
+```
+
