@@ -15,6 +15,7 @@ List of existing examples:
 - Braintree sink example
 - Couchbase sink example
 - CQL source and sink examples
+- Docker source examples
 - Exec sink example
 - File source and sink examples
 - FTP source and sink examples
