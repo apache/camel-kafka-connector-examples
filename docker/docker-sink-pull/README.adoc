@@ -78,6 +78,8 @@ Run the kafka connect with the Docker Source connector:
 $KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/docker/docker-sink-pull/config/CamelDockerSinkConnector.properties
 ----
 
+We just need to trigger the operation through a message
+
 On a different terminal run the kafkacat producer
 
 [source]
@@ -86,8 +88,6 @@ On a different terminal run the kafkacat producer
 % Auto-selecting Producer mode (use -P or -C to override)
 ----
 
-We just need to trigger the operation through a message
-
 After a while we should get a new memcached image in our Docker
 
 [source]
@@ -95,4 +95,41 @@ After a while we should get a new memcached image in our Docker
 > docker images
 REPOSITORY                                                               TAG                 IMAGE ID            CREATED             SIZE
 memcached                                                                latest              9f547b64a127        7 days ago          82.4MB
+----
+
+You can use a different approach and define everything through headers. In this case the correct configuration for the connector would be
+
+[source]
+----
+name=CamelDockerSinkConnector
+connector.class=org.apache.camel.kafkaconnector.docker.CamelDockerSinkConnector
+tasks.max=1
+
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.component.docker.host=/var/run/docker.sock
+camel.component.docker.socket=true
+camel.sink.path.operation=imagepull
+camel.sink.endpoint.username=<username>
+camel.sink.endpoint.password=<password>
+----
+
+And then send the following message
+
+[source]
+----
+> echo "test" | ./kafkacat -b localhost:9092 -t pereppe -H "CamelHeader.CamelDockerRepository=openjdk" -H "CamelHeader.CamelDockerTag=15.0.2-jdk"
+% Auto-selecting Producer mode (use -P or -C to override)
+----
+
+After a while you should see
+
+[source]
+----
+> docker images
+REPOSITORY                                                               TAG                 IMAGE ID            CREATED             SIZE
+openjdk                                                                  15.0.2-jdk          84a383f5b038        13 hours ago        486MB
 ----
