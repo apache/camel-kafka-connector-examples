@@ -121,7 +121,7 @@ And then send the following message
 
 [source]
 ----
-> echo "test" | ./kafkacat -b localhost:9092 -t pereppe -H "CamelHeader.CamelDockerRepository=openjdk" -H "CamelHeader.CamelDockerTag=15.0.2-jdk"
+> echo "test" | ./kafkacat -b localhost:9092 -t mytopic -H "CamelHeader.CamelDockerRepository=openjdk" -H "CamelHeader.CamelDockerTag=15.0.2-jdk"
 % Auto-selecting Producer mode (use -P or -C to override)
 ----
 
