@@ -1,0 +1,156 @@
+= Camel-Kafka-connector Docker Sink Tag
+
+This is an example for Camel-Kafka-connector Docker Sink Tag
+
+== Standalone
+
+=== What is needed
+
+- A Docker daemon
+- A Docker image
+
+=== Getting a docker image
+
+We need an image, we can choose memcached latest docker image for example
+
+After a while we should get a new memcached image in our Docker
+
+[source]
+----
+> docker pull memcached
+> docker images
+REPOSITORY                                                               TAG                 IMAGE ID            CREATED             SIZE
+memcached                                                                latest              9f547b64a127        7 days ago          82.4MB
+----
+
+Take note of the image id.
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Download the connector package
+
+Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-docker-kafka-connector/0.7.0/camel-docker-kafka-connector-0.7.0-package.zip
+> unzip camel-docker-kafka-connector-0.7.0-package.zip
+----
+
+=== Configuring Kafka Connect
+
+You'll need to set up the `plugin.path` property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties` and set the `plugin.path` property to your choosen location:
+
+[source]
+----
+...
+plugin.path=/home/oscerd/connectors
+...
+----
+
+=== Setup the connectors
+
+Open the Docker configuration file at `$EXAMPLES/docker/docker-sink-tag/config/CamelDockerSinkConnector.properties`
+
+[source]
+----
+name=CamelDockerSinkConnector
+connector.class=org.apache.camel.kafkaconnector.docker.CamelDockerSinkConnector
+tasks.max=1
+
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.component.docker.host=/var/run/docker.sock
+camel.component.docker.socket=true
+camel.sink.path.operation=imagetag
+camel.sink.endpoint.repository=memcached
+camel.sink.endpoint.imageId=9f547b64a127
+camel.sink.endpoint.tag=myversion-1.0
+camel.sink.endpoint.force=true
+camel.sink.endpoint.username=<username>
+camel.sink.endpoint.password=<password>
+----
+
+In this case we are using local unix socket.
+
+Add the correct information for username and password.
+
+=== Running the example
+
+Run the kafka connect with the Docker Source connector:
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/docker/docker-sink-tag/config/CamelDockerSinkConnector.properties
+----
+
+We just need to trigger the operation through a message
+
+On a different terminal run the kafkacat producer
+
+[source]
+----
+> echo "test" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+----
+
+After a while we should get a new tagged memcached image in our Docker
+
+[source]
+----
+> docker images
+REPOSITORY                                                               TAG                 IMAGE ID            CREATED             SIZE
+memcached                                                                latest              9f547b64a127        7 days ago          82.4MB
+memcached                                                                myversion-1.0       9f547b64a127        8 days ago          82.4MB
+----
+
+You can use a different approach and define everything through headers. In this case the correct configuration for the connector would be
+
+[source]
+----
+name=CamelDockerSinkConnector
+connector.class=org.apache.camel.kafkaconnector.docker.CamelDockerSinkConnector
+tasks.max=1
+
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.component.docker.host=/var/run/docker.sock
+camel.component.docker.socket=true
+camel.sink.path.operation=imagetag
+camel.sink.endpoint.username=<username>
+camel.sink.endpoint.password=<password>
+----
+
+And then send the following message
+
+[source]
+----
+> echo "test" | ./kafkacat -b localhost:9092 -t mytopic -H "CamelHeader.CamelDockerRepository=openjdk" -H "CamelHeader.CamelDockerTag=my-15.0.2-jdk" -H "CamelHeader.CamelDockerImageId=84a383f5b038" -H "CamelHeader.CamelDockerForce=true"
+% Auto-selecting Producer mode (use -P or -C to override)
+----
+
+After a while you should see a new tagged openjdk image
+
+[source]
+----
+> docker images
+REPOSITORY                                                               TAG                 IMAGE ID            CREATED             SIZE
+openjdk                                                                  15.0.2-jdk          84a383f5b038        13 hours ago        486MB
+openjdk                                                                  my-15.0.2-jdk       84a383f5b038        30 hours ago        486MB
+----
