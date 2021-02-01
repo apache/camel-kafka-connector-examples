@@ -41,8 +41,8 @@ Download the connector package zip and extract the content to a directory. In th
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-docker-kafka-connector/0.7.0/camel-docker-kafka-connector-0.7.0-package.zip
-> unzip camel-docker-kafka-connector-0.7.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-docker-kafka-connector/0.7.1/camel-docker-kafka-connector-0.7.1-package.zip
+> unzip camel-docker-kafka-connector-0.7.1-package.zip
 ----
 
 === Configuring Kafka Connect
