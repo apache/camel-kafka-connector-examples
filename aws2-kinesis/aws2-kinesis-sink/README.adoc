@@ -30,8 +30,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-kafka-connector/0.7.0/camel-aws2-kinesis-kafka-connector-0.7.0-package.zip
-> unzip camel-aws2-kinesis-kafka-connector-0.7.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-kafka-connector/0.7.1/camel-aws2-kinesis-kafka-connector-0.7.1-package.zip
+> unzip camel-aws2-kinesis-kafka-connector-0.7.1-package.zip
 ```
 
 On AWS console create a Kinesis stream delivery stream named streamTest.
