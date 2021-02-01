@@ -27,7 +27,7 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.7.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.7.1
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< org.apache.maven:standalone-pom >-------------------
@@ -43,31 +43,31 @@ You'll need to build your connector starting from an archetype:
 [INFO] Generating project in Interactive mode
 Define value for property 'groupId': org.apache.camel.kafkaconnector.cql.extended
 Define value for property 'artifactId': cql-extended
-Define value for property 'version' 1.0-SNAPSHOT: : 0.7.0
+Define value for property 'version' 1.0-SNAPSHOT: : 0.7.1
 Define value for property 'package' org.apache.camel.kafkaconnector.cql.extended: : 
 Define value for property 'camel-kafka-connector-name': camel-cql-kafka-connector
-[INFO] Using property: camel-kafka-connector-version = 0.7.0
+[INFO] Using property: camel-kafka-connector-version = 0.7.1
 Confirm properties configuration:
 groupId: org.apache.camel.kafkaconnector.cql.extended
 artifactId: cql-extended
-version: 0.7.0
+version: 0.7.1
 package: org.apache.camel.kafkaconnector.cql.extended
 camel-kafka-connector-name: camel-cql-kafka-connector
-camel-kafka-connector-version: 0.7.0
+camel-kafka-connector-version: 0.7.1
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.7.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.7.1
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector.cql.extended
 [INFO] Parameter: artifactId, Value: cql-extended
-[INFO] Parameter: version, Value: 0.7.0
+[INFO] Parameter: version, Value: 0.7.1
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector.cql.extended
 [INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector/cql/extended
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector.cql.extended
-[INFO] Parameter: version, Value: 0.7.0
+[INFO] Parameter: version, Value: 0.7.1
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector.cql.extended
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-cql-kafka-connector
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.7.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.7.1
 [INFO] Parameter: artifactId, Value: cql-extended
 [INFO] Project created from Archetype in dir: /home/oscerd/playground/cql-extended
 [INFO] ------------------------------------------------------------------------
@@ -124,8 +124,8 @@ In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll n
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/oscerd/playground/cql-extended/target/cql-extended-0.7.0-package.zip .
-> unzip cql-extended-0.7.0-package.zip
+> cp /home/oscerd/playground/cql-extended/target/cql-extended-0.7.1-package.zip .
+> unzip cql-extended-0.7.1-package.zip
 ```
 
 and we're now ready to setting up the Cassandra cluster.
@@ -279,8 +279,8 @@ So we need to do something like this:
 
 ```
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.7.0/camel-cql-kafka-connector-0.7.0-package.zip
-> unzip camel-cql-kafka-connector-0.7.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.7.1/camel-cql-kafka-connector-0.7.1-package.zip
+> unzip camel-cql-kafka-connector-0.7.1-package.zip
 ```
 
 Now we can start the build 
@@ -309,22 +309,22 @@ You should see something like this:
   {
     "class": "org.apache.camel.kafkaconnector.CamelSinkConnector",
     "type": "sink",
-    "version": "0.7.0"
+    "version": "0.7.1"
   },
   {
     "class": "org.apache.camel.kafkaconnector.CamelSourceConnector",
     "type": "source",
-    "version": "0.7.0"
+    "version": "0.7.1"
   },
   {
     "class": "org.apache.camel.kafkaconnector.cql.CamelCqlSinkConnector",
     "type": "sink",
-    "version": "0.7.0"
+    "version": "0.7.1"
   },
   {
     "class": "org.apache.camel.kafkaconnector.cql.CamelCqlSourceConnector",
     "type": "source",
-    "version": "0.7.0"
+    "version": "0.7.1"
   },
   {
     "class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
