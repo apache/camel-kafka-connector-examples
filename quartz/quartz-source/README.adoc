@@ -24,13 +24,6 @@ Download the connector package zip and extract the content to a directory. In th
 > unzip camel-quartz-kafka-connector-0.7.1-package.zip
 ----
 
-In 0.7.1, you'll need to add also camel-quartz and quartz dependency.
-
-[source]
-----
-> cd /home/oscerd/connectors/camel-quartz-kafka-connector
-----
-
 We are now ready
 
 === Configuring Kafka Connect
