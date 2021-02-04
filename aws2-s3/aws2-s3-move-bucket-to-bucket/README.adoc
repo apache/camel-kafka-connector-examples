@@ -50,7 +50,7 @@ topics=mytopic
 
 camel.source.path.bucketNameOrArn=camel-kafka-connector
 
-camel.component.aws2-s3.access-key=<access_key>
+camel.component.aws2-s3.accessKey=<access_key>
 camel.component.aws2-s3.secretKey=<secret_key>
 camel.component.aws2-s3.region=<region>
 ```
@@ -69,7 +69,7 @@ topics=mytopic
 
 camel.sink.path.bucketNameOrArn=camel-kafka-connector-1
 camel.remove.headers.pattern=CamelAwsS3BucketName
-camel.component.aws2-s3.access-key=<access_key>
+camel.component.aws2-s3.accessKey=<access_key>
 camel.component.aws2-s3.secretKey=<secret_key>
 camel.component.aws2-s3.region=<region>
 ```

@@ -56,7 +56,7 @@ topics=mytopic
 
 camel.sink.path.topicNameOrArn=camel-1
 
-camel.component.aws2-sns.access-key=xxxx
+camel.component.aws2-sns.accessKey=xxxx
 camel.component.aws2-sns.secretKey=yyyy
 camel.component.aws2-sns.region=eu-west-1
 ----

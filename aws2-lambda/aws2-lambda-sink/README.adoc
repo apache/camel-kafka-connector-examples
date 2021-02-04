@@ -62,7 +62,7 @@ topics=mytopic
 camel.sink.path.function=hello-ckc
 camel.sink.endpoint.operation=invokeFunction
 
-camel.component.aws2-lambda.access-key=xxxx
+camel.component.aws2-lambda.accessKey=xxxx
 camel.component.aws2-lambda.secretKey=yyyy
 camel.component.aws2-lambda.region=eu-west-1
 ```

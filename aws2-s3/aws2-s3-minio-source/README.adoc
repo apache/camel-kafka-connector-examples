@@ -61,7 +61,7 @@ topics=test1
 camel.source.path.bucketNameOrArn=bucket
 camel.source.endpoint.overrideEndpoint=true
 camel.source.endpoint.uriEndpointOverride=http://localhost:9000
-camel.component.aws2-s3.access-key=minio
+camel.component.aws2-s3.accessKey=minio
 camel.component.aws2-s3.secretKey=miniostorage
 camel.component.aws2-s3.region=eu-west-1
 ```
