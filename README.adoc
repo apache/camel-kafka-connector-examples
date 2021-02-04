@@ -9,6 +9,7 @@ List of existing examples:
 - AWS2-lambda sink example
 - AWS2-Kinesis-firehose sink example
 - AWS2-Kinesis source and sink example
+- AWS2-KMS sink examples
 - AWS2-S3 source and sink examples
 - AWS2-SNS sink example
 - AWS2-SQS source and sink examples
