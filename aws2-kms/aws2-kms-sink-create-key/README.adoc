@@ -1,4 +1,4 @@
-= Camel-Kafka-connector AWS2 KMS Sink for creating user
+= Camel-Kafka-connector AWS2 KMS Sink for creating key
 
 This is an example for Camel-Kafka-connector AWS2-KMS Sink for creating key
 
@@ -43,7 +43,7 @@ plugin.path=/home/oscerd/connectors
 
 === Setup the connectors
 
-Open the AWS2 KMS configuration file at `$EXAMPLES/aws2-kms/aws2-kms-sink-create-user/config/CamelAWS2KMSSinkConnector.properties`
+Open the AWS2 KMS configuration file at `$EXAMPLES/aws2-kms/aws2-kms-sink-create-key/config/CamelAWS2KMSSinkConnector.properties`
 
 [source]
 ----
@@ -71,7 +71,7 @@ Run the kafka connect with the KMS Sink connector:
 
 [source]
 ----
-$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/aws2-kms/aws2-kms-sink-create-user/config/CamelAWS2KMSSinkConnector.properties
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/aws2-kms/aws2-kms-sink-create-key/config/CamelAWS2KMSSinkConnector.properties
 ----
 
 On a different terminal run the kafkacat producer and send the following message
