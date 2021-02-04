@@ -52,7 +52,7 @@ topics=mytopic
 camel.sink.path.streamName=firehose-stream
 
 camel.component.aws2-kinesis-firehose.access-key=xxxx
-camel.component.aws2-kinesis-firehose.secret-key=yyyy
+camel.component.aws2-kinesis-firehose.secretKey=yyyy
 camel.component.aws2-kinesis-firehose.region=eu-west-1
 ```
 

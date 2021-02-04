@@ -49,7 +49,7 @@ topics=test1
 camel.source.url=aws2-s3://camel-kafka-connector?autocloseBody=false
 
 camel.component.aws2-s3.access-key=xxxx
-camel.component.aws2-s3.secret-key=yyyy
+camel.component.aws2-s3.secretKey=yyyy
 camel.component.aws2-s3.region=eu-west-1
 ```
 
