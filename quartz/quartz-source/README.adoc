@@ -1,0 +1,94 @@
+= Camel-Kafka-connector Quartz Source 
+
+This is an example for Camel-Kafka-connector Quartz Source
+
+== Standalone
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Download the connector package
+
+Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-quartz-kafka-connector/0.7.1/camel-quartz-kafka-connector-0.7.1-package.zip
+> unzip camel-quartz-kafka-connector-0.7.1-package.zip
+----
+
+In 0.7.1, you'll need to add also camel-quartz and quartz dependency.
+
+[source]
+----
+> cd /home/oscerd/connectors/camel-quartz-kafka-connector
+----
+
+We are now ready
+
+=== Configuring Kafka Connect
+
+You'll need to set up the `plugin.path` property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties` and set the `plugin.path` property to your choosen location:
+
+[source]
+----
+...
+plugin.path=/home/oscerd/connectors
+...
+----
+
+=== Setup the connectors
+
+Open the Cron configuration file at `$EXAMPLES/quartz/quartz-source/config/CamelQuartzSourceConnector.properties`
+
+[source]
+----
+name=CamelQuartzSourceConnector
+connector.class=org.apache.camel.kafkaconnector.quartz.CamelQuartzSourceConnector
+tasks.max=1
+
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.source.path.groupName=Camel
+camel.source.path.triggerName=quartz-sample
+camel.source.endpoint.cron=0/5+*+*+*+*+?
+----
+
+In this case we are using local unix socket.
+
+For the containerId you'll need to use the value of the running debian container.
+
+=== Running the example
+
+Run the kafka connect with the Quartz Source connector:
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/quartz/quartz-source/config/CamelQuartzSourceConnector.properties
+----
+
+We'll get multiple message with statistics
+
+On a different terminal run the kafkacat consumer
+
+[source]
+----
+./kafkacat -b localhost:9092 -t mytopic -f 'Headers: %h: Message value: %s\n'
+% Auto-selecting Consumer mode (use -P or -C to override)
+% Reached end of topic quartz-topic1 [0] at offset 0
+Headers: CamelHeader.fireTime=2021-02-04T18:25:35.550Z,CamelHeader.jobRunTime=11,CamelHeader.nextFireTime=2021-02-04T18:25:40.000Z,CamelHeader.refireCount=0,CamelHeader.scheduledFireTime=2021-02-04T18:25:35.000Z,CamelHeader.triggerGroup=Camel,CamelHeader.triggerName=quartz-sample,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000: Message value: 
+% Reached end of topic mytopic [0] at offset 1
+
+----
