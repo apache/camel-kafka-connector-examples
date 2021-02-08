@@ -1,0 +1,52 @@
+# Camel-Kafka-connector FHIR Sink Example
+
+## Introduction
+
+This is an example for Camel-Kafka-connector
+
+## What is needed
+
+- A Kafka Cluster running
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic patients
+```
+
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/ldemasi/connectors/`
+
+```
+> mkdir -p /home/ldemasi/connectors/ && cd /home/ldemasi/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-fhir-kafka-connector/0.7.1/camel-fhir-kafka-connector-0.7.1-package.zip
+> unzip camel-fhir-kafka-connector-0.7.1-package.zip
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties source/CamelFhirSinkConnector.properties
+```
+
+Just connect to your Kafka 
+- Produce some sample kafka messages
+```bash
+$KAFKA_HOME/bin/kafka-console-producer.sh --bootstrap-server localhost:9092  --topic patients < sink/patientKobe.json
+$KAFKA_HOME/bin/kafka-console-producer.sh --bootstrap-server localhost:9092  --topic patients < sink/patientAI.json
+```
+- Check with the HAPI FHIR REST server that the patients have been created:
+```bash
+curl -v http://hapi.fhir.org/baseR4/Patient?given=bean&_pretty=true
+curl -v http://hapi.fhir.org/baseR4/Patient?given=Ezail&_pretty=true
+```
