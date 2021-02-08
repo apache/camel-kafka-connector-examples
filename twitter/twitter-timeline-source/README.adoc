@@ -1,0 +1,80 @@
+= Camel-Kafka-connector Twitter Timeline Source
+
+This is an example for Camel-Kafka-connector Twitter Timeline Source
+
+== Standalone
+
+=== What is needed
+
+- A Twitter App with Read and Write permissions
+
+=== Setting up Twitter App and get credentials
+
+You'll need to create a twitter app and take note of access token, access token secret, consumer key and consumer secret.
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-timeline-kafka-connector/0.7.1/camel-twitter-timeline-kafka-connector-0.7.1-package.zip
+> unzip camel-twitter-timeline-kafka-connector-0.7.1-package.zip
+----
+
+Now it's time to setup the connectors
+
+Open the Twitter source configuration file
+
+[source]
+----
+name=CamelTwitter-timelineSourceConnector
+connector.class=org.apache.camel.kafkaconnector.twittertimeline.CamelTwittertimelineSourceConnector
+tasks.max=1
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.source.path.timelineType=user
+camel.source.endpoint.user=ApacheCamel
+camel.source.endpoint.accessToken=<access_token>
+camel.source.endpoint.accessTokenSecret=<access_token_secret>
+camel.source.endpoint.consumerKey=<consumer_key>
+camel.source.endpoint.consumerSecret=<consumer_secret>
+----
+
+Set the correct options in the file for the credentials part.
+
+Now you can run the example
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelTwittertimelineSourceConnector.properties
+----
+
+In another terminal, using kafkacat, you can consume the messages
+
+[source]
+----
+> ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Consumer mode (use -P or -C to override)
+StatusJSONImpl{createdAt=Thu Jan 21 19:40:53 UTC 2021, id=1352340411239559170, text='We released Apache Camel 3.7.1 (LTS) today, a new patch release with 29 fixes and improvements: https://t.co/osOTD4uY5k #apachecamel', source='<a href="https://about.twitter.com/products/tweetdeck" rel="nofollow">TweetDeck</a>', isTruncated=false, inReplyToStatusId=-1, inReplyToUserId=-1, isFavorited=false, isRetweeted=false, favoriteCount=37, inReplyToScreenName='null', geoLocation=null, place=null, retweetCount=18, isPossiblySensitive=false, lang='en', contributorsIDs=[], retweetedStatus=null, userMentionEntities=[], urlEntities=[URLEntityJSONImpl{url='https://t.co/osOTD4uY5k', expandedURL='https://camel.apache.org/blog/2021/01/RELEASE-3.7.1/', displayURL='camel.apache.org/blog/2021/01/R…'}], hashtagEntities=[HashtagEntityJSONImpl{text='apachecamel'}], mediaEntities=[], symbolEntities=[], currentUserRetweetId=-1, user=UserJSONImpl{id=1086624104466341888, name='Apache Camel', email='null', screenName='ApacheCamel', location='', description='Apache Camel™ is a versatile open-source integration framework based on Enterprise Integration Patterns from @TheASF', isContributorsEnabled=false, profileImageUrl='http://pbs.twimg.com/profile_images/1090189047367192577/xWt1RFo6_normal.jpg', profileImageUrlHttps='https://pbs.twimg.com/profile_images/1090189047367192577/xWt1RFo6_normal.jpg', isDefaultProfileImage=false, url='https://t.co/cH7LVwWAdJ', isProtected=false, followersCount=1629, status=null, profileBackgroundColor='000000', profileTextColor='000000', profileLinkColor='FAB81E', profileSidebarFillColor='000000', profileSidebarBorderColor='000000', profileUseBackgroundImage=false, isDefaultProfile=false, showAllInlineMedia=false, friendsCount=0, createdAt=Sat Jan 19 13:59:09 UTC 2019, favouritesCount=30, utcOffset=-1, timeZone='null', profileBackgroundImageUrl='http://abs.twimg.com/images/themes/theme1/bg.png', profileBackgroundImageUrlHttps='https://abs.twimg.com/images/themes/theme1/bg.png', profileBackgroundTiled=false, lang='null', statusesCount=326, isGeoEnabled=false, isVerified=false, translator=false, listedCount=28, isFollowRequestSent=false, withheldInCountries=null}, withHeldInCountries=null, quotedStatusId=-1, quotedStatus=null}
+% Reached end of topic mytopic [0] at offset 1
+----
