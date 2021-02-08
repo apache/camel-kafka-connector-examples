@@ -1,0 +1,71 @@
+# Camel-Kafka-connector FHIR Source Example
+
+## Introduction
+
+This is an example for  Camel-Kafka-connector
+
+## What is needed
+
+- A Kafka Cluster running
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic patients
+```
+
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/ldemasi/connectors/`
+
+```
+> mkdir -p /home/ldemasi/connectors/ && cd /home/ldemasi/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-fhir-kafka-connector/0.7.1/camel-fhir-kafka-connector-0.7.1-package.zip
+> unzip camel-fhir-kafka-connector-0.7.1-package.zip
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties source/CamelFhirSourceConnector.properties
+```
+
+Just connect to your Kafka and check with the kafka console consumer that the messages are available in the kafka topic.
+```bash
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic mytopic --from-beginning
+{
+  "resourceType": "Bundle",
+  "id": "80a62211-eb26-412c-9ebc-f39bc1f1dff7",
+  "meta": {
+    "lastUpdated": "2021-02-10T14:22:46.149+00:00"
+  },
+  "type": "searchset",
+  "link": [
+    {
+      "relation": "self",
+      "url": "http://hapi.fhir.org/baseR4/Patient?_pretty=true"
+    },
+    {
+      "relation": "next",
+      "url": "http://hapi.fhir.org/baseR4?_getpages=80a62211-eb26-412c-9ebc-f39bc1f1dff7&_getpagesoffset=20&_count=20&_pretty=true&_bundletype=searchset"
+    }
+  ],
+  "entry": [
+    {
+      "fullUrl": "http://hapi.fhir.org/baseR4/Patient/628467",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "628467",
+.........
+
+Ctrl+C
+```
