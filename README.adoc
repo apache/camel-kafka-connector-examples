@@ -35,6 +35,7 @@ List of existing examples:
 - PGEvent source example
 - Quartz source example
 - RabbitMQ source and sink examples
+- SCP sink example
 - SFTP source and sink examples
 - Slack source, sink and apicurio registry example
 - SSH source and sink examples
