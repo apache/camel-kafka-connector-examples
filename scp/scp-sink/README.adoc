@@ -1,0 +1,103 @@
+# Camel-Kafka-connector SCP Sink
+
+This is an example for Camel-Kafka-connector SCP Sink 
+
+## Standalone
+
+### What is needed
+
+- An SSH server running
+
+### Setting up an SSH server
+
+We'll use a docker image for this purpose. Any docker image with ssh enabled should be ok.
+
+```
+> docker run -d -P --name test_sshd rastasheep/ubuntu-sshd:14.04
+d77dfccf3a5fe96dfa04b48a359edf572953b1b2086cab498ea7d52830eca5ee
+```
+
+Now we need to check where the port 22 has been exposed into the host
+
+```
+> docker port test_sshd 22
+0.0.0.0:32768
+```
+
+So we'll point to localhost and port 32768
+
+### Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+### Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+In this example we'll use `/home/oscerd/connectors/`
+
+```
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-scp-kafka-connector/0.7.1/camel-scp-kafka-connector-0.7.1-package.zip
+> unzip camel-scp-kafka-connector-0.7.1-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the SCP sink configuration file
+
+```
+name=CamelScpSinkConnector
+connector.class=org.apache.camel.kafkaconnector.scp.CamelScpSinkConnector
+tasks.max=1
+
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.sink.path.host=localhost
+camel.sink.path.port=32768
+camel.sink.endpoint.username=root
+camel.sink.endpoint.password=root
+camel.sink.endpoint.preferredAuthentications=password
+camel.sink.endpoint.fileName=mydata-${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.txt
+camel.sink.endpoint.strictHostKeyChecking=no
+camel.component.scp.verboseLogging=true
+camel.sink.endpoint.disconnectOnBatchComplete=false
+camel.sink.endpoint.allowNullBody=false
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelScpSinkConnector.properties
+```
+
+In another terminal, using kafkacat, you should be able to send messages
+
+```
+> echo "Hello from camel-scp-kafka-connector" | ./kafkacat -b localhost:9092 -t mytopic
+% Auto-selecting Producer mode (use -P or -C to override)
+```
+
+Now we can check our docker container.
+
+```
+> ssh root@localhost -p 32768
+root@localhost's password: 
+Last login: Wed Feb 10 12:51:54 2021 from 172.17.0.1
+root@0d813b2e5994:~# ls
+mydata-20210210-135931864-F4B26643BB9D698-0000000000000001.txt                                                           
+root@0d813b2e5994:~# cat mydata-20210210-135931864-F4B26643BB9D698-0000000000000001.txt 
+Hello from camel-scp-kafka-connector
+```
+
