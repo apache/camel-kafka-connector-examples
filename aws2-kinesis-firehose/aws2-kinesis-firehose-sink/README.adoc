@@ -114,7 +114,7 @@ We can now install the Strimzi operator into this project:
 
 [source,bash,options="nowrap",subs="attributes"]
 ----
-oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.19.0/strimzi-cluster-operator-0.19.0.yaml
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.20.1/strimzi-cluster-operator-0.20.1.yaml
 ----
 
 Next we will deploy a Kafka broker cluster and a Kafka Connect cluster and then create a Kafka Connect image with the Debezium connectors installed:
@@ -122,10 +122,10 @@ Next we will deploy a Kafka broker cluster and a Kafka Connect cluster and then 
 [source,bash,options="nowrap",subs="attributes"]
 ----
 # Deploy a single node Kafka broker
-oc apply -f https://github.com/strimzi/strimzi-kafka-operator/raw/0.19.0/examples/kafka/kafka-persistent-single.yaml
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/raw/0.20.1/examples/kafka/kafka-persistent-single.yaml
 
 # Deploy a single instance of Kafka Connect with no plug-in installed
-oc apply -f https://github.com/strimzi/strimzi-kafka-operator/raw/0.19.0/examples/connect/kafka-connect-s2i-single-node-kafka.yaml
+oc apply -f https://github.com/strimzi/strimzi-kafka-operator/raw/0.20.1/examples/connect/kafka-connect-s2i-single-node-kafka.yaml
 ----
 
 Optionally enable the possibility to instantiate Kafka Connectors through specific custom resource:
