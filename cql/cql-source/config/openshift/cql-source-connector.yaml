@@ -19,5 +19,5 @@ spec:
     camel.source.endpoint.cql: select * from users
     camel.source.endpoint.username: admin
     camel.source.endpoint.password: admin
-
+    camel.source.endpoint.resultSetConversionStrategy: "#class:org.apache.camel.kafkaconnector.cql.extended.RowConversionStrategy"
 

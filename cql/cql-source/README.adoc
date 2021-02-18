@@ -275,12 +275,106 @@ if you have built the whole project (`mvn clean package`) decompress the connect
 so that each one is in its own subfolder
 (alternatively you can download the latest officially released and packaged connectors from maven):
 
-So we need to do something like this:
+```
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.7.1
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.apache.maven:standalone-pom >-------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] >>> maven-archetype-plugin:3.1.2:generate (default-cli) > generate-sources @ standalone-pom >>>
+[INFO] 
+[INFO] <<< maven-archetype-plugin:3.1.2:generate (default-cli) < generate-sources @ standalone-pom <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-archetype-plugin:3.1.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Interactive mode
+Define value for property 'groupId': org.apache.camel.kafkaconnector.cql.extended
+Define value for property 'artifactId': cql-extended
+Define value for property 'version' 1.0-SNAPSHOT: : 0.7.1
+Define value for property 'package' org.apache.camel.kafkaconnector.cql.extended: : 
+Define value for property 'camel-kafka-connector-name': camel-cql-kafka-connector
+[INFO] Using property: camel-kafka-connector-version = 0.7.1
+Confirm properties configuration:
+groupId: org.apache.camel.kafkaconnector.cql.extended
+artifactId: cql-extended
+version: 0.7.1
+package: org.apache.camel.kafkaconnector.cql.extended
+camel-kafka-connector-name: camel-cql-kafka-connector
+camel-kafka-connector-version: 0.7.1
+ Y: : Y
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.7.1
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector.cql.extended
+[INFO] Parameter: artifactId, Value: cql-extended
+[INFO] Parameter: version, Value: 0.7.1
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector.cql.extended
+[INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector/cql/extended
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector.cql.extended
+[INFO] Parameter: version, Value: 0.7.1
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector.cql.extended
+[INFO] Parameter: camel-kafka-connector-name, Value: camel-cql-kafka-connector
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.7.1
+[INFO] Parameter: artifactId, Value: cql-extended
+[INFO] Project created from Archetype in dir: /home/oscerd/playground/cql-extended
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  55.314 s
+[INFO] Finished at: 2020-10-22T18:06:34+02:00
+[INFO] ------------------------------------------------------------------------
+> cd /home/oscerd/playground/cql-extended
+```
+
+Import the cql-extended project in your favorite IDE and create the following class as RowConversionStrategy
+
+```
+package org.apache.camel.kafkaconnector.cql.extended;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
+import org.apache.camel.component.cassandra.ResultSetConversionStrategy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class RowConversionStrategy implements ResultSetConversionStrategy {
+    private static final Logger LOG = LoggerFactory.getLogger(RowConversionStrategy.class);
+
+    @Override
+    public Object getBody(ResultSet resultSet) {
+        List<String> ret = new ArrayList<>();
+
+        Iterator<Row> iterator = resultSet.iterator();
+        while (iterator.hasNext()) {
+            Row row = iterator.next();
+            int id = row.getInt("id");
+            String name = row.getString("name");
+            ret.add("Row[" + String.valueOf(id) + ", " + name +"]");
+        }
+
+        return ret;
+    }
+}
+```
+
+Now we need to build the connector:
+
+```
+> mvn clean package
+```
+
+In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated zip from the previous build
 
 ```
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.7.1/camel-cql-kafka-connector-0.7.1-package.zip
-> unzip camel-cql-kafka-connector-0.7.1-package.zip
+> cp /home/oscerd/playground/cql-extended/target/cql-extended-0.7.1-package.zip .
+> unzip cql-extended-0.7.1-package.zip
 ```
 
 Now we can start the build 
@@ -397,7 +491,8 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "camel.source.path.keyspace": "test",
     "camel.source.endpoint.cql": "select * from users",
     "camel.source.endpoint.username": "admin",
-    "camel.source.endpoint.password": "admin"
+    "camel.source.endpoint.password": "admin",
+    "camel.source.endpoint.resultSetConversionStrategy": "#class:org.apache.camel.kafkaconnector.cql.extended.RowConversionStrategy"
   }
 }
 EOF
