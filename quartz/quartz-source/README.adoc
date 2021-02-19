@@ -20,8 +20,8 @@ Download the connector package zip and extract the content to a directory. In th
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-quartz-kafka-connector/0.7.1/camel-quartz-kafka-connector-0.7.1-package.zip
-> unzip camel-quartz-kafka-connector-0.7.1-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-quartz-kafka-connector/0.7.2/camel-quartz-kafka-connector-0.7.2-package.zip
+> unzip camel-quartz-kafka-connector-0.7.2-package.zip
 ----
 
 We are now ready
