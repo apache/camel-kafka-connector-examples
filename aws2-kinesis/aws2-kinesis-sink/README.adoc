@@ -30,8 +30,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-kafka-connector/0.7.1/camel-aws2-kinesis-kafka-connector-0.7.1-package.zip
-> unzip camel-aws2-kinesis-kafka-connector-0.7.1-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-kafka-connector/0.7.2/camel-aws2-kinesis-kafka-connector-0.7.2-package.zip
+> unzip camel-aws2-kinesis-kafka-connector-0.7.2-package.zip
 ```
 
 On AWS console create a Kinesis stream delivery stream named streamTest.
@@ -92,7 +92,7 @@ After this we'll need to perform a get-records operation
             "Data": "aGVsbG8gdGhlcmU=", 
             "PartitionKey": "partition-1", 
             "ApproximateArrivalTimestamp": 1610729857.904, 
-            "SequenceNumber": "49614584677004495689019783087056269304781414429070721026"
+            "SequenceNumber": "4961458467700449568901978308705626930.7.2414429070721026"
         }, 
         {
             "Data": "aGVsbG8gdGhlcmU=", 
