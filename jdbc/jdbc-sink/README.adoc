@@ -25,8 +25,8 @@ Download the connector package zip and extract the content to a directory. In th
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-jdbc-kafka-connector/0.7.1/camel-jdbc-kafka-connector-0.7.1-package.zip
-> unzip camel-jdbc-kafka-connector-0.7.1-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-jdbc-kafka-connector/0.7.2/camel-jdbc-kafka-connector-0.7.2-package.zip
+> unzip camel-jdbc-kafka-connector-0.7.2-package.zip
 ----
 
 There is also the need of the driver for this example
