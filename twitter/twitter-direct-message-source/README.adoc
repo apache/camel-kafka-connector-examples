@@ -32,8 +32,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-directmessage-kafka-connector/0.7.1/camel-twitter-directmessage-kafka-connector-0.7.1-package.zip
-> unzip camel-twitter-directmessage-kafka-connector-0.7.1-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-directmessage-kafka-connector/0.7.2/camel-twitter-directmessage-kafka-connector-0.7.2-package.zip
+> unzip camel-twitter-directmessage-kafka-connector-0.7.2-package.zip
 ```
 
 Now it's time to setup the connectors
