@@ -1,0 +1,196 @@
+# Camel-Kafka-connector File Source
+
+## Introduction
+
+This is an example for Camel-Kafka-connector File source
+
+## What is needed
+
+- A File System
+
+## Running Kafka
+
+```
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+```
+
+## Setting up the needed bits and running the example
+
+You'll need to setup the plugin.path property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties`
+
+and set the `plugin.path` property to your choosen location
+
+You'll need to build your connector starting from an archetype:
+
+```
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.7.2
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< org.apache.maven:standalone-pom >-------------------
+[INFO] Building Maven Stub Project (No POM) 1
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] >>> maven-archetype-plugin:3.1.2:generate (default-cli) > generate-sources @ standalone-pom >>>
+[INFO] 
+[INFO] <<< maven-archetype-plugin:3.1.2:generate (default-cli) < generate-sources @ standalone-pom <<<
+[INFO] 
+[INFO] 
+[INFO] --- maven-archetype-plugin:3.1.2:generate (default-cli) @ standalone-pom ---
+[INFO] Generating project in Interactive mode
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.7.2] found in catalog remote
+Define value for property 'groupId': org.apache.camel.kafkaconnector
+Define value for property 'artifactId': file-extended
+Define value for property 'version' 1.0-SNAPSHOT: : 0.7.2
+Define value for property 'package' org.apache.camel.kafkaconnector: : 
+Define value for property 'camel-kafka-connector-name': camel-file-kafka-connector
+[INFO] Using property: camel-kafka-connector-version = 0.7.2
+Confirm properties configuration:
+groupId: org.apache.camel.kafkaconnector
+artifactId: file-extended
+version: 0.7.2
+package: com.github.oscerd
+camel-kafka-connector-name: camel-file-kafka-connector
+camel-kafka-connector-version: 0.7.2
+ Y: : Y
+[INFO] ----------------------------------------------------------------------------
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.7.2
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: artifactId, Value: file-extended
+[INFO] Parameter: version, Value: 0.7.2
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
+[INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: version, Value: 0.7.2
+[INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
+[INFO] Parameter: camel-kafka-connector-name, Value: camel-file-kafka-connector
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.7.2
+[INFO] Parameter: artifactId, Value: ftps-extended
+[INFO] Project created from Archetype in dir: /home/workspace/miscellanea/file-extended
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  24.590 s
+[INFO] Finished at: 2020-11-05T07:45:43+01:00
+[INFO] ------------------------------------------------------------------------
+> cd /home/workspace/miscellanea/file-extended
+```
+
+We'll need to add a little transform for this example. So import the file-extended project in your IDE and create a class in the only package there
+
+```
+package org.apache.camel.kafkaconnector;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
+import org.apache.camel.component.file.GenericFile;
+import org.apache.camel.kafkaconnector.utils.SchemaHelper;
+import org.apache.commons.io.FileUtils;
+import org.apache.kafka.common.config.ConfigDef;
+import org.apache.kafka.connect.connector.ConnectRecord;
+import org.apache.kafka.connect.transforms.Transformation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class FileTransforms<R extends ConnectRecord<R>> implements Transformation<R> {
+    public static final String FIELD_KEY_CONFIG = "key";
+    public static final ConfigDef CONFIG_DEF = new ConfigDef().define(FIELD_KEY_CONFIG, ConfigDef.Type.STRING, null, ConfigDef.Importance.MEDIUM, "Transforms File to String");
+
+    private static final Logger LOG = LoggerFactory.getLogger(FileTransforms.class);
+
+    @Override
+    public R apply(R r) {
+        Object value = r.value();
+
+        if (r.value() instanceof GenericFile) {
+            LOG.debug("Converting record from RemoteFile to text");
+            GenericFile<File> message = (GenericFile<File>)r.value();
+            String c = null;
+            try {
+                c = FileUtils.readFileToString(message.getFile(), StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return r.newRecord(r.topic(), r.kafkaPartition(), null, r.key(), SchemaHelper.buildSchemaBuilderForType(c), c, r.timestamp());
+
+        } else {
+            LOG.debug("Unexpected message type: {}", r.value().getClass());
+
+            return r;
+        }
+    }
+
+    @Override
+    public ConfigDef config() {
+        return CONFIG_DEF;
+    }
+
+    @Override
+    public void close() {
+
+    }
+
+    @Override
+    public void configure(Map<String, ?> map) {
+
+    }
+```
+
+Now we need to build the connector:
+
+```
+> mvn clean package
+```
+
+In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated zip from the previois build
+
+```
+> cd /home/oscerd/connectors/
+> cp /home/workspace/miscellanea/file-extended/target/file-extended-0.7.2-package.zip .
+> unzip file-extended-0.7.2-package.zip
+```
+
+Now it's time to setup the connectors
+
+Open the File connector configuration file
+
+```
+name=CamelFileSourceConnector
+connector.class=org.apache.camel.kafkaconnector.file.CamelFileSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+transforms=FileTransformer
+transforms.FileTransformer.type=org.apache.camel.kafkaconnector.FileTransforms
+
+camel.source.maxPollDuration=10000
+
+topics=mytopic
+
+camel.source.path.directoryName=/tmp/kafkastuff/
+camel.source.endpoint.idempotent=true
+camel.source.endpoint.noop=true
+```
+
+Now you can run the example
+
+```
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties config/CamelFileSourceConnector.properties
+```
+
+Create files into the /tmp/kafkastuff folder with the content "Hello from ckc"
+
+On a different terminal run the kafka-consumer and you should see messages from the SQS queue arriving through Kafka Broker.
+
+```
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic mytopic --from-beginning
+{"schema":{"type":"string","optional":false},"payload":"Hello from ckc"}
+% Reached end of topic mytopic [0] at offset 1
+```
+
