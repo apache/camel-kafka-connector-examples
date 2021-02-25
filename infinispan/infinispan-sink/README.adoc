@@ -14,7 +14,7 @@ As first step you need to download the Infinispan Server with version 11.0.3.Fin
 
 Infinispan 11.x is secured by default. For the purpose of this example we'll remove the security check, so we won't need any authentication.
 
-If you have Infinispan unzipped in $INFINISPAN_HOME, you'll need to:
+If you have Infinispan untar.gzped in $INFINISPAN_HOME, you'll need to:
 
 - Edit $INFINISPAN_HOME/server/config/infinispan.xml
 
@@ -127,8 +127,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-infinispan-kafka-connector/0.8.0/camel-infinispan-kafka-connector-0.8.0-package.zip
-> unzip camel-infinispan-kafka-connector-0.8.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-infinispan-kafka-connector/0.8.0/camel-infinispan-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-infinispan-kafka-connector-0.8.0-package.tar.gz
 ```
 
 Now it's time to setup the connectors
