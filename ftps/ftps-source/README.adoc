@@ -54,7 +54,7 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.7.2
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.8.0
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< org.apache.maven:standalone-pom >-------------------
@@ -68,34 +68,34 @@ You'll need to build your connector starting from an archetype:
 [INFO] 
 [INFO] --- maven-archetype-plugin:3.1.2:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Interactive mode
-[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.7.2] found in catalog remote
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.8.0] found in catalog remote
 Define value for property 'groupId': org.apache.camel.kafkaconnector
 Define value for property 'artifactId': ftps-extended
-Define value for property 'version' 1.0-SNAPSHOT: : 0.7.2
+Define value for property 'version' 1.0-SNAPSHOT: : 0.8.0
 Define value for property 'package' org.apache.camel.kafkaconnector: : 
 Define value for property 'camel-kafka-connector-name': camel-ftps-kafka-connector
-[INFO] Using property: camel-kafka-connector-version = 0.7.2
+[INFO] Using property: camel-kafka-connector-version = 0.8.0
 Confirm properties configuration:
 groupId: org.apache.camel.kafkaconnector
 artifactId: ftps-extended
-version: 0.7.2
+version: 0.8.0
 package: com.github.oscerd
 camel-kafka-connector-name: camel-ftps-kafka-connector
-camel-kafka-connector-version: 0.7.2
+camel-kafka-connector-version: 0.8.0
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.7.2
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.8.0
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: artifactId, Value: ftps-extended
-[INFO] Parameter: version, Value: 0.7.2
+[INFO] Parameter: version, Value: 0.8.0
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
-[INFO] Parameter: version, Value: 0.7.2
+[INFO] Parameter: version, Value: 0.8.0
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-ftps-kafka-connector
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.7.2
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.8.0
 [INFO] Parameter: artifactId, Value: ftps-extended
 [INFO] Project created from Archetype in dir: /home/workspace/miscellanea/ftps-extended
 [INFO] ------------------------------------------------------------------------
@@ -177,8 +177,8 @@ In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll n
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/workspace/miscellanea/ftps-extended/target/ftps-extended-0.7.2-package.zip .
-> unzip ftps-extended-0.7.2-package.zip
+> cp /home/workspace/miscellanea/ftps-extended/target/ftps-extended-0.8.0-package.zip .
+> unzip ftps-extended-0.8.0-package.zip
 ```
 
 Now it's time to setup the connector
