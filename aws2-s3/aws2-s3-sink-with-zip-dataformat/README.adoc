@@ -102,7 +102,7 @@ Now we need to edit the POM
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-zipfile</artifactId>
+      <artifactId>camel-tar.gzfile</artifactId>
     </dependency>
   </dependencies>
   .
@@ -110,7 +110,7 @@ Now we need to edit the POM
   .
 ```
 
-In the dependencies section you'll need to uncomment the aws2-s3 connector dependency and adding the camel-zipfile component
+In the dependencies section you'll need to uncomment the aws2-s3 connector dependency and adding the camel-tar.gzfile component
 
 Now we need to build the connector:
 
@@ -118,12 +118,12 @@ Now we need to build the connector:
 > mvn clean package
 ```
 
-In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated zip from the previois build
+In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated tar.gz from the previois build
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/workspace/miscellanea/aws2s3/target/aws2s3-1.0-SNAPSHOT-package.zip .
-> unzip aws2s3-1.0-SNAPSHOT-package.zip
+> cp /home/workspace/miscellanea/aws2s3/target/aws2s3-1.0-SNAPSHOT-package.tar.gz .
+> untar.gz aws2s3-1.0-SNAPSHOT-package.tar.gz
 ```
 
 Now it's time to setup the connectors
@@ -137,7 +137,7 @@ key.converter=org.apache.kafka.connect.storage.StringConverter
 value.converter=org.apache.kafka.connect.storage.StringConverter
 
 topics=mytopic
-camel.sink.marshal=zipfile
+camel.sink.marshal=tar.gzfile
 
 camel.sink.path.bucketNameOrArn=camel-kafka-connector
 
@@ -145,7 +145,7 @@ camel.component.aws2-s3.accessKey=xxxx
 camel.component.aws2-s3.secretKey=yyyy
 camel.component.aws2-s3.region=eu-west-1
 
-camel.sink.endpoint.keyName=${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip
+camel.sink.endpoint.keyName=${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.tar.gz
 ```
 
 and add the correct credentials for AWS.
@@ -165,7 +165,7 @@ bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic mytopic
 Kafka to S3 message 1
 ```
 
-You should see a file with date-exchangeId.zip name containing the one file named date-exchangeId. This file will contain the message.
+You should see a file with date-exchangeId.tar.gz name containing the one file named date-exchangeId. This file will contain the message.
 
 ```
 Kafka to S3 message 1
@@ -314,7 +314,7 @@ Now we need to edit the POM
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-zipfile</artifactId>
+      <artifactId>camel-tar.gzfile</artifactId>
     </dependency>
   </dependencies>
   .
@@ -328,7 +328,7 @@ Now we need to build the connector:
 > mvn clean package
 ```
 
-And move the zip package in targe to my-connectors folder and unzipped it.
+And move the tar.gz package in targe to my-connectors folder and untar.gzped it.
 
 Now we can start the build
 
@@ -402,8 +402,8 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "value.converter": "org.apache.kafka.connect.storage.StringConverter",
     "topics": "s3-topic",
     "camel.sink.path.bucketNameOrArn": "camel-kafka-connector",
-    "camel.sink.endpoint.keyName": "${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip",
-    "camel.sink.marshal": "zipfile",
+    "camel.sink.endpoint.keyName": "${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.tar.gz",
+    "camel.sink.marshal": "tar.gzfile",
     "camel.component.aws2-s3.accessKey": "xxx",
     "camel.component.aws2-s3.secretKey": "xxx",
     "camel.component.aws2-s3.region": "xxx"
@@ -432,8 +432,8 @@ spec:
     value.converter: org.apache.kafka.connect.storage.StringConverter
     topics: s3-topic
     camel.sink.path.bucketNameOrArn: camel-kafka-connector
-    camel.sink.endpoint.keyName: ${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip
-    camel.sink.marshal: zipfile
+    camel.sink.endpoint.keyName: ${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.tar.gz
+    camel.sink.marshal: tar.gzfile
     camel.component.aws2-s3.accessKey: xxxx
     camel.component.aws2-s3.secretKey: yyyy
     camel.component.aws2-s3.region: region
@@ -444,7 +444,7 @@ If you followed the optional step for secret credentials you can run the followi
 
 [source,bash,options="nowrap"]
 ----
-oc apply -f config/openshift/aws2-s3-sink-with-zip-dataformat.yaml
+oc apply -f config/openshift/aws2-s3-sink-with-tar.gz-dataformat.yaml
 ----
 
 You can check the status of the connector using
@@ -463,7 +463,7 @@ oc exec -i -c kafka my-cluster-kafka-0 -- bin/kafka-console-producer.sh --bootst
 Kafka to S3 message 1
 ```
 
-You should see a file with date-exchangeId.zip name containing the one file named date-exchangeId. This file will contain the message.
+You should see a file with date-exchangeId.tar.gz name containing the one file named date-exchangeId. This file will contain the message.
 
 ```
 Kafka to S3 message 1
