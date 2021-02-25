@@ -149,12 +149,12 @@ Now we need to build the connector:
 > mvn clean package
 ```
 
-In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated zip from the previois build
+In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated tar.gz from the previois build
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/workspace/miscellanea/github-extended/target/github-extended-0.8.0-package.zip .
-> unzip github-extended-0.8.0-package.zip
+> cp /home/workspace/miscellanea/github-extended/target/github-extended-0.8.0-package.tar.gz .
+> untar.gz github-extended-0.8.0-package.tar.gz
 ```
 
 Now we are ready to go.
