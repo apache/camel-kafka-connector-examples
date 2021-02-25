@@ -39,13 +39,13 @@ $KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --rep
 
 === Download the connector package
 
-Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+Download the connector package tar.gz and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
 
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-google-calendar-stream-kafka-connector/0.8.0/camel-google-calendar-stream-kafka-connector-0.8.0-package.zip
-> unzip camel-google-calendar-stream-kafka-connector-0.8.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-google-calendar-stream-kafka-connector/0.8.0/camel-google-calendar-stream-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-google-calendar-stream-kafka-connector-0.8.0-package.tar.gz
 ----
 
 === Configuring Kafka Connect
