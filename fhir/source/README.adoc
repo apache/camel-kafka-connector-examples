@@ -29,8 +29,8 @@ In this example we'll use `/home/ldemasi/connectors/`
 
 ```
 > mkdir -p /home/ldemasi/connectors/ && cd /home/ldemasi/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-fhir-kafka-connector/0.7.2/camel-fhir-kafka-connector-0.7.2-package.zip
-> unzip camel-fhir-kafka-connector-0.7.2-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-fhir-kafka-connector/0.8.0/camel-fhir-kafka-connector-0.8.0-package.zip
+> unzip camel-fhir-kafka-connector-0.8.0-package.zip
 ```
 
 Now you can run the example
