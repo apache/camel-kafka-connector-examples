@@ -374,7 +374,7 @@ Now we need to build the connector:
 > mvn clean package
 ```
 
-And move the zip package in target to my-connectors folder and unzipped it.
+And move the tar.gz package in target to my-connectors folder and untar.gzped it.
 
 Now we can start the build
 

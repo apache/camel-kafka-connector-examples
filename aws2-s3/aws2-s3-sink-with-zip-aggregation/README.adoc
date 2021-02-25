@@ -102,7 +102,7 @@ Now we need to edit the POM
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-zipfile</artifactId>
+      <artifactId>camel-tar.gzfile</artifactId>
       <version>3.4.2</version>
     </dependency>
   </dependencies>
@@ -111,7 +111,7 @@ Now we need to edit the POM
   .
 ```
 
-In the dependencies section you'll need to uncomment the aws2-s3 connector dependency and adding the camel-zipfile component
+In the dependencies section you'll need to uncomment the aws2-s3 connector dependency and adding the camel-tar.gzfile component
 
 Now we need to build the connector:
 
@@ -119,12 +119,12 @@ Now we need to build the connector:
 > mvn clean package
 ```
 
-In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated zip from the previois build
+In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll need the generated tar.gz from the previois build
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/workspace/miscellanea/aws2s3/target/aws2s3-1.0-SNAPSHOT-package.zip .
-> unzip aws2s3-1.0-SNAPSHOT-package.zip
+> cp /home/workspace/miscellanea/aws2s3/target/aws2s3-1.0-SNAPSHOT-package.tar.gz .
+> untar.gz aws2s3-1.0-SNAPSHOT-package.tar.gz
 ```
 
 Now it's time to setup the connectors
@@ -145,9 +145,9 @@ camel.component.aws2-s3.accessKey=xxxx
 camel.component.aws2-s3.secretKey=yyyy
 camel.component.aws2-s3.region=eu-west-1
 
-camel.sink.endpoint.keyName=${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip
+camel.sink.endpoint.keyName=${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.tar.gz
 
-camel.beans.aggregate=#class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy
+camel.beans.aggregate=#class:org.apache.camel.processor.aggregate.tar.gzfile.ZipAggregationStrategy
 camel.aggregation.size=10
 camel.aggregation.timeout=5000
 ```
@@ -173,7 +173,7 @@ Kafka to S3 message 4
 Kafka to S3 message 5
 ```
 
-You should see (after the timeout has been reached) a file with date-exchangeId.zip name containing the following multiple files. Those files will contain the messages.
+You should see (after the timeout has been reached) a file with date-exchangeId.tar.gz name containing the following multiple files. Those files will contain the messages.
 
 ```
 Kafka to S3 message 1
@@ -326,7 +326,7 @@ Now we need to edit the POM
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-zipfile</artifactId>
+      <artifactId>camel-tar.gzfile</artifactId>
       <version>3.5.0</version>
     </dependency>
   </dependencies>
@@ -341,7 +341,7 @@ Now we need to build the connector:
 > mvn clean package
 ```
 
-And move the zip package in targe to my-connectors folder and unzipped it.
+And move the tar.gz package in targe to my-connectors folder and untar.gzped it.
 
 Now we can start the build
 
@@ -415,8 +415,8 @@ oc exec -i `oc get pods --field-selector status.phase=Running -l strimzi.io/name
     "value.converter": "org.apache.kafka.connect.storage.StringConverter",
     "topics": "s3-topic",
     "camel.sink.path.bucketNameOrArn": "camel-kafka-connector",
-    "camel.sink.endpoint.keyName": "${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip",
-    "camel.beans.aggregate": "#class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy",
+    "camel.sink.endpoint.keyName": "${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.tar.gz",
+    "camel.beans.aggregate": "#class:org.apache.camel.processor.aggregate.tar.gzfile.ZipAggregationStrategy",
     "camel.aggregation.size": "10",
     "camel.aggregation.timeout": "5000",
     "camel.component.aws2-s3.accessKey": "xxx",
@@ -447,8 +447,8 @@ spec:
     value.converter: org.apache.kafka.connect.storage.StringConverter
     topics: s3-topic
     camel.sink.path.bucketNameOrArn: camel-kafka-connector
-    camel.sink.endpoint.keyName: ${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.zip
-    camel.beans.aggregate: #class:org.apache.camel.processor.aggregate.zipfile.ZipAggregationStrategy
+    camel.sink.endpoint.keyName: ${date:now:yyyyMMdd-HHmmssSSS}-${exchangeId}.tar.gz
+    camel.beans.aggregate: #class:org.apache.camel.processor.aggregate.tar.gzfile.ZipAggregationStrategy
     camel.aggregation.size: 10
     camel.aggregation.timeout: 5000
     camel.component.aws2-s3.accessKey: xxxx
@@ -461,7 +461,7 @@ If you followed the optional step for secret credentials you can run the followi
 
 [source,bash,options="nowrap"]
 ----
-oc apply -f config/openshift/aws2-s3-sink-with-zip-aggregation.yaml
+oc apply -f config/openshift/aws2-s3-sink-with-tar.gz-aggregation.yaml
 ----
 
 You can check the status of the connector using
@@ -484,7 +484,7 @@ Kafka to S3 message 4
 Kafka to S3 message 5
 ```
 
-You should see (after the timeout has been reached) a file with date-exchangeId.zip name containing the following multiple files. Those files will contain the messages.
+You should see (after the timeout has been reached) a file with date-exchangeId.tar.gz name containing the following multiple files. Those files will contain the messages.
 
 ```
 Kafka to S3 message 1

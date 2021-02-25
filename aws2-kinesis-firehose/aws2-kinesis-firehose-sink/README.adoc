@@ -30,8 +30,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-firehose-kafka-connector/0.8.0/camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.zip
-> unzip camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-firehose-kafka-connector/0.8.0/camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.tar.gz
 ```
 
 On AWS console create a Kinesis firehose delivery stream named firehose-stream and choose to send it to an S3 bucket from the available list (in the same region)
@@ -146,8 +146,8 @@ So we need to do something like this:
 
 ```
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-firehose-kafka-connector/0.8.0/camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.zip
-> unzip camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-kinesis-firehose-kafka-connector/0.8.0/camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-aws2-kinesis-firehose-kafka-connector-0.8.0-package.tar.gz
 ```
 
 Now we can start the build 

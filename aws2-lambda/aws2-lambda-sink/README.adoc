@@ -29,8 +29,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-lambda-kafka-connector/0.8.0/camel-aws2-lambda-kafka-connector-0.8.0-package.zip
-> unzip camel-aws2-sns-kafka-connector-0.8.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-lambda-kafka-connector/0.8.0/camel-aws2-lambda-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-aws2-sns-kafka-connector-0.8.0-package.tar.gz
 ```
 
 ### Deploying the AWS Lambda function
@@ -161,8 +161,8 @@ So we need to do something like this:
 
 ```
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-lambda-kafka-connector/0.8.0/camel-aws2-lambda-kafka-connector-0.8.0-package.zip
-> unzip camel-aws2-lambda-kafka-connector-0.8.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-lambda-kafka-connector/0.8.0/camel-aws2-lambda-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-aws2-lambda-kafka-connector-0.8.0-package.tar.gz
 ```
 
 Now we can start the build 
