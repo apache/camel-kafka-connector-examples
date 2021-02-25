@@ -109,13 +109,13 @@ Open the `$KAFKA_HOME/config/connect-standalone.properties`
 
 and set the `plugin.path` property to your choosen location
 
-Download the connector package zip and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+Download the connector package tar.gz and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
 
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-arangodb-kafka-connector/0.8.0/camel-arangodb-kafka-connector-0.8.0-package.zip
-> unzip camel-arangodb-kafka-connector-0.8.0-package.zip
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-arangodb-kafka-connector/0.8.0/camel-arangodb-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-arangodb-kafka-connector-0.8.0-package.tar.gz
 ----
 
 Now it's time to setup the connector
