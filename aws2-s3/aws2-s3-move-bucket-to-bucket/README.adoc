@@ -31,9 +31,9 @@ Since this is example is related to a new feature you'll need to build the lates
 ```
 > cd <ckc_project> 
 > mvn clean package
-> cp <ckc_project>/connectors/camel-aws2-s3-kafka-connector/target/camel-aws2-s3-kafka-connector-0.8.0-SNAPSHOT-package.tar.gz /home/oscerd/connectors/
+> cp <ckc_project>/connectors/camel-aws2-s3-kafka-connector/target/camel-aws2-s3-kafka-connector-0.7.2-SNAPSHOT-package.tar.gz /home/oscerd/connectors/
 > cd /home/oscerd/connectors/
-> untar.gz camel-aws2-s3-kafka-connector-0.8.0-SNAPSHOT-package.tar.gz
+> untar.gz camel-aws2-s3-kafka-connector-0.7.2-SNAPSHOT-package.tar.gz
 ```
 
 Now it's time to setup the connectors

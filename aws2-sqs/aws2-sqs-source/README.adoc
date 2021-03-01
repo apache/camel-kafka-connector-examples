@@ -24,8 +24,8 @@ Download the connector package tar.gz and extract the content to a directory.In 
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-sqs-kafka-connector/0.8.0/camel-aws2-sqs-kafka-connector-0.8.0-package.tar.gz
-> untar.gz camel-aws2-sqs-kafka-connector-0.8.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-sqs-kafka-connector/0.7.2/camel-aws2-sqs-kafka-connector-0.7.2-package.tar.gz
+> untar.gz camel-aws2-sqs-kafka-connector-0.7.2-package.tar.gz
 ----
 
 === Configuring Kafka Connect
@@ -157,8 +157,8 @@ so that each one is in its own subfolder
 [source]
 ----
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-sqs-kafka-connector/0.8.0/camel-aws2-sqs-kafka-connector-0.8.0-package.tar.gz
-> untar.gz camel-aws2-sqs-kafka-connector-0.8.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-sqs-kafka-connector/0.7.2/camel-aws2-sqs-kafka-connector-0.7.2-package.tar.gz
+> untar.gz camel-aws2-sqs-kafka-connector-0.7.2-package.tar.gz
 ----
 
 Now we can start the build
@@ -183,7 +183,7 @@ You should see something like this:
 
 [source,json,options="nowrap"]
 ----
-[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.8.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.8.0"},{"class":"org.apache.camel.kafkaconnector.aws2sqs.CamelAws2sqsSinkConnector","type":"sink","version":"0.8.0"},{"class":"org.apache.camel.kafkaconnector.aws2sqs.CamelAws2sqsSourceConnector","type":"source","version":"0.8.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
+[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.7.2"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.7.2"},{"class":"org.apache.camel.kafkaconnector.aws2sqs.CamelAws2sqsSinkConnector","type":"sink","version":"0.7.2"},{"class":"org.apache.camel.kafkaconnector.aws2sqs.CamelAws2sqsSourceConnector","type":"source","version":"0.7.2"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
 ----
 
 === Set the AWS credentials as OpenShift secret (optional)

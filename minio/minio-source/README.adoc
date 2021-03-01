@@ -28,8 +28,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-minio-kafka-connector/0.8.0/camel-minio-kafka-connector-0.8.0-package.tar.gz
-> untar.gz camel-minio-kafka-connector-0.8.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-minio-kafka-connector/0.7.2/camel-minio-kafka-connector-0.7.2-package.tar.gz
+> untar.gz camel-minio-kafka-connector-0.7.2-package.tar.gz
 ```
 
 Now we need to setup a MinIO instance
