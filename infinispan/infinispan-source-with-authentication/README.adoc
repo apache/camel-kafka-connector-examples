@@ -10,31 +10,41 @@ This is an example for Camel-Kafka-connector Infinispan Source With Authenticati
 
 ### Setting up Infinispan
 
-As first step you need to download the Infinispan Server with version 11.0.5.Final.
+As first step you need to download the Infinispan Server with version 12.0.0.Final.
 
 You can now start your server
 
 ```
 > $INFINISPAN_HOME/bin/server.sh
 bin/server.sh 
-06:57:51,378 INFO  (main) [BOOT] JVM OpenJDK 64-Bit Server VM AdoptOpenJDK 25.252-b09
-06:57:51,395 INFO  (main) [BOOT] JVM arguments = [-Xms64m, -Xmx512m, -XX:MetaspaceSize=64M, -Djava.net.preferIPv4Stack=true, -Djava.awt.headless=true, -Dvisualvm.display.name=infinispan-server, -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager, -Dinfinispan.server.home.path=/home/oscerd/playground/infinispan-server-11.0.5.Final]
-06:57:51,396 INFO  (main) [BOOT] PID = 9678
-06:57:51,441 INFO  (main) [org.infinispan.SERVER] ISPN080000: Infinispan Server starting
-06:57:51,441 INFO  (main) [org.infinispan.SERVER] ISPN080017: Server configuration: /home/oscerd/playground/infinispan-server-11.0.5.Final/server/conf/infinispan.xml
-06:57:51,441 INFO  (main) [org.infinispan.SERVER] ISPN080032: Logging configuration: /home/oscerd/playground/infinispan-server-11.0.5.Final/server/conf/log4j2.xml
-06:57:51,959 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'query-dsl-filter-converter-factory'
-06:57:51,960 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'continuous-query-filter-converter-factory'
-06:57:51,961 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'iteration-filter-converter-factory'
-06:57:51,961 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'jdk.nashorn.api.scripting.NashornScriptEngineFactory'
-06:57:52,367 WARN  (main) [org.infinispan.PERSISTENCE] ISPN000554: jboss-marshalling is deprecated and planned for removal
-06:57:52,919 INFO  (main) [org.infinispan.CONTAINER] ISPN000128: Infinispan version: Infinispan 'Corona Extra' 11.0.5.Final
-06:57:52,921 INFO  (main) [org.infinispan.CONTAINER] ISPN000389: Loaded global state, version=11.0.5.Final timestamp=2020-09-30T21:04:46.511Z
-06:57:53,046 INFO  (main) [org.infinispan.CLUSTER] ISPN000078: Starting JGroups channel cluster with stack tcp
-06:57:55,138 INFO  (main) [org.jgroups.protocols.pbcast.GMS] ghost-35169: no members discovered after 2001 ms: creating cluster as coordinator
-06:57:55,150 INFO  (main) [org.infinispan.CLUSTER] ISPN000094: Received new cluster view for channel cluster: [ghost-35169|0] (1) [ghost-35169]
-06:57:55,156 INFO  (main) [org.infinispan.CLUSTER] ISPN000079: Channel cluster local address is ghost-35169, physical addresses are [192.168.1.15:7800]
-06:57:55,810 INFO  (main) [org.infinispan.CONTAINER] ISPN000104: Using EmbeddedTransactionManager
+18:07:32,435 INFO  (main) [BOOT] JVM OpenJDK 64-Bit Server VM AdoptOpenJDK 11.0.7+10
+18:07:32,441 INFO  (main) [BOOT] JVM arguments = [-server, -Xlog:gc*:file=/home/oscerd/playground/infinispan-server-12.0.0.Final/server/log/gc.log:time,uptimemillis:filecount=5,filesize=3M, -Xms64m, -Xmx512m, -XX:MetaspaceSize=64M, -Djava.net.preferIPv4Stack=true, -Djava.awt.headless=true, -Dvisualvm.display.name=infinispan-server, -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager, -Dinfinispan.server.home.path=/home/oscerd/playground/infinispan-server-12.0.0.Final, -classpath, :/home/oscerd/playground/infinispan-server-12.0.0.Final/boot/infinispan-server-runtime-12.0.0.Final-loader.jar, org.infinispan.server.loader.Loader, org.infinispan.server.Bootstrap]
+18:07:32,441 INFO  (main) [BOOT] PID = 21270
+18:07:32,466 INFO  (main) [org.infinispan.SERVER] ISPN080000: Infinispan Server starting
+18:07:32,466 INFO  (main) [org.infinispan.SERVER] ISPN080017: Server configuration: infinispan.xml
+18:07:32,466 INFO  (main) [org.infinispan.SERVER] ISPN080032: Logging configuration: /home/oscerd/playground/infinispan-server-12.0.0.Final/server/conf/log4j2.xml
+18:07:32,823 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'query-dsl-filter-converter-factory'
+18:07:32,823 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'continuous-query-filter-converter-factory'
+18:07:32,825 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'iteration-filter-converter-factory'
+18:07:32,825 INFO  (main) [org.infinispan.SERVER] ISPN080027: Loaded extension 'jdk.nashorn.api.scripting.NashornScriptEngineFactory'
+18:07:33,172 INFO  (main) [org.infinispan.CONTAINER] ISPN000556: Starting user marshaller 'org.infinispan.commons.marshall.ImmutableProtoStreamMarshaller'
+18:07:33,262 WARN  (main) [org.infinispan.PERSISTENCE] ISPN000554: jboss-marshalling is deprecated and planned for removal
+18:07:33,545 INFO  (main) [org.infinispan.query.remote.impl.ProtobufMetadataManagerImpl] ISPN028019: Registering protostream serialization context initializer: org.infinispan.query.core.stats.impl.PersistenceContextInitializerImpl
+18:07:33,547 INFO  (main) [org.infinispan.CONTAINER] ISPN000128: Infinispan version: Infinispan 'Lockdown' 12.0.0.Final
+18:07:33,687 INFO  (main) [org.infinispan.CLUSTER] ISPN000078: Starting JGroups channel cluster with stack tcp
+18:07:35,796 INFO  (main) [org.jgroups.protocols.pbcast.GMS] ghost-43669: no members discovered after 2002 ms: creating cluster as coordinator
+18:07:35,832 INFO  (main) [org.infinispan.CLUSTER] ISPN000094: Received new cluster view for channel cluster: [ghost-43669|0] (1) [ghost-43669]
+18:07:35,843 INFO  (main) [org.infinispan.CLUSTER] ISPN000079: Channel cluster local address is ghost-43669, physical addresses are [10.36.115.182:7800]
+18:07:35,878 INFO  (main) [org.infinispan.CONTAINER] ISPN000390: Persisted state, version=12.0.0.Final timestamp=2021-03-01T17:07:35.875687Z
+18:07:36,081 INFO  (main) [org.jboss.threads] JBoss Threads version 2.3.3.Final
+18:07:36,150 INFO  (main) [org.infinispan.CONTAINER] ISPN000104: Using EmbeddedTransactionManager
+18:07:36,447 INFO  (main) [org.infinispan.server.core.RequestTracer] OpenTracing integration is disabled
+18:07:36,510 INFO  (ForkJoinPool.commonPool-worker-3) [org.infinispan.SERVER] ISPN080018: Started connector HotRod (internal)
+18:07:36,601 INFO  (main) [org.infinispan.SERVER] ISPN080018: Started connector REST (internal)
+18:07:36,762 INFO  (main) [org.infinispan.SERVER] ISPN080004: Connector SINGLE_PORT (default) listening on 127.0.0.1:11222
+18:07:36,762 INFO  (main) [org.infinispan.SERVER] ISPN080034: Server 'ghost-43669' listening on http://127.0.0.1:11222
+18:07:36,763 INFO  (main) [org.infinispan.SERVER] ISPN080001: Infinispan Server 12.0.0.Final started in 4296ms
+
 ```
 
 So, you'll need to run
@@ -53,9 +63,6 @@ Password: ********
     "remote-timeout" : 17500,
     "state-transfer" : {
       "timeout" : 60000
-    },
-    "transaction" : {
-      "mode" : "NONE"
     },
     "locking" : {
       "concurrency-level" : 1000,
@@ -78,7 +85,7 @@ and add the encoding section in the configuration
 ```
 <?xml version="1.0" ?>
 
-<infinispan>
+<infinispan xmlns="urn:infinispan:config:12.0">
     <cache-container>
         <distributed-cache mode="SYNC" remote-timeout="17500" name="mycache" statistics="true">
             <encoding>
@@ -86,7 +93,6 @@ and add the encoding section in the configuration
                 <value media-type="text/plain; charset=UTF-8"/>
             </encoding>
             <locking concurrency-level="1000" acquire-timeout="15000" striping="false"/>
-            <transaction mode="NONE"/>
             <state-transfer timeout="60000"/>
         </distributed-cache>
     </cache-container></infinispan>
@@ -133,7 +139,6 @@ topics=mytopic
 camel.source.endpoint.hosts=localhost
 camel.source.path.cacheName=mycache
 camel.source.endpoint.eventTypes=CLIENT_CACHE_ENTRY_CREATED
-camel.source.endpoint.sync=false
 camel.component.infinispan.secure=true
 camel.source.endpoint.username=admin
 camel.component.infinispan.password=password
