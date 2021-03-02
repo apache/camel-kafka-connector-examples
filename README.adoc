@@ -26,7 +26,7 @@ List of existing examples:
 - Github source multiple examples
 - Google Calendar Stream source example
 - Google Mail Stream source example
-- Google PubSub source examples
+- Google PubSub source and sink examples
 - Google Sheets Stream source examples
 - Infinispan source and sink examples
 - JDBC sink example
