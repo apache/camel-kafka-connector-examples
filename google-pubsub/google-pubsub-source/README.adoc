@@ -1,0 +1,105 @@
+= Camel-Kafka-connector Google Pubsub Source Example
+
+This is an example for Camel-Kafka-connector Google Pubsub Source Example
+
+== Standalone
+
+=== What is needed
+
+- A google cloud account
+- A service account for PubSub service
+- A project in google cloud
+- A PubSub topic
+- A PubSub topic subscription
+
+=== Setting up PubSub
+
+You need to go here: https://console.cloud.google.com/cloudpubsub
+- Create a service account with permission to operate on PubSub service
+- Export a service account key file somewhere on your filesystem (for example /home/connectors/ServiceAccountPubsub.json)
+- Follow the instruction to create a topic (call it 'test' for example)
+- Follow the instruction to create a subscription (call it 'test-sub' for example)
+
+Take note of project id and subscription name. If for example your topic name is 'projects/testpubsub-306306/topics/test'
+the project id will be 'testpubsub-306306'.
+
+=== Running Kafka
+
+[source]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties
+$KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
+$KAFKA_HOME/bin/kafka-topics.sh --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic mytopic
+----
+
+=== Download the connector package
+
+Download the connector package tar.gz and extract the content to a directory. In this example we'll use `/home/oscerd/connectors/`
+
+[source]
+----
+> cd /home/oscerd/connectors/
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-google-pubsub-kafka-connector/0.8.0/camel-google-pubsub-kafka-connector-0.8.0-package.tar.gz
+> untar.gz camel-google-pubsub-kafka-connector-0.8.0-package.tar.gz
+----
+
+=== Configuring Kafka Connect
+
+You'll need to set up the `plugin.path` property in your kafka
+
+Open the `$KAFKA_HOME/config/connect-standalone.properties` and set the `plugin.path` property to your choosen location:
+
+[source]
+----
+...
+plugin.path=/home/oscerd/connectors
+...
+----
+
+=== Setup the connectors
+
+Open the Google Pubsub configuration file at `$EXAMPLES/google-pubsub/google-pubsub-source/config/CamelGooglepubsubSourceConnector.properties`
+
+[source]
+----
+name=CamelGoogle-pubsubSourceConnector
+connector.class=org.apache.camel.kafkaconnector.googlepubsub.CamelGooglepubsubSourceConnector
+tasks.max=1
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+
+topics=mytopic
+
+camel.source.path.destinationName=test-sub
+camel.source.path.projectId=testpubsub-306306
+camel.source.endpoint.synchronousPull=true
+----
+
+=== Running the example
+
+On the same terminal you'll run the connector run the following command:
+
+[source]
+----
+export GOOGLE_APPLICATION_CREDENTIALS=/home/connectors/ServiceAccountPubsub.json
+----
+
+pointing to the service account key you created.
+
+Run the kafka connect with the Google Pubsub Source connector:
+
+[source]
+----
+$KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.properties $EXAMPLES/google-pubsub/google-pubsub-source/config/CamelGooglepubsubSourceConnector.properties
+----
+
+In your google cloud console, in the PubSub section, select the 'test' topic and click on 'Publish Message'. As body add "Camel Kafka Connector is great!" and publish the message.
+
+On a different terminal run the kafkacat consumer
+
+[source]
+----
+> ./kafkacat -b localhost:9092 -t mytopic
+Camel Kafka Connector is great!
+% Reached end of topic mytopic [0] at offset 1
+----
