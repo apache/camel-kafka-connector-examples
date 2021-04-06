@@ -42,8 +42,8 @@ Download the connector package tar.gz and extract the content to a directory. In
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ftp-kafka-connector/0.8.0/camel-ftp-kafka-connector-0.8.0-package.tar.gz
-> untar.gz camel-ftp-kafka-connector-0.8.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ftp-kafka-connector/0.9.0/camel-ftp-kafka-connector-0.9.0-package.tar.gz
+> untar.gz camel-ftp-kafka-connector-0.9.0-package.tar.gz
 ----
 
 Now it's time to setup the connector
