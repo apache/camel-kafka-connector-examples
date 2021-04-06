@@ -32,8 +32,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-search-kafka-connector/0.8.0/camel-twitter-search-kafka-connector-0.8.0-package.tar.gz
-> untar.gz camel-twitter-search-kafka-connector-0.8.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-twitter-search-kafka-connector/0.9.0/camel-twitter-search-kafka-connector-0.9.0-package.tar.gz
+> untar.gz camel-twitter-search-kafka-connector-0.9.0-package.tar.gz
 ```
 
 Now it's time to setup the connectors
