@@ -24,8 +24,8 @@ Download the connector package tar.gz and extract the content to a directory. In
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-docker-kafka-connector/0.8.0/camel-docker-kafka-connector-0.8.0-package.tar.gz
-> untar.gz camel-docker-kafka-connector-0.8.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-docker-kafka-connector/0.9.0/camel-docker-kafka-connector-0.9.0-package.tar.gz
+> untar.gz camel-docker-kafka-connector-0.9.0-package.tar.gz
 ----
 
 === Configuring Kafka Connect
@@ -88,7 +88,7 @@ and I want to delete it and check the events in the mytopic Kafka topic
 > docker rmi e7d08cddf791
 Untagged: debian:latest
 Untagged: debian@sha256:b16f66714660c4b3ea14d273ad8c35079b81b35d65d1e206072d226c7ff78299
-Deleted: sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3
+Deleted: sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3
 Deleted: sha256:4762552ad7d851a9901571428078281985074e5ddb806979dd7ad24748db4ca0
 ----
 
@@ -101,8 +101,8 @@ On a different terminal run the kafkacat consumer
 ./kafkacat -b localhost:9092 -t mytopic 
 % Auto-selecting Consumer mode (use -P or -C to override)
 Event(status=destroy, id=1ef0f76d93ce49011ae134b4b60350d699c9b3c914f0b76f69d692aae9b5b2b7, from=debian, node=null, type=CONTAINER, action=destroy, actor=EventActor(id=1ef0f76d93ce49011ae134b4b60350d699c9b3c914f0b76f69d692aae9b5b2b7, attributes={image=debian, name=test}), time=1611124880, timeNano=1611124880722895527)
-Event(status=untag, id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3, from=null, node=null, type=IMAGE, action=untag, actor=EventActor(id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3, attributes={name=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3}), time=1611124882, timeNano=1611124882129721717)
-Event(status=untag, id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3, from=null, node=null, type=IMAGE, action=untag, actor=EventActor(id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3, attributes={name=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3}), time=1611124882, timeNano=1611124882131312712)
-Event(status=delete, id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3, from=null, node=null, type=IMAGE, action=delete, actor=EventActor(id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3, attributes={name=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d368018009355855044a3}), time=1611124882, timeNano=1611124882347718909)
+Event(status=untag, id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3, from=null, node=null, type=IMAGE, action=untag, actor=EventActor(id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3, attributes={name=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3}), time=1611124882, timeNano=1611124882129721717)
+Event(status=untag, id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3, from=null, node=null, type=IMAGE, action=untag, actor=EventActor(id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3, attributes={name=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3}), time=1611124882, timeNano=1611124882131312712)
+Event(status=delete, id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3, from=null, node=null, type=IMAGE, action=delete, actor=EventActor(id=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3, attributes={name=sha256:e7d08cddf791fe3245267654331eb21b805458b3412d3680.9.09355855044a3}), time=1611124882, timeNano=1611124882347718909)
 % Reached end of topic mytopic [0] at offset 4
 ----
