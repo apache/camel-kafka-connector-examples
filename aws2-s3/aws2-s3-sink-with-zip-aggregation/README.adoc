@@ -73,7 +73,7 @@ Now we need to edit the POM
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <kafka-version>2.5.0</kafka-version>
+    <kafka-version>2.7.0</kafka-version>
     <camel-kafka-connector-version>${project.version}</camel-kafka-connector-version>
   </properties>
 
@@ -102,8 +102,8 @@ Now we need to edit the POM
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
-      <artifactId>camel-tar.gzfile</artifactId>
-      <version>3.4.2</version>
+      <artifactId>camel-zipfile</artifactId>
+      <version>3.9.0</version>
     </dependency>
   </dependencies>
   .
