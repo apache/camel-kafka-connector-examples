@@ -26,8 +26,8 @@ Download the connector package tar.gz and extract the content to a directory. In
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-github-kafka-connector/0.9.0/camel-github-kafka-connector-0.9.0-package.tar.gz
-> untar.gz camel-github-kafka-connector-0.9.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-github-kafka-connector/0.10.0/camel-github-kafka-connector-0.10.0-package.tar.gz
+> untar.gz camel-github-kafka-connector-0.10.0-package.tar.gz
 ----
 
 === Configuring Kafka Connect
