@@ -60,8 +60,8 @@ Download the connector package tar.gz and extract the content to the plugin.path
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sftp-kafka-connector/0.9.0/camel-sftp-kafka-connector-0.9.0-package.tar.gz
-> untar.gz camel-sftp-kafka-connector-0.9.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sftp-kafka-connector/0.10.0/camel-sftp-kafka-connector-0.10.0-package.tar.gz
+> untar.gz camel-sftp-kafka-connector-0.10.0-package.tar.gz
 ----
 
 Open the SFTP sink configuration file
