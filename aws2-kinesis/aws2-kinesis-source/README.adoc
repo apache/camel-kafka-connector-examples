@@ -28,7 +28,7 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.10.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.10.1
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< org.apache.maven:standalone-pom >-------------------
@@ -42,34 +42,34 @@ You'll need to build your connector starting from an archetype:
 [INFO] 
 [INFO] --- maven-archetype-plugin:3.2.0:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Interactive mode
-[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.10.0] found in catalog remote
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.10.1] found in catalog remote
 Define value for property 'groupId': org.apache.camel.kafkaconnector
 Define value for property 'artifactId': aws2-kinesis-extended
-Define value for property 'version' 1.0-SNAPSHOT: : 0.10.0
+Define value for property 'version' 1.0-SNAPSHOT: : 0.10.1
 Define value for property 'package' org.apache.camel.kafkaconnector: : 
 Define value for property 'camel-kafka-connector-name': camel-aws2-kinesis-kafka-connector
-[INFO] Using property: camel-kafka-connector-version = 0.10.0
+[INFO] Using property: camel-kafka-connector-version = 0.10.1
 Confirm properties configuration:
 groupId: org.apache.camel.kafkaconnector
 artifactId: aws2-kinesis-extended
-version: 0.10.0
+version: 0.10.1
 package: org.apache.camel.kafkaconnector
 camel-kafka-connector-name: camel-aws2-kinesis-kafka-connector
-camel-kafka-connector-version: 0.10.0
+camel-kafka-connector-version: 0.10.1
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.10.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.10.1
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: artifactId, Value: aws2-kinesis-extended
-[INFO] Parameter: version, Value: 0.10.0
+[INFO] Parameter: version, Value: 0.10.1
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
-[INFO] Parameter: version, Value: 0.10.0
+[INFO] Parameter: version, Value: 0.10.1
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-aws2-kinesis-kafka-connector
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.10.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.10.1
 [INFO] Parameter: artifactId, Value: aws2-kinesis-extended
 [INFO] Project created from Archetype in dir: /home/oscerd/workspace/miscellanea/aws2-kinesis-extended
 [INFO] ------------------------------------------------------------------------
@@ -255,7 +255,7 @@ so that each one is in its own subfolder
 In this case we need to extend an existing connector and add a transform, so we need to leverage the archetype
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.10.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.10.1
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< org.apache.maven:standalone-pom >-------------------
@@ -269,34 +269,34 @@ In this case we need to extend an existing connector and add a transform, so we 
 [INFO] 
 [INFO] --- maven-archetype-plugin:3.2.0:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Interactive mode
-[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.10.0] found in catalog remote
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.10.1] found in catalog remote
 Define value for property 'groupId': org.apache.camel.kafkaconnector
 Define value for property 'artifactId': aws2-kinesis-extended
-Define value for property 'version' 1.0-SNAPSHOT: : 0.10.0
+Define value for property 'version' 1.0-SNAPSHOT: : 0.10.1
 Define value for property 'package' org.apache.camel.kafkaconnector: : 
 Define value for property 'camel-kafka-connector-name': camel-aws2-kinesis-kafka-connector
-[INFO] Using property: camel-kafka-connector-version = 0.10.0
+[INFO] Using property: camel-kafka-connector-version = 0.10.1
 Confirm properties configuration:
 groupId: org.apache.camel.kafkaconnector
 artifactId: aws2-kinesis-extended
-version: 0.10.0
+version: 0.10.1
 package: org.apache.camel.kafkaconnector
 camel-kafka-connector-name: camel-aws2-kinesis-kafka-connector
-camel-kafka-connector-version: 0.10.0
+camel-kafka-connector-version: 0.10.1
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.10.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.10.1
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: artifactId, Value: aws2-kinesis-extended
-[INFO] Parameter: version, Value: 0.10.0
+[INFO] Parameter: version, Value: 0.10.1
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
-[INFO] Parameter: version, Value: 0.10.0
+[INFO] Parameter: version, Value: 0.10.1
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-aws2-kinesis-kafka-connector
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.10.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.10.1
 [INFO] Parameter: artifactId, Value: aws2-kinesis-extended
 [INFO] Project created from Archetype in dir: /home/oscerd/workspace/miscellanea/aws2-kinesis-extended
 [INFO] ------------------------------------------------------------------------
@@ -398,7 +398,7 @@ You should see something like this:
 
 [source,json,options="nowrap"]
 ----
-[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.10.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.10.0"},{"class":"org.apache.camel.kafkaconnector.aws2kinesis.CamelAws2kinesisSinkConnector","type":"sink","version":"0.10.0"},{"class":"org.apache.camel.kafkaconnector.aws2kinesis.CamelAws2kinesisSourceConnector","type":"source","version":"0.10.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
+[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.10.1"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.10.1"},{"class":"org.apache.camel.kafkaconnector.aws2kinesis.CamelAws2kinesisSinkConnector","type":"sink","version":"0.10.1"},{"class":"org.apache.camel.kafkaconnector.aws2kinesis.CamelAws2kinesisSourceConnector","type":"source","version":"0.10.1"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
 ----
 
 ### Set the AWS credential as secret (optional)
