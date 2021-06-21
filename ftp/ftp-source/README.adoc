@@ -16,10 +16,10 @@ Run the following command:
 
 ```
 docker run -d -v /my/data/directory:/home/vsftpd -p 20:20 -p 21:21 -p 21100-21110:21100-21110 -e FTP_USER=admin -e FTP_PASS=password -e PASV_ADDRESS=127.0.0.1 -e PASV_MIN_PORT=21100 -e PASV_MAX_PORT=21110 --name vsftpd --restart=always fauria/vsftpd
-9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.038370a12
+9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.138370a12
 ```
 
-take note of the container id. In our case it is 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.038370a12
+take note of the container id. In our case it is 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.138370a12
 
 ### Running Kafka
 
@@ -40,7 +40,7 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.10.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.10.1
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< org.apache.maven:standalone-pom >-------------------
@@ -54,34 +54,34 @@ You'll need to build your connector starting from an archetype:
 [INFO] 
 [INFO] --- maven-archetype-plugin:3.1.2:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Interactive mode
-[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.10.0] found in catalog remote
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.10.1] found in catalog remote
 Define value for property 'groupId': org.apache.camel.kafkaconnector
 Define value for property 'artifactId': ftp-extended
-Define value for property 'version' 1.0-SNAPSHOT: : 0.10.0
+Define value for property 'version' 1.0-SNAPSHOT: : 0.10.1
 Define value for property 'package' org.apache.camel.kafkaconnector: : 
 Define value for property 'camel-kafka-connector-name': camel-ftp-kafka-connector
-[INFO] Using property: camel-kafka-connector-version = 0.10.0
+[INFO] Using property: camel-kafka-connector-version = 0.10.1
 Confirm properties configuration:
 groupId: org.apache.camel.kafkaconnector
 artifactId: ftp-extended
-version: 0.10.0
+version: 0.10.1
 package: com.github.oscerd
 camel-kafka-connector-name: camel-ftp-kafka-connector
-camel-kafka-connector-version: 0.10.0
+camel-kafka-connector-version: 0.10.1
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.10.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.10.1
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: artifactId, Value: ftp-extended
-[INFO] Parameter: version, Value: 0.10.0
+[INFO] Parameter: version, Value: 0.10.1
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
-[INFO] Parameter: version, Value: 0.10.0
+[INFO] Parameter: version, Value: 0.10.1
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-ftp-kafka-connector
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.10.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.10.1
 [INFO] Parameter: artifactId, Value: ftp-extended
 [INFO] Project created from Archetype in dir: /home/workspace/miscellanea/ftp-extended
 [INFO] ------------------------------------------------------------------------
@@ -163,8 +163,8 @@ In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll n
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/workspace/miscellanea/ftp-extended/target/ftp-extended-0.10.0-package.tar.gz .
-> untar.gz ftp-extended-0.10.0-package.tar.gz
+> cp /home/workspace/miscellanea/ftp-extended/target/ftp-extended-0.10.1-package.tar.gz .
+> untar.gz ftp-extended-0.10.1-package.tar.gz
 ```
 
 Now it's time to setup the connector
@@ -200,7 +200,7 @@ $KAFKA_HOME/bin/connect-standalone.sh $KAFKA_HOME/config/connect-standalone.prop
 Now we need to connect to the ftp server and add some stuff to the demos folder
 
 ```
-> docker exec -it 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.038370a12 bash
+> docker exec -it 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.138370a12 bash
 [root@9534a8d7a87c /]# cd /home/vsftpd
 [root@9534a8d7a87c vsftpd]# touch test.txt
 [root@9534a8d7a87c vsftpd]# echo "Ckc rocks" > test.txt 
@@ -212,7 +212,7 @@ In another terminal, using kafkacat, you should be able to see the headers.
 ```
 > ./kafkacat -b localhost:9092 -t mytopic -f 'Headers: %h: Message value: %s\n'
 % Auto-selecting Consumer mode (use -P or -C to override)
-Headers: CamelHeader.CamelFileAbsolute=false,CamelHeader.CamelFileAbsolutePath=test.txt,CamelHeader.CamelFileHost=127.0.0.1,CamelHeader.CamelFileLastModified=16050.10.00000,CamelHeader.CamelFileLength=10,CamelHeader.CamelFileName=test.txt,CamelHeader.CamelFileNameConsumed=test.txt,CamelHeader.CamelFileNameOnly=test.txt,CamelHeader.CamelFileParent=/,CamelHeader.CamelFilePath=/test.txt,CamelHeader.CamelFileRelativePath=test.txt,CamelHeader.CamelFtpReplyCode=226,CamelHeader.CamelFtpReplyString=226 Transfer complete.
+Headers: CamelHeader.CamelFileAbsolute=false,CamelHeader.CamelFileAbsolutePath=test.txt,CamelHeader.CamelFileHost=127.0.0.1,CamelHeader.CamelFileLastModified=16050.10.10000,CamelHeader.CamelFileLength=10,CamelHeader.CamelFileName=test.txt,CamelHeader.CamelFileNameConsumed=test.txt,CamelHeader.CamelFileNameOnly=test.txt,CamelHeader.CamelFileParent=/,CamelHeader.CamelFilePath=/test.txt,CamelHeader.CamelFileRelativePath=test.txt,CamelHeader.CamelFtpReplyCode=226,CamelHeader.CamelFtpReplyString=226 Transfer complete.
 ,CamelProperty.CamelBatchSize=1,CamelProperty.CamelUnitOfWorkProcessSync=true,CamelProperty.CamelBatchComplete=true,CamelProperty.CamelBatchIndex=0,CamelProperty.CamelToEndpoint=direct://end?pollingConsumerBlockTimeout=0&pollingConsumerBlockWhenFull=true&pollingConsumerQueueSize=1000: Message value: Ckc rocks
 % Reached end of topic mytopic [0] at offset 1
 ```
