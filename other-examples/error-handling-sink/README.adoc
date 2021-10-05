@@ -30,8 +30,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/otavio/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sjms2-kafka-connector/0.10.1/camel-sjms2-kafka-connector-0.10.1-package.tar.gz
-> untar.gz camel-sjms2-kafka-connector-0.10.1-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sjms2-kafka-connector/0.11.0/camel-sjms2-kafka-connector-0.11.0-package.tar.gz
+> untar.gz camel-sjms2-kafka-connector-0.11.0-package.tar.gz
 ```
 
 Open the SJMS2 configuration file
