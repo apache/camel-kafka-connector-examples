@@ -46,8 +46,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-scp-kafka-connector/0.10.1/camel-scp-kafka-connector-0.10.1-package.tar.gz
-> untar.gz camel-scp-kafka-connector-0.10.1-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-scp-kafka-connector/0.11.0/camel-scp-kafka-connector-0.11.0-package.tar.gz
+> untar.gz camel-scp-kafka-connector-0.11.0-package.tar.gz
 ```
 
 Now it's time to setup the connectors
@@ -96,8 +96,8 @@ Now we can check our docker container.
 root@localhost's password: 
 Last login: Wed Feb 10 12:51:54 2021 from 172.17.0.1
 root@0d813b2e5994:~# ls
-mydata-20210210-135931864-F4B26643BB9D698-0000000000000001.txt                                                           
-root@0d813b2e5994:~# cat mydata-20210210-135931864-F4B26643BB9D698-0000000000000001.txt 
+mydata-20.11.00-135931864-F4B26643BB9D698-0000000000000001.txt                                                           
+root@0d813b2e5994:~# cat mydata-20.11.00-135931864-F4B26643BB9D698-0000000000000001.txt 
 Hello from camel-scp-kafka-connector
 ```
 

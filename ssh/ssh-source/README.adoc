@@ -45,7 +45,7 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.10.1
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.11.0
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< org.apache.maven:standalone-pom >-------------------
@@ -59,34 +59,34 @@ You'll need to build your connector starting from an archetype:
 [INFO] 
 [INFO] --- maven-archetype-plugin:3.1.2:generate (default-cli) @ standalone-pom ---
 [INFO] Generating project in Interactive mode
-[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.10.1] found in catalog remote
+[INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.11.0] found in catalog remote
 Define value for property 'groupId': org.apache.camel.kafkaconnector
 Define value for property 'artifactId': ssh-extended
-Define value for property 'version' 1.0-SNAPSHOT: : 0.10.1
+Define value for property 'version' 1.0-SNAPSHOT: : 0.11.0
 Define value for property 'package' org.apache.camel.kafkaconnector: : 
 Define value for property 'camel-kafka-connector-name': camel-ssh-kafka-connector
-[INFO] Using property: camel-kafka-connector-version = 0.10.1
+[INFO] Using property: camel-kafka-connector-version = 0.11.0
 Confirm properties configuration:
 groupId: org.apache.camel.kafkaconnector
 artifactId: ssh-extended
-version: 0.10.1
+version: 0.11.0
 package: com.github.oscerd
 camel-kafka-connector-name: camel-ssh-kafka-connector
-camel-kafka-connector-version: 0.10.1
+camel-kafka-connector-version: 0.11.0
  Y: : Y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.10.1
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.11.0
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: artifactId, Value: ssh-extended
-[INFO] Parameter: version, Value: 0.10.1
+[INFO] Parameter: version, Value: 0.11.0
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
-[INFO] Parameter: version, Value: 0.10.1
+[INFO] Parameter: version, Value: 0.11.0
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-ssh-kafka-connector
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.10.1
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.11.0
 [INFO] Parameter: artifactId, Value: ftps-extended
 [INFO] Project created from Archetype in dir: /home/workspace/miscellanea/ssh-extended
 [INFO] ------------------------------------------------------------------------
@@ -171,8 +171,8 @@ In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll n
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/workspace/miscellanea/ftps-extended/target/ssh-extended-0.10.1-package.tar.gz .
-> untar.gz ssh-extended-0.10.1-package.tar.gz
+> cp /home/workspace/miscellanea/ftps-extended/target/ssh-extended-0.11.0-package.tar.gz .
+> untar.gz ssh-extended-0.11.0-package.tar.gz
 ```
 
 Now it's time to setup the connectors
