@@ -157,8 +157,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-infinispan-kafka-connector/0.10.1/camel-infinispan-kafka-connector-0.10.1-package.tar.gz
-> untar.gz camel-infinispan-kafka-connector-0.10.1-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-infinispan-kafka-connector/0.11.0/camel-infinispan-kafka-connector-0.11.0-package.tar.gz
+> untar.gz camel-infinispan-kafka-connector-0.11.0-package.tar.gz
 ```
 
 Now it's time to setup the connectors
