@@ -16,9 +16,9 @@ Run the following command:
 
 ```
 docker run -d -v /my/data/directory:/home/vsftpd -p 20:20 -p 21:21 -p 21100-21110:21100-21110 -e FTP_USER=admin -e FTP_PASS=password -e PASV_ADDRESS=127.0.0.1 -e PASV_MIN_PORT=21100 -e PASV_MAX_PORT=21110 --name vsftpd --restart=always fauria/vsftpd
-9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.138370a12
+9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.11.038370a12
 ```
-take note of the container id. In our case it is 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.138370a12
+take note of the container id. In our case it is 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.11.038370a12
 
 ### Running Kafka
 
@@ -42,8 +42,8 @@ Download the connector package tar.gz and extract the content to a directory. In
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ftp-kafka-connector/0.10.1/camel-ftp-kafka-connector-0.10.1-package.tar.gz
-> untar.gz camel-ftp-kafka-connector-0.10.1-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-ftp-kafka-connector/0.11.0/camel-ftp-kafka-connector-0.11.0-package.tar.gz
+> untar.gz camel-ftp-kafka-connector-0.11.0-package.tar.gz
 ----
 
 Now it's time to setup the connector
@@ -83,7 +83,7 @@ In a different terminal we need to send something to mytopic
 Now we need to connect to the ftp server and check the file
 
 ```
-> docker exec -it 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.10.138370a12 bash
+> docker exec -it 9534a8d7a87c5f0525079824f692552fe6306fcea2e0e2a0fe60.11.038370a12 bash
 [root@9534a8d7a87c /]# cd /home/vsftpd/admin
 [root@9534a8d7a87c admin]# cat mydata-20201111.txt
 Hello from ckc
