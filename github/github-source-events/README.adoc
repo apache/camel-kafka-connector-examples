@@ -72,7 +72,7 @@ camel-kafka-connector-version: 0.11.0
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-github-kafka-connector
 [INFO] Parameter: camel-kafka-connector-version, Value: 0.11.0
-[INFO] Parameter: artifactId, Value: ftps-extended
+[INFO] Parameter: artifactId, Value: github-extended
 [INFO] Project created from Archetype in dir: /home/workspace/miscellanea/github-extended
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
@@ -80,10 +80,10 @@ camel-kafka-connector-version: 0.11.0
 [INFO] Total time:  24.590 s
 [INFO] Finished at: 2020-11-05T07:45:43+01:00
 [INFO] ------------------------------------------------------------------------
-> cd /home/workspace/miscellanea/ftps-extended
+> cd /home/workspace/miscellanea/github-extended
 ```
 
-We'll need to add a little transform for this example. So import the ftp-extended project in your IDE and create a class in the only package there
+We'll need to add a little transform for this example. So import the github-extended project in your IDE and create a class in the only package there
 
 ```
 package org.apache.camel.kafkaconnector;
