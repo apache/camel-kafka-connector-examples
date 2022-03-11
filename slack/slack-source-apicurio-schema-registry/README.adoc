@@ -66,7 +66,7 @@ and set the `plugin.path` property to your choosen location
 You'll need to build your connector starting from an archetype:
 
 ```
-> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.11.0
+> mvn archetype:generate  -DarchetypeGroupId=org.apache.camel.kafkaconnector.archetypes  -DarchetypeArtifactId=camel-kafka-connector-extensible-archetype  -DarchetypeVersion=0.11.5
 [INFO] Scanning for projects...
 [INFO] 
 [INFO] ------------------< org.apache.maven:standalone-pom >-------------------
@@ -83,38 +83,38 @@ You'll need to build your connector starting from an archetype:
 [INFO] Archetype repository not defined. Using the one from [org.apache.camel.kafkaconnector.archetypes:camel-kafka-connector-extensible-archetype:0.4.0] found in catalog remote
 Define value for property 'groupId': org.apache.camel.kafkaconnector
 Define value for property 'artifactId': slack-extended
-Define value for property 'version' 1.0-SNAPSHOT: : 0.11.0
+Define value for property 'version' 1.0-SNAPSHOT: : 0.11.5
 Define value for property 'package' org.apache.camel.kafkaconnector: : 
 Define value for property 'camel-kafka-connector-name': camel-slack-kafka-connector
-[INFO] Using property: camel-kafka-connector-version = 0.11.0
+[INFO] Using property: camel-kafka-connector-version = 0.11.5
 Confirm properties configuration:
 groupId: org.apache.camel.kafkaconnector
 artifactId: slack-extended
-version: 0.11.0
+version: 0.11.5
 package: org.apache.camel.kafkaconnector
 camel-kafka-connector-name: camel-slack-kafka-connector
-camel-kafka-connector-version: 0.11.0
+camel-kafka-connector-version: 0.11.5
  Y: : y
 [INFO] ----------------------------------------------------------------------------
-[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.11.0
+[INFO] Using following parameters for creating project from Archetype: camel-kafka-connector-extensible-archetype:0.11.5
 [INFO] ----------------------------------------------------------------------------
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: artifactId, Value: slack-extended
-[INFO] Parameter: version, Value: 0.11.0
+[INFO] Parameter: version, Value: 0.11.5
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: packageInPathFormat, Value: org/apache/camel/kafkaconnector
 [INFO] Parameter: package, Value: org.apache.camel.kafkaconnector
-[INFO] Parameter: version, Value: 0.11.0
+[INFO] Parameter: version, Value: 0.11.5
 [INFO] Parameter: groupId, Value: org.apache.camel.kafkaconnector
 [INFO] Parameter: camel-kafka-connector-name, Value: camel-slack-kafka-connector
-[INFO] Parameter: camel-kafka-connector-version, Value: 0.11.0
+[INFO] Parameter: camel-kafka-connector-version, Value: 0.11.5
 [INFO] Parameter: artifactId, Value: slack-extended
 [INFO] Project created from Archetype in dir: /home/oscerd/playground/slack-extended
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  39.295 s
-[INFO] Finished at: 2020.11.03T09:16:51+02:00
+[INFO] Finished at: 2020.11.53T09:16:51+02:00
 [INFO] ------------------------------------------------------------------------
 > cd /home/workspace/miscellanea/slack-extended
 ```
@@ -126,7 +126,7 @@ Now we need to edit the POM
   .
   .
   .
-  <version>0.11.0</version>
+  <version>0.11.5</version>
   <name>A Camel Kafka Connector extended</name>
 
   <properties>
@@ -151,12 +151,12 @@ Now we need to edit the POM
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-kafka-connector</artifactId>
-      <version>0.11.0</version>
+      <version>0.11.5</version>
     </dependency>
     <dependency>
       <groupId>org.apache.camel.kafkaconnector</groupId>
       <artifactId>camel-slack-kafka-connector</artifactId>
-      <version>0.11.0</version>
+      <version>0.11.5</version>
     </dependency>
     <dependency>
        <groupId>io.apicurio</groupId>
@@ -186,8 +186,8 @@ In this example we'll use `/home/oscerd/connectors/` as plugin.path, but we'll n
 
 ```
 > cd /home/oscerd/connectors/
-> cp /home/workspace/miscellanea/slack-extended/target/slack-extended-0.11.0-package.tar.gz .
-> untar.gz slack-extended-0.11.0-package.tar.gz
+> cp /home/workspace/miscellanea/slack-extended/target/slack-extended-0.11.5-package.tar.gz .
+> untar.gz slack-extended-0.11.5-package.tar.gz
 ```
 
 Now it's time to setup the connector
@@ -244,14 +244,14 @@ We can also collect some version meta info for the schema
 
 ```
 curl -X GET http://localhost:8080/api/artifacts/mytopic-value/versions/1/meta
-{"version":1,"createdOn":160.11.0208148,"type":"KCONNECT","globalId":1,"state":"ENABLED","id":"mytopic-value"}
+{"version":1,"createdOn":160.11.5208148,"type":"KCONNECT","globalId":1,"state":"ENABLED","id":"mytopic-value"}
 ```
 
 and some meta info too
 
 ```
 curl -X GET http://localhost:8080/api/artifacts/mytopic-value/meta
-{"createdOn":160.11.0208148,"modifiedOn":160.11.0208148,"id":"mytopic-value","version":1,"type":"KCONNECT","globalId":1,"state":"ENABLED"}
+{"createdOn":160.11.5208148,"modifiedOn":160.11.5208148,"id":"mytopic-value","version":1,"type":"KCONNECT","globalId":1,"state":"ENABLED"}
 ```
 
 and finally the schema content
