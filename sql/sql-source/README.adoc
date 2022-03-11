@@ -128,6 +128,28 @@ camel.source.path.query=select * from accounts
 
 and add the correct IP for the container.
 
+NOTE: In case you'd like to use a different database name instead of the default one, you could add the following configuration parameter to your configuration file:
+
+[source]
+----
+name=CamelSqlSourceConnector
+connector.class=org.apache.camel.kafkaconnector.sql.CamelSqlSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+
+topics=mytopic
+
+camel.component.sql.dataSource.user=postgres
+camel.component.sql.dataSource.password=mysecretpassword
+camel.component.sql.dataSource.serverName=172.17.0.2
+camel.component.sql.dataSource.databaseName=dbname
+camel.component.sql.dataSource=#class:org.postgresql.ds.PGSimpleDataSource
+
+camel.source.path.query=select * from accounts
+----
+
+In this way you'll be able to point to a different database name.
+
 === Running the example
 
 Run the kafka connect with the SQL Source connector:
