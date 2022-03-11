@@ -28,8 +28,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.11.0/camel-cql-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-cql-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.11.5/camel-cql-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-cql-kafka-connector-0.11.5-package.tar.gz
 ```
 
 ## Setting up Apache Cassandra
@@ -210,8 +210,8 @@ So we need to do something like this:
 
 ```
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.11.0/camel-cql-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-cql-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cql-kafka-connector/0.11.5/camel-cql-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-cql-kafka-connector-0.11.5-package.tar.gz
 ```
 
 Now we can start the build 
@@ -240,22 +240,22 @@ You should see something like this:
   {
     "class": "org.apache.camel.kafkaconnector.CamelSinkConnector",
     "type": "sink",
-    "version": "0.11.0"
+    "version": "0.11.5"
   },
   {
     "class": "org.apache.camel.kafkaconnector.CamelSourceConnector",
     "type": "source",
-    "version": "0.11.0"
+    "version": "0.11.5"
   },
   {
     "class": "org.apache.camel.kafkaconnector.cql.CamelCqlSinkConnector",
     "type": "sink",
-    "version": "0.11.0"
+    "version": "0.11.5"
   },
   {
     "class": "org.apache.camel.kafkaconnector.cql.CamelCqlSourceConnector",
     "type": "source",
-    "version": "0.11.0"
+    "version": "0.11.5"
   },
   {
     "class": "org.apache.kafka.connect.file.FileStreamSinkConnector",
