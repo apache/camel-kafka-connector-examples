@@ -29,10 +29,10 @@ In this example we'll use `/home/otavio/connectors/`
 
 ```
 > cd /home/otavio/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-couchbase-kafka-connector/0.11.0/camel-couchbase-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-couchbase-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-couchbase-kafka-connector/0.11.5/camel-couchbase-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-couchbase-kafka-connector-0.11.5-package.tar.gz
 ```
-There is a little bug in 0.11.0, so we'll need to add explicitly the couchbase driver
+There is a little bug in 0.11.5, so we'll need to add explicitly the couchbase driver
 
 ```
 > cd /home/otavio/connectors/camel-couchbase-kafka-connector
