@@ -20,11 +20,11 @@ Download the connector package tar.gz and extract the content to a directory. In
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cron-kafka-connector/0.11.0/camel-cron-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-cron-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-cron-kafka-connector/0.11.5/camel-cron-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-cron-kafka-connector-0.11.5-package.tar.gz
 ----
 
-In 0.11.0, you'll need to add also camel-quartz and quartz dependency.
+In 0.11.5, you'll need to add also camel-quartz and quartz dependency.
 
 [source]
 ----
