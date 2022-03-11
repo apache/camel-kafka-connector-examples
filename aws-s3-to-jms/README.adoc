@@ -36,10 +36,10 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sjms2-kafka-connector/0.11.0/camel-sjms2-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-sjms2-kafka-connector-0.11.0-package.tar.gz
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws-s3-kafka-connector/0.11.0/camel-aws-s3-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-aws-s3-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-sjms2-kafka-connector/0.11.5/camel-sjms2-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-sjms2-kafka-connector-0.11.5-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws-s3-kafka-connector/0.11.5/camel-aws-s3-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-aws-s3-kafka-connector-0.11.5-package.tar.gz
 ```
 
 These are the basic connectors. For camel-sjms2 we have a bunch of provided dependencies we need to add in our path, so run the following commands:

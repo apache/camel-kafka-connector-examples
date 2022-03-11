@@ -25,8 +25,8 @@ Download the connector package tar.gz and extract the content to a directory. In
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-iam-kafka-connector/0.11.0/camel-aws2-iam-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-aws2-iam-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-aws2-iam-kafka-connector/0.11.5/camel-aws2-iam-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-aws2-iam-kafka-connector-0.11.5-package.tar.gz
 ----
 
 === Configuring Kafka Connect
