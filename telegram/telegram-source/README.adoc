@@ -32,8 +32,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-telegram-kafka-connector/0.11.0/camel-telegram-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-telegram-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-telegram-kafka-connector/0.11.5/camel-telegram-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-telegram-kafka-connector-0.11.5-package.tar.gz
 ```
 
 Now it's time to setup the connectors
@@ -140,8 +140,8 @@ So we need to do something like this:
 
 ```
 > cd my-connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-telegram-kafka-connector/0.11.0/camel-telegram-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-telegram-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-telegram-kafka-connector/0.11.5/camel-telegram-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-telegram-kafka-connector-0.11.5-package.tar.gz
 ```
 
 Now we can start the build 
@@ -166,7 +166,7 @@ You should see something like this:
 
 [source,json,options="nowrap"]
 ----
-[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.11.0"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.11.0"},{"class":"org.apache.camel.kafkaconnector.slack.CamelTelegramSinkConnector","type":"sink","version":"0.11.0"},{"class":"org.apache.camel.kafkaconnector.slack.CamelTelegramSourceConnector","type":"source","version":"0.11.0"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
+[{"class":"org.apache.camel.kafkaconnector.CamelSinkConnector","type":"sink","version":"0.11.5"},{"class":"org.apache.camel.kafkaconnector.CamelSourceConnector","type":"source","version":"0.11.5"},{"class":"org.apache.camel.kafkaconnector.slack.CamelTelegramSinkConnector","type":"sink","version":"0.11.5"},{"class":"org.apache.camel.kafkaconnector.slack.CamelTelegramSourceConnector","type":"source","version":"0.11.5"},{"class":"org.apache.kafka.connect.file.FileStreamSinkConnector","type":"sink","version":"2.5.0"},{"class":"org.apache.kafka.connect.file.FileStreamSourceConnector","type":"source","version":"2.5.0"},{"class":"org.apache.kafka.connect.mirror.MirrorCheckpointConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorHeartbeatConnector","type":"source","version":"1"},{"class":"org.apache.kafka.connect.mirror.MirrorSourceConnector","type":"source","version":"1"}]
 ----
 
 ### Set the Authorization Token as secret (optional)
