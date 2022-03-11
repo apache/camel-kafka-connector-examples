@@ -44,8 +44,8 @@ Download the connector package tar.gz and extract the content to a directory. In
 [source]
 ----
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-google-calendar-stream-kafka-connector/0.11.0/camel-google-calendar-stream-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-google-calendar-stream-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-google-calendar-stream-kafka-connector/0.11.5/camel-google-calendar-stream-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-google-calendar-stream-kafka-connector-0.11.5-package.tar.gz
 ----
 
 === Configuring Kafka Connect
@@ -101,7 +101,7 @@ On a different terminal run the kafkacat consumer
 [source]
 ----
 > ./kafkacat -b localhost:9092 -t mytopic
-{"created":"2020-11-09T13:20:12.000Z","creator"...
-...,"reminders":{"useDefault":true},"sequence":0,"start":{"dateTime":"2020-11-09T15:00:00.000+01:00"},"status":"confirmed","summary":"Test for ckc","updated":"2020-11-09T13:20:12.380Z"}
+{"created":"2020.11.59T13:20:12.000Z","creator"...
+...,"reminders":{"useDefault":true},"sequence":0,"start":{"dateTime":"2020.11.59T15:00:00.000+01:00"},"status":"confirmed","summary":"Test for ckc","updated":"2020.11.59T13:20:12.380Z"}
 % Reached end of topic mytopic [0] at offset 1
 ----
