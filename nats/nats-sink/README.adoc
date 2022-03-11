@@ -28,8 +28,8 @@ In this example we'll use `/home/oscerd/connectors/`
 
 ```
 > cd /home/oscerd/connectors/
-> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-nats-kafka-connector/0.11.0/camel-nats-kafka-connector-0.11.0-package.tar.gz
-> untar.gz camel-nats-kafka-connector-0.11.0-package.tar.gz
+> wget https://repo1.maven.org/maven2/org/apache/camel/kafkaconnector/camel-nats-kafka-connector/0.11.5/camel-nats-kafka-connector-0.11.5-package.tar.gz
+> untar.gz camel-nats-kafka-connector-0.11.5-package.tar.gz
 ```
 
 In this example we'll use a docker image for NATS
