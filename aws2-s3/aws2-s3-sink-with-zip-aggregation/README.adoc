@@ -2,6 +2,8 @@
 
 This is an example for Camel-Kafka-connector AWS2-S3 Sink
 
+NOTE: This example is not production ready for large use cases. The zipping function will lose data. If you want to sync Kafka with S3, Kafka Streams just going to be a more reliable design at scale.
+
 ## Standalone
 
 ### What is needed
